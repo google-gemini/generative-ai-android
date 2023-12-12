@@ -1,0 +1,19 @@
+name: Unit tests
+
+on: pull_request
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3.5.3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+          cache: gradle
+      - name: Run tests
+        run: |
+          ./gradlew test --no-daemon
