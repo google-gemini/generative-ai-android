@@ -157,9 +157,7 @@ internal class StreamingSnapshotTests {
     goldenStreamingFile("failure-image-rejected.txt", HttpStatusCode.BadRequest) {
       val responses = model.generateContentStream()
 
-      withTimeout(testTimeout) {
-        shouldThrow<ServerException> { responses.collect() }
-      }
+      withTimeout(testTimeout) { shouldThrow<ServerException> { responses.collect() } }
     }
 
   @Test
@@ -175,8 +173,6 @@ internal class StreamingSnapshotTests {
     goldenStreamingFile("failure-api-key.txt", HttpStatusCode.BadRequest) {
       val responses = model.generateContentStream()
 
-      withTimeout(testTimeout) {
-        shouldThrow<ServerException> { responses.collect() }
-      }
+      withTimeout(testTimeout) { shouldThrow<ServerException> { responses.collect() } }
     }
 }
