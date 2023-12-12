@@ -1,0 +1,19 @@
+name: Check code format
+
+on: pull_request
+
+jobs:
+  check-format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3.5.3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+          cache: gradle
+      - name: Run ktfmt
+        run: |
+          ./gradlew ktfmtCheck --no-daemon
