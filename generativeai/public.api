@@ -35,6 +35,7 @@ public final class com/google/ai/client/generativeai/GenerativeModel {
 public abstract class com/google/ai/client/generativeai/java/ChatFutures {
 	public static final field Companion Lcom/google/ai/client/generativeai/java/ChatFutures$Companion;
 	public static final fun from (Lcom/google/ai/client/generativeai/Chat;)Lcom/google/ai/client/generativeai/java/ChatFutures;
+	public abstract fun getHistory ()Ljava/util/ArrayList;
 	public abstract fun sendMessage (Lcom/google/ai/client/generativeai/type/Content;)Lcom/google/common/util/concurrent/ListenableFuture;
 	public abstract fun sendMessageStream (Lcom/google/ai/client/generativeai/type/Content;)Lorg/reactivestreams/Publisher;
 }

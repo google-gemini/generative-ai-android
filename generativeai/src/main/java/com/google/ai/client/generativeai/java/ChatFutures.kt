@@ -46,12 +46,21 @@ abstract class ChatFutures internal constructor() {
    */
   abstract fun sendMessageStream(prompt: Content): Publisher<GenerateContentResponse>
 
+  /**
+   * Returns the previous interactions with the model
+   */
+  abstract fun getHistory(): ArrayList<Content>
+
   private class FuturesImpl(val chat: Chat) : ChatFutures() {
     override fun sendMessage(prompt: Content): ListenableFuture<GenerateContentResponse> =
       SuspendToFutureAdapter.launchFuture { chat.sendMessage(prompt) }
 
     override fun sendMessageStream(prompt: Content): Publisher<GenerateContentResponse> =
       chat.sendMessageStream(prompt).asPublisher()
+
+    override fun getHistory(): ArrayList<Content> {
+      return ArrayList(chat.history)
+    }
   }
 
   companion object {
