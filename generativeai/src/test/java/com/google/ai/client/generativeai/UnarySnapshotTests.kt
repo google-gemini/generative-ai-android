@@ -105,7 +105,7 @@ internal class UnarySnapshotTests {
 
   @Test
   fun `citation returns correctly`() =
-    goldenUnaryFile("success-citation.json") {
+    goldenUnaryFile("success-citations.json") {
       withTimeout(testTimeout) {
         val response = model.generateContent()
 
