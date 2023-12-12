@@ -137,4 +137,10 @@ internal class UnarySnapshotTests {
     goldenUnaryFile("failure-image-rejected.json", HttpStatusCode.BadRequest) {
       withTimeout(testTimeout) { shouldThrow<ServerException> { model.generateContent() } }
     }
+
+  @Test
+  fun `unknown model`() =
+    goldenUnaryFile("failure-unknown-model.json", HttpStatusCode.NotFound) {
+      withTimeout(testTimeout) { shouldThrow<ServerException> { model.generateContent() } }
+    }
 }
