@@ -127,6 +127,12 @@ internal class UnarySnapshotTests {
     }
 
   @Test
+  fun `invalid api key`() =
+    goldenUnaryFile("failure-api-key.json", HttpStatusCode.BadRequest) {
+      withTimeout(testTimeout) { shouldThrow<ServerException> { model.generateContent() } }
+    }
+
+  @Test
   fun `image rejected`() =
     goldenUnaryFile("failure-image-rejected.json", HttpStatusCode.BadRequest) {
       withTimeout(testTimeout) { shouldThrow<ServerException> { model.generateContent() } }

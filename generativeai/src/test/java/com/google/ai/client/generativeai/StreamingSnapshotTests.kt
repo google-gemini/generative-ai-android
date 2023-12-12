@@ -161,4 +161,13 @@ internal class StreamingSnapshotTests {
         shouldThrow<ServerException> { responses.collect() }
       }
     }
+  @Test
+  fun `invalid api key`() =
+    goldenStreamingFile("failure-api-key.txt", HttpStatusCode.BadRequest) {
+      val responses = model.generateContentStream()
+
+      withTimeout(testTimeout) {
+        shouldThrow<ServerException> { responses.collect() }
+      }
+    }
 }
