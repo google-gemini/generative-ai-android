@@ -46,9 +46,7 @@ abstract class ChatFutures internal constructor() {
    */
   abstract fun sendMessageStream(prompt: Content): Publisher<GenerateContentResponse>
 
-  /**
-   * Returns the previous interactions with the model
-   */
+  /** Returns the previous interactions with the model */
   abstract fun getHistory(): ArrayList<Content>
 
   private class FuturesImpl(val chat: Chat) : ChatFutures() {
