@@ -151,4 +151,28 @@ internal class StreamingSnapshotTests {
         exception.response.candidates.first().finishReason shouldBe FinishReason.RECITATION
       }
     }
+
+  @Test
+  fun `image rejected`() =
+    goldenStreamingFile("failure-image-rejected.txt", HttpStatusCode.BadRequest) {
+      val responses = model.generateContentStream()
+
+      withTimeout(testTimeout) { shouldThrow<ServerException> { responses.collect() } }
+    }
+
+  @Test
+  fun `unknown model`() =
+    goldenStreamingFile("failure-unknown-model.txt", HttpStatusCode.NotFound) {
+      val responses = model.generateContentStream()
+
+      withTimeout(testTimeout) { shouldThrow<ServerException> { responses.collect() } }
+    }
+
+  @Test
+  fun `invalid api key`() =
+    goldenStreamingFile("failure-api-key.txt", HttpStatusCode.BadRequest) {
+      val responses = model.generateContentStream()
+
+      withTimeout(testTimeout) { shouldThrow<ServerException> { responses.collect() } }
+    }
 }

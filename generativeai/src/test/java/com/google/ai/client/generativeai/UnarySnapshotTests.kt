@@ -105,7 +105,7 @@ internal class UnarySnapshotTests {
 
   @Test
   fun `citation returns correctly`() =
-    goldenUnaryFile("success-citation.json") {
+    goldenUnaryFile("success-citations.json") {
       withTimeout(testTimeout) {
         val response = model.generateContent()
 
@@ -124,5 +124,23 @@ internal class UnarySnapshotTests {
   fun `malformed content`() =
     goldenUnaryFile("failure-malformed-content.json") {
       withTimeout(testTimeout) { shouldThrow<SerializationException> { model.generateContent() } }
+    }
+
+  @Test
+  fun `invalid api key`() =
+    goldenUnaryFile("failure-api-key.json", HttpStatusCode.BadRequest) {
+      withTimeout(testTimeout) { shouldThrow<ServerException> { model.generateContent() } }
+    }
+
+  @Test
+  fun `image rejected`() =
+    goldenUnaryFile("failure-image-rejected.json", HttpStatusCode.BadRequest) {
+      withTimeout(testTimeout) { shouldThrow<ServerException> { model.generateContent() } }
+    }
+
+  @Test
+  fun `unknown model`() =
+    goldenUnaryFile("failure-unknown-model.json", HttpStatusCode.NotFound) {
+      withTimeout(testTimeout) { shouldThrow<ServerException> { model.generateContent() } }
     }
 }
