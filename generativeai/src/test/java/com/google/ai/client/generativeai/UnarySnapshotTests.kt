@@ -125,4 +125,10 @@ internal class UnarySnapshotTests {
     goldenUnaryFile("failure-malformed-content.json") {
       withTimeout(testTimeout) { shouldThrow<SerializationException> { model.generateContent() } }
     }
+
+  @Test
+  fun `image rejected`() =
+    goldenUnaryFile("failure-image-rejected.json", HttpStatusCode.BadRequest) {
+      withTimeout(testTimeout) { shouldThrow<ServerException> { model.generateContent() } }
+    }
 }

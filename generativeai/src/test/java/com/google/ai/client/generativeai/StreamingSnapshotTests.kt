@@ -151,4 +151,14 @@ internal class StreamingSnapshotTests {
         exception.response.candidates.first().finishReason shouldBe FinishReason.RECITATION
       }
     }
+
+  @Test
+  fun `image rejected`() =
+    goldenStreamingFile("failure-image-rejected.txt", HttpStatusCode.BadRequest) {
+      val responses = model.generateContentStream()
+
+      withTimeout(testTimeout) {
+        shouldThrow<ServerException> { responses.collect() }
+      }
+    }
 }
