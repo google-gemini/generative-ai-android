@@ -31,6 +31,6 @@ jobs:
       - name: Upload generated artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: google-ai-android
+          name: generative-ai-android
           path: generativeai/m2
           retention-days: 5

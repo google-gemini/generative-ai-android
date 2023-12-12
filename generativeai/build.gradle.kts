@@ -101,7 +101,14 @@ publishing {
             groupId = "com.google.ai.client.generativeai"
             artifactId = "generativeai"
             version = project.version.toString()
-
+            pom {
+                licenses {
+                    license {
+                        name = "The Apache License, Version 2.0"
+                        url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                    }
+                }
+            }
             afterEvaluate {
                 from(components["release"])
             }
