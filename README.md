@@ -7,7 +7,7 @@ The Google AI client SDK for Android enables developers to use Google's state-of
 
 For example, with just a few lines of code, you can access Gemini's multimodal capabilities to generate text from text-and-image input:
 
-```
+```kotlin
 val generativeModel = GenerativeModel(
     modelName = "gemini-pro-vision",
     apiKey = BuildConfig.apiKey
