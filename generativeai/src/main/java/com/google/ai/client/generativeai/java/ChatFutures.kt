@@ -56,9 +56,7 @@ abstract class ChatFutures internal constructor() {
     override fun sendMessageStream(prompt: Content): Publisher<GenerateContentResponse> =
       chat.sendMessageStream(prompt).asPublisher()
 
-    override fun getChat(): Chat {
-      return chat
-    }
+    override fun getChat(): Chat = chat
   }
 
   companion object {

@@ -83,9 +83,7 @@ abstract class GenerativeModelFutures internal constructor() {
 
     override fun startChat(history: List<Content>): ChatFutures = from(model.startChat(history))
 
-    override fun getGenerativeModel(): GenerativeModel {
-      return model
-    }
+    override fun getGenerativeModel(): GenerativeModel = model
   }
 
   companion object {
