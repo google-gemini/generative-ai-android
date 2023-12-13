@@ -30,7 +30,8 @@ print(response.text)
 
 This repository contains a sample app demonstrating how the SDK can access and utilize the Gemini model for various use cases.
 
-To try out the sample app, follow these steps:
+To try out the sample app you can directly import the project from Android Studio 
+via **File > New > Import Sample** and searching for *Generative AI Sample* or follow these steps below:
 
 1.  Check out this repository.\
 `git clone https://github.com/google/generative-ai-android`
