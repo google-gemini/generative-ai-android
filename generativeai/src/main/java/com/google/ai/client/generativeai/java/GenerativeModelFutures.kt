@@ -64,7 +64,10 @@ abstract class GenerativeModelFutures internal constructor() {
    */
   abstract fun startChat(history: List<Content>): ChatFutures
 
-  private class FuturesImpl(val model: GenerativeModel) : GenerativeModelFutures() {
+  /** Returns the [GenerativeModel] instance that was used to create this object */
+  abstract fun getGenerativeModel(): GenerativeModel
+
+  private class FuturesImpl(private val model: GenerativeModel) : GenerativeModelFutures() {
     override fun generateContent(
       vararg prompt: Content
     ): ListenableFuture<GenerateContentResponse> =
@@ -79,6 +82,10 @@ abstract class GenerativeModelFutures internal constructor() {
     override fun startChat(): ChatFutures = startChat(emptyList())
 
     override fun startChat(history: List<Content>): ChatFutures = from(model.startChat(history))
+
+    override fun getGenerativeModel(): GenerativeModel {
+      return model
+    }
   }
 
   companion object {
