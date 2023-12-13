@@ -102,7 +102,7 @@ internal class APIController(
     }
     contentType(ContentType.Application.Json)
     header("x-goog-api-key", key)
-    header("x-goog-api-client", "genai-kotlin/${BuildConfig.VERSION_NAME}")
+    header("x-goog-api-client", "genai-android/${BuildConfig.VERSION_NAME}")
   }
 }
 
