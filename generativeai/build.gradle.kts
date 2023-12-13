@@ -32,11 +32,15 @@ android {
     namespace = "com.google.ai.client.generativeai"
     compileSdk = 34
 
+    buildFeatures.buildConfig = true
+
     defaultConfig {
         minSdk = 21
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        buildConfigField("String", "VERSION_NAME", "\"${project.version.toString()}\"")
     }
 
     publishing {

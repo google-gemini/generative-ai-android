@@ -18,6 +18,7 @@ package com.google.ai.client.generativeai.internal.api
 
 import com.google.ai.client.generativeai.internal.util.decodeToFlow
 import com.google.ai.client.generativeai.type.ServerException
+import com.google.ai.client.generativeai.BuildConfig
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.HttpClientEngine
@@ -101,6 +102,7 @@ internal class APIController(
     }
     contentType(ContentType.Application.Json)
     header("x-goog-api-key", key)
+    header("x-goog-api-client", "genai-kotlin/${BuildConfig.VERSION_NAME}")
   }
 }
 
