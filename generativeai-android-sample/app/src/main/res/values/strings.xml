@@ -27,7 +27,7 @@
 
     <!-- Summarize sample strings -->
     <string name="summarize_label">Text</string>
-    <string name="summarize_hint">Enter text or a URL to summarize</string>
+    <string name="summarize_hint">Enter text to summarize</string>
 
     <!-- Photo Reasoning sample strings -->
     <string name="reason_label">Question</string>
