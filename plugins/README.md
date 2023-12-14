@@ -34,14 +34,14 @@ The APIPlugin registers the two following tasks to facilitate this process:
 - [buildApi](./src/main/java/com/google/gradle/plugins/ApiPlugin.kt) -> Creates a `.api` file 
 containing the public API of the project.
 - [updateApi](./src/main/java/com/google/gradle/plugins/ApiPlugin.kt) -> Updates (or creates) the 
-`public.api` file at the project directory; keeping track of the currently released/public api. 
+`released.api` file at the project directory; keeping track of the currently released/public api. 
 
 ### Tasks
 
 The ChangelogPlugin registers the four following tasks:
 
 - [findChanges](./src/main/java/com/google/gradle/tasks/FindChangesTask.kt) -> Creates a new `.api` 
-file for the current project, and compares it to the existing `public.api` to create a diff of 
+file for the current project, and compares it to the existing `released.api` to create a diff of 
 changes made to the public api.
 - [makeChange](./src/main/java/com/google/gradle/tasks/MakeChangeTask.kt) -> Creates a new `.json` 
 file in the `.changes` directory with an optional message, including the version impact inferred 
