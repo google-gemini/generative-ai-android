@@ -31,7 +31,7 @@ import org.gradle.api.tasks.TaskAction
  * The changes are represented as [LinesChanged]; with a list of added and removed lines between the
  * files. These are saved in `.json` format in the [outputFile].
  *
- * @property old the previously released api file (typically `public.api)
+ * @property old the previously released api file (typically `released.api)
  * @property new the current API pending release (generated from the state of the repo as is)
  * @property outputFile where to save the diff to
  */
