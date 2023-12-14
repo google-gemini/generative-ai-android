@@ -46,12 +46,17 @@ abstract class ChatFutures internal constructor() {
    */
   abstract fun sendMessageStream(prompt: Content): Publisher<GenerateContentResponse>
 
-  private class FuturesImpl(val chat: Chat) : ChatFutures() {
+  /** Returns the [Chat] instance that was used to create this instance */
+  abstract fun getChat(): Chat
+
+  private class FuturesImpl(private val chat: Chat) : ChatFutures() {
     override fun sendMessage(prompt: Content): ListenableFuture<GenerateContentResponse> =
       SuspendToFutureAdapter.launchFuture { chat.sendMessage(prompt) }
 
     override fun sendMessageStream(prompt: Content): Publisher<GenerateContentResponse> =
       chat.sendMessageStream(prompt).asPublisher()
+
+    override fun getChat(): Chat = chat
   }
 
   companion object {
