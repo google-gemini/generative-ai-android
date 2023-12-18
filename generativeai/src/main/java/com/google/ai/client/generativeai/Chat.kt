@@ -25,6 +25,7 @@ import com.google.ai.client.generativeai.type.InvalidStateException
 import com.google.ai.client.generativeai.type.TextPart
 import com.google.ai.client.generativeai.type.content
 import java.util.LinkedList
+import java.util.concurrent.Semaphore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
@@ -39,6 +40,7 @@ import kotlinx.coroutines.flow.onEach
  * @property history the previous interactions with the model
  */
 class Chat(private val model: GenerativeModel, val history: MutableList<Content> = ArrayList()) {
+  private var lock = Semaphore(1)
 
   /**
    * Generates a response from the backend with the provided [Content], and any previous ones
@@ -49,9 +51,11 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
    */
   suspend fun sendMessage(prompt: Content): GenerateContentResponse {
     prompt.assertComesFromUser()
+    assertNoOngoingCall()
 
     val response = model.generateContent(*history.toTypedArray(), prompt)
 
+    lock.release()
     history.add(prompt)
     history.add(response.candidates.first().content)
 
@@ -87,6 +91,7 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
    */
   fun sendMessageStream(prompt: Content): Flow<GenerateContentResponse> {
     prompt.assertComesFromUser()
+    assertNoOngoingCall()
 
     val flow = model.generateContentStream(*history.toTypedArray(), prompt)
     val bitmaps = LinkedList<Bitmap>()
@@ -109,6 +114,7 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
         }
       }
       .onCompletion {
+        lock.release()
         if (it == null) {
           val content =
             content("model") {
@@ -154,6 +160,15 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
   private fun Content.assertComesFromUser() {
     if (role != "user") {
       throw InvalidStateException("Chat prompts should come from the 'user' role.")
+    }
+  }
+
+  private fun assertNoOngoingCall() {
+    if (!lock.tryAcquire()) {
+      throw IllegalStateException(
+        "This chat instance currently has an ongoing request, please wait for it to complete " +
+          "before sending more messages"
+      )
     }
   }
 }
