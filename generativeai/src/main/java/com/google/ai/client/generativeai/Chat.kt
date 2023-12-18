@@ -51,7 +51,7 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
    */
   suspend fun sendMessage(prompt: Content): GenerateContentResponse {
     prompt.assertComesFromUser()
-    assertNoOngoingCall()
+    attemptLock()
 
     val response = model.generateContent(*history.toTypedArray(), prompt)
 
@@ -91,7 +91,7 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
    */
   fun sendMessageStream(prompt: Content): Flow<GenerateContentResponse> {
     prompt.assertComesFromUser()
-    assertNoOngoingCall()
+    attemptLock()
 
     val flow = model.generateContentStream(*history.toTypedArray(), prompt)
     val bitmaps = LinkedList<Bitmap>()
@@ -163,7 +163,7 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
     }
   }
 
-  private fun assertNoOngoingCall() {
+  private fun attemptLock() {
     if (!lock.tryAcquire()) {
       throw IllegalStateException(
         "This chat instance currently has an ongoing request, please wait for it to complete " +
