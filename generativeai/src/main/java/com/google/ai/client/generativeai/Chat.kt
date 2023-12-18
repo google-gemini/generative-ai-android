@@ -52,14 +52,14 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
   suspend fun sendMessage(prompt: Content): GenerateContentResponse {
     prompt.assertComesFromUser()
     attemptLock()
-
-    val response = model.generateContent(*history.toTypedArray(), prompt)
-
-    lock.release()
-    history.add(prompt)
-    history.add(response.candidates.first().content)
-
-    return response
+    try {
+      val response = model.generateContent(*history.toTypedArray(), prompt)
+      history.add(prompt)
+      history.add(response.candidates.first().content)
+      return response
+    } finally {
+      lock.release()
+    }
   }
 
   /**
