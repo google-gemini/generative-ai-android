@@ -61,13 +61,7 @@ internal constructor(
     apiKey: String,
     generationConfig: GenerationConfig? = null,
     safetySettings: List<SafetySetting>? = null,
-  ) : this(
-    modelName,
-    apiKey,
-    generationConfig,
-    safetySettings,
-    APIController(apiKey, fullModelName(modelName))
-  )
+  ) : this(modelName, apiKey, generationConfig, safetySettings, APIController(apiKey, modelName))
 
   /**
    * Generates a response from the backend with the provided [Content]s.
@@ -188,11 +182,3 @@ internal constructor(
       ?.let { throw ResponseStoppedException(this) }
   }
 }
-
-/**
- * Ensures the model name provided has a `models/` prefix
- *
- * Models must be prepended with the `models/` prefix when communicating with the backend.
- */
-private fun fullModelName(name: String): String =
-  name.takeIf { it.startsWith("models/") } ?: "models/$name"

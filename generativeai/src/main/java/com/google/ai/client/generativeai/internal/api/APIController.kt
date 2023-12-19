@@ -63,9 +63,11 @@ internal val JSON = Json {
  */
 internal class APIController(
   private val key: String,
-  private val model: String,
+  model: String,
   httpEngine: HttpClientEngine = OkHttp.create()
 ) {
+  private val model = fullModelName(model)
+
   private val client =
     HttpClient(httpEngine) {
       install(HttpTimeout) {
@@ -105,6 +107,14 @@ internal class APIController(
     header("x-goog-api-client", "genai-android/${BuildConfig.VERSION_NAME}")
   }
 }
+
+/**
+ * Ensures the model name provided has a `models/` prefix
+ *
+ * Models must be prepended with the `models/` prefix when communicating with the backend.
+ */
+private fun fullModelName(name: String): String =
+  name.takeIf { it.startsWith("models/") } ?: "models/$name"
 
 /**
  * Makes a POST request to the specified [url] and returns a [Flow] of deserialized response objects
