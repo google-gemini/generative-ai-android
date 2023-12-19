@@ -37,7 +37,7 @@ import kotlinx.coroutines.flow.onEach
  * further interaction.
  *
  * Note: This object is not thread-safe, and calling [sendMessage] multiple times without waiting
- * for a response will throw an [InvalidStateException]
+ * for a response will throw an [InvalidStateException].
  *
  * @param model the model to use for the interaction
  * @property history the previous interactions with the model
