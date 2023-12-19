@@ -44,7 +44,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
 // TODO: Should these stay here or be moved elsewhere?
-internal const val DOMAIN = "https://generativelanguage.googleapis.com/v1/models"
+internal const val DOMAIN = "https://generativelanguage.googleapis.com/v1"
 
 internal val JSON = Json {
   ignoreUnknownKeys = true
