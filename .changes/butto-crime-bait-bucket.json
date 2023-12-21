@@ -1,0 +1,1 @@
+{"type":"MINOR","changes":["Update proguard rules to not obfuscate serialization types"]}
