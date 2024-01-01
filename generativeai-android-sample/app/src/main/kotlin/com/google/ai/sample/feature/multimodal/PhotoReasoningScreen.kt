@@ -68,6 +68,7 @@ import com.google.ai.sample.GenerativeViewModelFactory
 import coil.size.Precision
 import com.google.ai.sample.R
 import com.google.ai.sample.util.UriSaver
+import dev.jeziellago.compose.markdowntext.MarkdownText
 import kotlinx.coroutines.launch
 
 @Composable
@@ -226,12 +227,13 @@ fun PhotoReasoningScreen(
                                     drawCircle(color = Color.White)
                                 }
                         )
-                        Text(
-                            text = uiState.outputText, // TODO(thatfiredev): Figure out Markdown support
-                            color = MaterialTheme.colorScheme.onSecondary,
+                        MarkdownText(
+                            markdown = uiState.outputText,
                             modifier = Modifier
                                 .padding(start = 16.dp)
-                                .fillMaxWidth()
+                                .fillMaxWidth(),
+                            color = MaterialTheme.colorScheme.onSecondary,
+                            linkColor = Color.Blue
                         )
                     }
                 }

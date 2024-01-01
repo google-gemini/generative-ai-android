@@ -50,15 +50,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.ai.sample.GenerativeViewModelFactory
 import com.google.ai.sample.R
-import com.google.ai.sample.ui.theme.GenerativeAISample
+import dev.jeziellago.compose.markdowntext.MarkdownText
 import kotlinx.coroutines.launch
 
 @Composable
@@ -159,9 +158,10 @@ fun ChatBubbleItem(
                     shape = bubbleShape,
                     modifier = Modifier.widthIn(0.dp, maxWidth * 0.9f)
                 ) {
-                    Text(
-                        text = chatMessage.text,
-                        modifier = Modifier.padding(16.dp)
+                    MarkdownText(
+                        markdown = chatMessage.text,
+                        modifier = Modifier.padding(start = 16.dp),
+                        linkColor = Color.Blue
                     )
                 }
             }
