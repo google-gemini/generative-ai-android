@@ -76,4 +76,6 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     implementation("com.google.ai.client.generativeai:generativeai:0.1.1")
+
+    implementation("com.github.jeziellago:compose-markdown:0.3.7")
 }
