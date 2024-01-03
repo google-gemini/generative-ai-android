@@ -31,7 +31,10 @@ interface Part
 /** Represents text or string based data sent to and received from requests. */
 class TextPart(val text: String) : Part
 
-/** Represents image data sent to and received from requests. */
+/**
+ * Represents image data sent to and received from requests. When this is sent to the server it is
+ * converted to jpeg encoding at 80% quality.
+ */
 class ImagePart(val image: Bitmap) : Part
 
 /** Represents binary data with an associated MIME type sent to and received from requests. */

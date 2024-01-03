@@ -52,7 +52,7 @@ internal fun com.google.ai.client.generativeai.type.Content.toInternal() =
 internal fun com.google.ai.client.generativeai.type.Part.toInternal(): Part {
   return when (this) {
     is com.google.ai.client.generativeai.type.TextPart -> TextPart(text)
-    is ImagePart -> BlobPart(Blob("image/png", encodeBitmapToBase64Png(image)))
+    is ImagePart -> BlobPart(Blob("image/jpeg", encodeBitmapToBase64Png(image)))
     is com.google.ai.client.generativeai.type.BlobPart ->
       BlobPart(Blob(mimeType, Base64.encodeToString(blob, BASE_64_FLAGS)))
     else ->
@@ -192,7 +192,7 @@ internal fun CountTokensResponse.toPublic() =
 
 private fun encodeBitmapToBase64Png(input: Bitmap): String {
   ByteArrayOutputStream().let {
-    input.compress(Bitmap.CompressFormat.PNG, 100, it)
+    input.compress(Bitmap.CompressFormat.JPEG, 80, it)
     return Base64.encodeToString(it.toByteArray(), BASE_64_FLAGS)
   }
 }
