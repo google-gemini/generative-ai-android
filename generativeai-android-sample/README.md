@@ -31,4 +31,4 @@ This sample showcases the following API capablilites:
 
 ## Documentation
 
-You can find the quick start documentation for the Android Generative AI API [here](https://ai.google.dev/tutorials/android_quickstart#set-up-api-key).
+You can find the quick start documentation for the Android Generative AI API [here](https://ai.google.dev/tutorials/android_quickstart).
