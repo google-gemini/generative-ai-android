@@ -1,0 +1,1 @@
+{"type":"MAJOR","changes":["Prevent Kotlin version from leaking 1.9.0 instead of 1.8.22"]}

@@ -19,9 +19,9 @@ plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
     kotlin("jvm") version "1.8.22"
-    id("com.ncorti.ktfmt.gradle") version "0.15.1"
+    id("com.ncorti.ktfmt.gradle") version "0.16.0"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.2"
-    kotlin("plugin.serialization") version "1.9.0"
+    kotlin("plugin.serialization") version "1.8.22"
 }
 
 ktfmt {
