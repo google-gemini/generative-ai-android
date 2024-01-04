@@ -1,0 +1,1 @@
+{"type":"MINOR","changes":["Update the serialization of ImagePart to compress to JPEG encoding at 80% quality, from PNG encoding at 100% quality"]}
