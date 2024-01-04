@@ -16,10 +16,10 @@
 
 plugins {
     id("com.android.library") version "8.1.3" apply false
-    id("org.jetbrains.dokka") version "1.9.10" apply false
+    id("org.jetbrains.dokka") version "1.8.20" apply false
     kotlin("android") version "1.8.22" apply false
-    kotlin("plugin.serialization") version "1.9.0" apply false
-    id("com.ncorti.ktfmt.gradle") version "0.15.1" apply false
+    kotlin("plugin.serialization") version "1.8.22" apply false
+    id("com.ncorti.ktfmt.gradle") version "0.16.0" apply false
     id("license-plugin")
 }
 
