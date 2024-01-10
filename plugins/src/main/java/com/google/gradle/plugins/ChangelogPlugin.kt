@@ -21,11 +21,12 @@ import com.google.gradle.tasks.MakeChangeTask
 import com.google.gradle.tasks.MakeReleaseNotesTask
 import com.google.gradle.tasks.WarnAboutApiChangesTask
 import com.google.gradle.types.Changelog
-import com.google.gradle.types.ModuleVersion
 import com.google.gradle.types.RandomWordsGenerator
 import com.google.gradle.util.apply
 import com.google.gradle.util.buildDir
 import com.google.gradle.util.childFile
+import com.google.gradle.util.moduleVersion
+import com.google.gradle.util.orElseIfNotExists
 import com.google.gradle.util.outputFile
 import com.google.gradle.util.provideProperty
 import com.google.gradle.util.tempFile
@@ -69,7 +70,9 @@ abstract class ChangelogPlugin : Plugin<Project> {
     with(project) {
       val extension =
         extensions.create<ChangelogPluginExtension>("changelog").apply { commonConfiguration() }
-      val releasedApiFile = apiPlugin.apiFile
+
+      val exportedApiFile = provider { file("exported.api") }
+      val releasedApiFile = exportedApiFile.orElseIfNotExists(apiPlugin.apiFile)
       val newApiFile = tasks.named("buildApi").outputFile
 
       val findChanges =
@@ -108,8 +111,9 @@ abstract class ChangelogPlugin : Plugin<Project> {
 
       tasks.register<MakeReleaseNotesTask>("makeReleaseNotes") {
         onlyIf("No changelog files found") { changelogFiles.get().isNotEmpty() }
+
         changeFiles.set(changelogFiles)
-        version.set(ModuleVersion.fromStringOrNull(project.version.toString()))
+        version.set(project.moduleVersion)
         outputFile.set(rootProject.buildDir("release_notes.md"))
 
         finalizedBy(deleteChangeFiles)

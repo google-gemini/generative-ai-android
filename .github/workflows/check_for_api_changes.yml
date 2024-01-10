@@ -18,12 +18,12 @@ jobs:
           distribution: temurin
           cache: gradle
 
-      - name: Update released.api
+      - name: Export the api file
         run: |
-          ./gradlew updateApi --no-daemon
+          ./gradlew exportApi --no-daemon
 
-      - name: Save released.api from master
-        run: mv generativeai/released.api ~/released.api
+      - name: Save exported.api from master
+        run: mv generativeai/exported.api ~/exported.api
 
       - name: Checkout branch
         uses: actions/checkout@v3.5.3
@@ -36,7 +36,7 @@ jobs:
           cache: gradle
 
       - name: Copy saved api to branch
-        run: mv ~/released.api generativeai/released.api
+        run: mv ~/exported.api generativeai/exported.api
 
       - name: Run api warning task
         run: |
