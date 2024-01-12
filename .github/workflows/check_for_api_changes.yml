@@ -20,7 +20,7 @@ jobs:
 
       - name: Generate the api file
         run: |
-          ./gradlew exportApi --no-daemon
+          ./gradlew generativeai:exportApi --no-daemon
 
       - name: Save public.api from master
         run: mv generativeai/public.api ~/public.api
@@ -40,7 +40,7 @@ jobs:
 
       - name: Run api warning task
         run: |
-          ./gradlew warnAboutApiChanges --no-daemon
+          ./gradlew generativeai:warnAboutApiChanges --no-daemon
 
       - name: Add PR Comment
         if: ${{ hashFiles('api_changes.md') != '' }}
