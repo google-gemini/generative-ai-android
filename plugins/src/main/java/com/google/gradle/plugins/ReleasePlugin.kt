@@ -31,7 +31,7 @@ import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.register
 
 /**
- * A Gradle plugin for preparing the release of a [Project].
+ * A Gradle plugin for preparing a release.
  *
  * Intended to be ran before running `publishAllPublicationsToMavenRepository`.
  *
