@@ -71,7 +71,7 @@ abstract class ChangelogPlugin : Plugin<Project> {
       val extension =
         extensions.create<ChangelogPluginExtension>("changelog").apply { commonConfiguration() }
 
-      val exportedApiFile = provider { file("exported.api") }
+      val exportedApiFile = provider { file("public.api") }
       val releasedApiFile = exportedApiFile.orElseIfNotExists(apiPlugin.apiFile)
       val newApiFile = tasks.named("buildApi").outputFile
 
