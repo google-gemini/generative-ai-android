@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 /*
  * Copyright 2023 Google LLC
  *
@@ -49,6 +51,25 @@ android {
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.4"
+    }
+    afterEvaluate {
+        val projectPath = rootProject.file(".").absolutePath
+        tasks.withType<KotlinCompile> {
+            kotlinOptions {
+                freeCompilerArgs = freeCompilerArgs + listOf(
+                    "-opt-in=kotlin.OptIn",
+                    "-opt-in=kotlin.RequiresOptIn",
+                )
+                freeCompilerArgs = freeCompilerArgs + listOf(
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=$projectPath/report/compose-metrics",
+                )
+                freeCompilerArgs = freeCompilerArgs + listOf(
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=$projectPath/report/compose-reports",
+                )
+            }
+        }
     }
 }
 

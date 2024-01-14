@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("UNCHECKED_CAST")
+
 package com.google.ai.sample
 
 import androidx.lifecycle.ViewModel
