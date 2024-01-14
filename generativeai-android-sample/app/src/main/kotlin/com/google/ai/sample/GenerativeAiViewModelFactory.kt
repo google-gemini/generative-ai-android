@@ -27,14 +27,14 @@ import com.google.ai.sample.feature.text.SummarizeViewModel
 
 val GenerativeViewModelFactory = object : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(
-        viewModelClass: Class<T>,
+        modelClass: Class<T>,
         extras: CreationExtras
     ): T {
         val config = generationConfig {
             temperature = 0.7f
         }
 
-        return with(viewModelClass) {
+        return with(modelClass) {
             when {
                 isAssignableFrom(SummarizeViewModel::class.java) -> {
                     // Initialize a GenerativeModel with the `gemini-pro` AI model
@@ -69,7 +69,7 @@ val GenerativeViewModelFactory = object : ViewModelProvider.Factory {
                 }
 
                 else ->
-                    throw IllegalArgumentException("Unknown ViewModel class: ${viewModelClass.name}")
+                    throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }
         } as T
     }
