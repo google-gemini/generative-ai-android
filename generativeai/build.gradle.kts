@@ -20,6 +20,7 @@ plugins {
     id("org.jetbrains.dokka")
     id("com.ncorti.ktfmt.gradle")
     id("changelog-plugin")
+    id("release-plugin")
     kotlin("android")
     kotlin("plugin.serialization")
 }

@@ -38,10 +38,6 @@ import org.gradle.api.tasks.TaskAction
  * The markdown file will also have a header representing the version to be released, bumped from
  * the provided [version] according to the highest impact [VersionType] from the list of changes.
  *
- * Note, that the version is ONLY bumped if the impact of any given change is more than a
- * [patch][VersionType.PATCH], as the repo's current version is set to a patch bump higher than the
- * currently released version by default to avoid cache conflicts when testing locally.
- *
  * @property changeFiles the [Changelog] files to use in the release
  * @property version a [ModuleVersion] representing the current version of the project
  * @property outputFile where to save the serialized release notes to
@@ -61,13 +57,11 @@ abstract class MakeReleaseNotesTask : DefaultTask() {
 
     val bump = changelogs.minBy { it.type.ordinal }.type
 
-    val version = if (bump >= VersionType.PATCH) version.get() else version.get().bump(bump)
-
     outputFile
       .get()
       .writeText(
         """
-            | # $version
+            |# ${version.get().bump(bump)}
             | 
             | - ${changes.joinToString("\n - ")}
         """
