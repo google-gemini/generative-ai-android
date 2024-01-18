@@ -16,6 +16,7 @@
 
 package com.google.gradle.util
 
+import com.google.gradle.types.ModuleVersion
 import java.io.File
 import org.gradle.api.DefaultTask
 import org.gradle.api.Plugin
@@ -60,7 +61,7 @@ inline fun <reified T : WorkAction<C>, C : WorkParameters> WorkQueue.submit(
  * fileProvider.map { File("${it.path}/$path") }
  * ```
  */
-fun Provider<File>.childFile(path: String) = map { File("${it.path}/$path") }
+fun Provider<File>.childFile(path: String): Provider<File> = map { File("${it.path}/$path") }
 
 /**
  * Returns a new [File] under the given sub directory.
@@ -131,6 +132,57 @@ val KotlinAndroidProjectExtension.release: KotlinJvmAndroidCompilation
  *
  * @param property the name of the property to look for
  */
-inline fun <reified T> Project.provideProperty(property: String) = provider {
+inline fun <reified T> Project.provideProperty(property: String): Provider<T?> = provider {
   findProperty(property) as? T
+}
+
+/**
+ * Rewrites the lines of a file.
+ *
+ * The lines of the file are first read and then transformed by the provided `block` function. The
+ * transformed lines are then joined together with a newline character and written back to the file.
+ *
+ * If the `terminateWithNewline` parameter is set to `false`, the file will not be terminated with a
+ * newline character.
+ *
+ * @param terminateWithNewline Whether to terminate the file with a newline character. Defaults to
+ *   `true`.
+ * @param block A function that takes a string as input and returns a new string. This function is
+ *   used to transform the lines of the file before they are rewritten.
+ *
+ * ```
+ * val file = File("my-file.txt")
+ *
+ * // Rewrite the lines of the file, replacing all spaces with tabs.
+ * file.rewriteLines { it.replace(" ", "\t") }
+ *
+ * // Rewrite the lines of the file, capitalizing the first letter of each word.
+ * file.rewriteLines { it.capitalizeWords() }
+ * ```
+ *
+ * @see [readLines]
+ * @see [writeText]
+ */
+fun File.rewriteLines(terminateWithNewline: Boolean = true, block: (String) -> String) {
+  val newLines = readLines().map(block)
+  writeText(newLines.joinToString("\n").let { if (terminateWithNewline) it + "\n" else it })
+}
+
+/**
+ * Lazily reads the first line of a file.
+ *
+ * Uses a buffered reader to avoid loading the whole file in memory, and closes the file after
+ * reading the first line.
+ */
+fun File.readFirstLine(): String = bufferedReader().useLines { it.first() }
+
+/** Fetches the [version][Project.getVersion] of the project as a [ModuleVersion]. */
+val Project.moduleVersion: ModuleVersion
+  get() =
+    ModuleVersion.fromStringOrNull(project.version.toString())
+      ?: throw RuntimeException("Invalid project version found.")
+
+/** Maps a file provider to an alternative provider if the original file does not exist. */
+fun Provider<File>.orElseIfNotExists(file: Provider<File>): Provider<File> = map {
+  it.takeIf { it.exists() } ?: file.get()
 }

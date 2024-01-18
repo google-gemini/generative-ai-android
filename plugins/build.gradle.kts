@@ -45,6 +45,10 @@ gradlePlugin {
             id = "changelog-plugin"
             implementationClass = "com.google.gradle.plugins.ChangelogPlugin"
         }
+        register("release-plugin") {
+            id = "release-plugin"
+            implementationClass = "com.google.gradle.plugins.ReleasePlugin"
+        }
     }
 }
 
