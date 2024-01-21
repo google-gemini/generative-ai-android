@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Shreyas Patil
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,32 @@
  */
 
 plugins {
-    id("com.android.library") version "8.1.3" apply false
+    //trick: for the same plugin versions in all sub-modules
+    alias(libs.plugins.androidLibrary).apply(false)
+    alias(libs.plugins.kotlinMultiplatform).apply(false)
     id("org.jetbrains.dokka") version "1.9.10" apply false
-    kotlin("android") version "1.8.22" apply false
+    kotlin("android") apply false
     kotlin("plugin.serialization") version "1.9.0" apply false
-    id("com.ncorti.ktfmt.gradle") version "0.15.1" apply false
-    id("license-plugin")
+    alias(libs.plugins.spotless).apply(false)
 }
 
-license {
-    template.set(file("licenses/APACHE-2.0"))
-    include.set(listOf("**/*.kt", "**/*.kts"))
+subprojects {
+    apply(plugin = rootProject.libs.plugins.spotless.get().pluginId)
+
+    configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+        kotlin {
+            target("**/*.kt")
+            targetExclude("$buildDir/**/*.kt")
+            targetExclude("bin/**/*.kt")
+            ktlint().editorConfigOverride(mapOf(
+                "ktlint_standard_filename" to "disabled",
+
+            ))
+            licenseHeaderFile(rootProject.file("licenses/APACHE-2.0"))
+        }
+        kotlinGradle {
+            target("**/*.gradle.kts")
+            ktlint()
+        }
+    }
 }

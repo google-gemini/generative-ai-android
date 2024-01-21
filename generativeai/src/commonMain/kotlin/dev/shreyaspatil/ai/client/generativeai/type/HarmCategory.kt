@@ -13,3 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package dev.shreyaspatil.ai.client.generativeai.type
+
+/** Category for a given harm rating. */
+enum class HarmCategory {
+    /** A new and not yet supported value. */
+    UNKNOWN,
+
+    /** Harassment content. */
+    HARASSMENT,
+
+    /** Hate speech and content. */
+    HATE_SPEECH,
+
+    /** Sexually explicit content. */
+    SEXUALLY_EXPLICIT,
+
+    /** Dangerous content. */
+    DANGEROUS_CONTENT,
+}

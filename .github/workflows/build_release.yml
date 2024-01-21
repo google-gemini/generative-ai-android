@@ -5,19 +5,18 @@ name: Generate release artifacts
 
 # Controls when the action will run.
 on:
-  # Triggers the workflow on push or pull request events but only for the main branch
-  push:
-    branches: [ main ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      versionName:
+        description: 'Version Name'
+        required: true
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -28,9 +27,45 @@ jobs:
           cache: gradle
       - name: Perform a Gradle build
         run: ./gradlew generativeai:publishAllPublicationsToMavenRepository
-      - name: Upload generated artifacts
-        uses: actions/upload-artifact@v2
+
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@v2
         with:
-          name: generative-ai-android
-          path: generativeai/m2
-          retention-days: 5
+          arguments: build
+
+      - name: Publish Library
+        run: |
+          echo "Publishing library🚀"
+          ./gradlew :generativeai:publish
+          echo "Published Library✅"
+
+          echo "Releasing library...🚀"
+          ./gradlew :generativeai:closeAndReleaseRepository
+          echo "Released Library✅"
+        env:
+          ORG_GRADLE_PROJECT_VERSION_NAME: ${{ github.event.inputs.versionName }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PASSWORD }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+
+      - name: Create and push tag
+        run: |
+          git config --global user.email "shreyaspatilg@gmail.com"
+          git config --global user.name "$GITHUB_ACTOR"
+
+          git tag -a $TAG -m "Release $TAG"
+          git push origin $TAG
+        env:
+          TAG: v${{ github.event.inputs.versionName }}
+
+      - name: Create Release on GitHub
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.event.inputs.versionName }}
+          release_name: v${{ github.event.inputs.versionName }}
+          draft: true
+          prerelease: false

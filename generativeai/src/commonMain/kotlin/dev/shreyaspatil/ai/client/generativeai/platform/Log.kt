@@ -13,3 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package dev.shreyaspatil.ai.client.generativeai.platform
+
+expect object Log {
+    fun d(tag: String, message: String)
+
+    fun w(tag: String, message: String)
+
+    fun e(tag: String, message: String)
+}

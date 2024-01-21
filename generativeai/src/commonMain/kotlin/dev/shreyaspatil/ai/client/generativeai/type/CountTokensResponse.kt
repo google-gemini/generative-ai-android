@@ -13,3 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package dev.shreyaspatil.ai.client.generativeai.type
+
+/**
+ * Represents a response measuring model input.
+ *
+ * @property totalTokens A count of the number of tokens in the input
+ */
+class CountTokensResponse(val totalTokens: Int) {
+    operator fun component1() = totalTokens
+}

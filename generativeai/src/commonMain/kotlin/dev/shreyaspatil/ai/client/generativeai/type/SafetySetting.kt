@@ -13,3 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package dev.shreyaspatil.ai.client.generativeai.type
+
+/**
+ * A configuration for a [BlockThreshold] of some [HarmCategory] allowed and blocked in responses.
+ *
+ * @param harmCategory The relevant [HarmCategory].
+ * @param threshold The threshold form harm allowable.
+ */
+class SafetySetting(val harmCategory: HarmCategory, val threshold: BlockThreshold)
