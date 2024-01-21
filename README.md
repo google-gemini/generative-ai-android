@@ -27,7 +27,7 @@ print(response.text)
 
 ## Installation and usage
 
-Add the dependency `implementation("dev.shreyaspatil.generativeai:generativeai:<version>"`) to 
+Add the dependency (`implementation("dev.shreyaspatil.generativeai:generativeai:<version>"`) to 
 your Kotlin Multiplatform project.
 
 For detailed instructions, you can find a [quickstart](https://ai.google.dev/tutorials/android_quickstart) 
@@ -39,8 +39,7 @@ use cases and features, like streaming, counting tokens, and controlling respons
 
 ## Documentation
 
-Find complete documentation for the Google AI SDKs and the Gemini model in the Google documentation:\
-https://ai.google.dev/docs
+To be updated...
 
 ## Contributing
 
