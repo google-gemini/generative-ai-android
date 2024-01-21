@@ -41,7 +41,8 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
-internal const val DOMAIN = "https://generativelanguage.googleapis.com/v1/models"
+// TODO: Should these stay here or be moved elsewhere?
+internal const val DOMAIN = "https://generativelanguage.googleapis.com/v1"
 
 internal val JSON = Json {
     ignoreUnknownKeys = true
@@ -60,9 +61,10 @@ internal val JSON = Json {
  */
 internal class APIController(
     private val key: String,
-    private val model: String,
+    model: String,
     engine: HttpClientEngine? = null,
 ) {
+    private val model = fullModelName(model)
     private val client = getHttpClient(engine)
 
     suspend fun generateContent(request: GenerateContentRequest): GenerateContentResponse {
@@ -112,6 +114,14 @@ internal class APIController(
         }
     }
 }
+
+/**
+ * Ensures the model name provided has a `models/` prefix
+ *
+ * Models must be prepended with the `models/` prefix when communicating with the backend.
+ */
+private fun fullModelName(name: String): String =
+  name.takeIf { it.startsWith("models/") } ?: "models/$name"
 
 /**
  * Makes a POST request to the specified [url] and returns a [Flow] of deserialized response objects
