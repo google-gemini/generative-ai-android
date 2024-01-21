@@ -66,6 +66,7 @@ kotlin {
         }
         jvmMain.dependencies {
             api(libs.ktor.client.okhttp)
+            api(libs.slf4j.api)
         }
         iosMain.dependencies {
             api(libs.ktor.client.darwin)

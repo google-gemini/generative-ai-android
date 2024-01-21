@@ -5,6 +5,7 @@ kotlin = "1.9.20"
 coroutines = "1.7.3"
 kotlinx-serialization-json = "1.6.2"
 ktor = "2.3.7"
+slf4j-api = "2.0.11"
 spotless = "6.22.0"
 
 [libraries]
@@ -22,6 +23,7 @@ ktor-client-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-
 
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest-assertions-core" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j-api" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
