@@ -31,11 +31,11 @@ import io.ktor.http.headersOf
 import io.ktor.utils.io.ByteChannel
 import io.ktor.utils.io.close
 import io.ktor.utils.io.writeFully
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.withTimeout
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import kotlin.time.Duration.Companion.seconds
 
 internal class GenerativeModelTests {
   private val testTimeout = 5.seconds
@@ -61,7 +61,7 @@ internal class GenerativeModelTests {
 internal class ModelNamingTests(private val modelName: String, private val actualName: String) {
 
   @Test
-  fun `request should include right model name`() =  doBlocking {
+  fun `request should include right model name`() = doBlocking {
     val channel = ByteChannel(autoFlush = true)
     val mockEngine = MockEngine {
       respond(channel, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
@@ -82,15 +82,13 @@ internal class ModelNamingTests(private val modelName: String, private val actua
   companion object {
     @JvmStatic
     @Parameterized.Parameters
-    fun data() = listOf(
-      arrayOf("gemini-pro", "models/gemini-pro"),
-      arrayOf("x/gemini-pro", "models/x/gemini-pro"),
-      arrayOf("models/gemini-pro", "models/gemini-pro"),
-      arrayOf("tunedModels/mymodel", "tunedModels/mymodel"),
-      arrayOf("tuneModels/mymodel", "models/tuneModels/mymodel"),
-    )
+    fun data() =
+      listOf(
+        arrayOf("gemini-pro", "models/gemini-pro"),
+        arrayOf("x/gemini-pro", "models/x/gemini-pro"),
+        arrayOf("models/gemini-pro", "models/gemini-pro"),
+        arrayOf("tunedModels/mymodel", "tunedModels/mymodel"),
+        arrayOf("tuneModels/mymodel", "models/tuneModels/mymodel"),
+      )
   }
-
-
 }
-

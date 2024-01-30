@@ -106,9 +106,7 @@ internal fun commonTest(status: HttpStatusCode = HttpStatusCode.OK, block: Commo
     CommonTestScope(channel, model).block()
   }
 
-/**
- * Simple wrapper that guarantees the model and APIController are created using the same data
- */
+/** Simple wrapper that guarantees the model and APIController are created using the same data */
 internal fun createGenerativeModel(name: String, apikey: String, engine: MockEngine) =
   GenerativeModel(name, apikey, controller = APIController(apikey, name, engine))
 
