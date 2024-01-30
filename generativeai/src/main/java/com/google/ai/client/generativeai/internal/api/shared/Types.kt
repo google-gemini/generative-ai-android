@@ -48,11 +48,23 @@ typealias Base64 = String
 
 @Serializable internal data class BlobPart(@SerialName("inline_data") val inlineData: Blob) : Part
 
+@Serializable internal data class FunctionCallPart(val functionCall: FunctionCall) : Part
+
+@Serializable
+internal data class FunctionResponsePart(val functionResponse: FunctionResponse) : Part
+
 @Serializable
 internal data class Blob(
   @SerialName("mime_type") val mimeType: String,
   val data: Base64,
 )
+
+@Serializable
+internal data class FunctionResponse(val name: String, val response: FunctionResponseData)
+
+@Serializable internal data class FunctionCall(val name: String, val args: Map<String, String>)
+
+@Serializable internal data class FunctionResponseData(val name: String, val content: String)
 
 @Serializable
 internal data class SafetySetting(val category: HarmCategory, val threshold: HarmBlockThreshold)
@@ -72,6 +84,8 @@ internal object PartSerializer : JsonContentPolymorphicSerializer<Part>(Part::cl
     return when {
       "text" in jsonObject -> TextPart.serializer()
       "inlineData" in jsonObject -> BlobPart.serializer()
+      "functionCall" in jsonObject -> FunctionCallPart.serializer()
+      "functionResponse" in jsonObject -> FunctionResponsePart.serializer()
       else -> throw SerializationException("Unknown Part type")
     }
   }

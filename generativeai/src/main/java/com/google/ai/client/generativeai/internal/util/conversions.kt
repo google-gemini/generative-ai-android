@@ -32,6 +32,11 @@ import com.google.ai.client.generativeai.internal.api.server.SafetyRating
 import com.google.ai.client.generativeai.internal.api.shared.Blob
 import com.google.ai.client.generativeai.internal.api.shared.BlobPart
 import com.google.ai.client.generativeai.internal.api.shared.Content
+import com.google.ai.client.generativeai.internal.api.shared.FunctionCall
+import com.google.ai.client.generativeai.internal.api.shared.FunctionCallPart
+import com.google.ai.client.generativeai.internal.api.shared.FunctionResponse
+import com.google.ai.client.generativeai.internal.api.shared.FunctionResponseData
+import com.google.ai.client.generativeai.internal.api.shared.FunctionResponsePart
 import com.google.ai.client.generativeai.internal.api.shared.HarmBlockThreshold
 import com.google.ai.client.generativeai.internal.api.shared.HarmCategory
 import com.google.ai.client.generativeai.internal.api.shared.Part
@@ -39,10 +44,14 @@ import com.google.ai.client.generativeai.internal.api.shared.SafetySetting
 import com.google.ai.client.generativeai.internal.api.shared.TextPart
 import com.google.ai.client.generativeai.type.BlockThreshold
 import com.google.ai.client.generativeai.type.CitationMetadata
+import com.google.ai.client.generativeai.type.FunctionDeclaration
 import com.google.ai.client.generativeai.type.ImagePart
 import com.google.ai.client.generativeai.type.SerializationException
+import com.google.ai.client.generativeai.type.Tool
 import com.google.ai.client.generativeai.type.content
 import java.io.ByteArrayOutputStream
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.buildJsonObject
 
 private const val BASE_64_FLAGS = Base64.NO_WRAP
 
@@ -55,6 +64,10 @@ internal fun com.google.ai.client.generativeai.type.Part.toInternal(): Part {
     is ImagePart -> BlobPart(Blob("image/jpeg", encodeBitmapToBase64Png(image)))
     is com.google.ai.client.generativeai.type.BlobPart ->
       BlobPart(Blob(mimeType, Base64.encodeToString(blob, BASE_64_FLAGS)))
+    is com.google.ai.client.generativeai.type.FunctionCallPart ->
+      FunctionCallPart(FunctionCall(name, args))
+    is com.google.ai.client.generativeai.type.FunctionResponsePart ->
+      FunctionResponsePart(FunctionResponse(name, FunctionResponseData(name, response)))
     else ->
       throw SerializationException(
         "The given subclass of Part (${javaClass.simpleName}) is not supported in the serialization yet."
@@ -95,6 +108,35 @@ internal fun BlockThreshold.toInternal() =
     BlockThreshold.UNSPECIFIED -> HarmBlockThreshold.UNSPECIFIED
   }
 
+internal fun Tool.toInternal() =
+  com.google.ai.client.generativeai.internal.api.client.Tool(
+    functionDeclarations.map { it.toInternal() }
+  )
+
+internal fun FunctionDeclaration.toInternal():
+  com.google.ai.client.generativeai.internal.api.client.FunctionDeclaration {
+  val convertedParams = buildJsonObject {
+    getParameters().forEach {
+      put(
+        it.name,
+        buildJsonObject {
+          put("type", JsonPrimitive("STRING"))
+          put("description", JsonPrimitive(it.description))
+        }
+      )
+    }
+  }
+  return com.google.ai.client.generativeai.internal.api.client.FunctionDeclaration(
+    name,
+    description,
+    com.google.ai.client.generativeai.internal.api.client.FunctionParameters(
+      convertedParams,
+      getParameters().map { it.name },
+      "OBJECT"
+    )
+  )
+}
+
 internal fun Candidate.toPublic(): com.google.ai.client.generativeai.type.Candidate {
   val safetyRatings = safetyRatings?.map { it.toPublic() }.orEmpty()
   val citations = citationMetadata?.citationSources?.map { it.toPublic() }.orEmpty()
@@ -122,6 +164,16 @@ internal fun Part.toPublic(): com.google.ai.client.generativeai.type.Part {
         com.google.ai.client.generativeai.type.BlobPart(inlineData.mimeType, data)
       }
     }
+    is FunctionCallPart ->
+      com.google.ai.client.generativeai.type.FunctionCallPart(
+        functionCall.name,
+        functionCall.args.orEmpty()
+      )
+    is FunctionResponsePart ->
+      com.google.ai.client.generativeai.type.FunctionResponsePart(
+        functionResponse.name,
+        functionResponse.response.content
+      )
   }
 }
 

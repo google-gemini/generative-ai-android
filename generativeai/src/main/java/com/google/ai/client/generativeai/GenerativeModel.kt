@@ -25,13 +25,20 @@ import com.google.ai.client.generativeai.internal.util.toPublic
 import com.google.ai.client.generativeai.type.Content
 import com.google.ai.client.generativeai.type.CountTokensResponse
 import com.google.ai.client.generativeai.type.FinishReason
+import com.google.ai.client.generativeai.type.FourParameterFunction
+import com.google.ai.client.generativeai.type.FunctionCallPart
 import com.google.ai.client.generativeai.type.GenerateContentResponse
 import com.google.ai.client.generativeai.type.GenerationConfig
 import com.google.ai.client.generativeai.type.GoogleGenerativeAIException
+import com.google.ai.client.generativeai.type.NoParameterFunction
+import com.google.ai.client.generativeai.type.OneParameterFunction
 import com.google.ai.client.generativeai.type.PromptBlockedException
 import com.google.ai.client.generativeai.type.ResponseStoppedException
 import com.google.ai.client.generativeai.type.SafetySetting
 import com.google.ai.client.generativeai.type.SerializationException
+import com.google.ai.client.generativeai.type.ThreeParameterFunction
+import com.google.ai.client.generativeai.type.Tool
+import com.google.ai.client.generativeai.type.TwoParameterFunction
 import com.google.ai.client.generativeai.type.content
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -52,6 +59,7 @@ internal constructor(
   val apiKey: String,
   val generationConfig: GenerationConfig? = null,
   val safetySettings: List<SafetySetting>? = null,
+  val tools: List<Tool>? = null,
   private val controller: APIController
 ) {
 
@@ -61,7 +69,15 @@ internal constructor(
     apiKey: String,
     generationConfig: GenerationConfig? = null,
     safetySettings: List<SafetySetting>? = null,
-  ) : this(modelName, apiKey, generationConfig, safetySettings, APIController(apiKey, modelName))
+    tools: List<Tool>? = null
+  ) : this(
+    modelName,
+    apiKey,
+    generationConfig,
+    safetySettings,
+    tools,
+    APIController(apiKey, modelName)
+  )
 
   /**
    * Generates a response from the backend with the provided [Content]s.
@@ -160,12 +176,64 @@ internal constructor(
     return countTokens(content { image(prompt) })
   }
 
+  /**
+   * Executes a function request by the model.
+   *
+   * @param call A [FunctionCallPart] from the model, containing a function call and parameters
+   * @return The output of the requested function call
+   */
+  suspend fun executeFunction(call: FunctionCallPart): String {
+    if (tools == null) {
+      throw RuntimeException("No registered tools")
+    }
+    val tool = tools.first { it.functionDeclarations.any { it.name == call.name } }
+    val declaration =
+      tool.functionDeclarations.firstOrNull() { it.name == call.name }
+        ?: throw RuntimeException("No registered function named ${call.name}")
+    return when (declaration) {
+      is NoParameterFunction -> {
+        declaration.function.invoke()
+      }
+      is OneParameterFunction -> {
+        val param1 = getParamOrThrow(declaration.param.name, call)
+        declaration.function.invoke(param1)
+      }
+      is TwoParameterFunction -> {
+        val param1 = getParamOrThrow(declaration.param1.name, call)
+        val param2 = getParamOrThrow(declaration.param2.name, call)
+        declaration.function.invoke(param1, param2)
+      }
+      is ThreeParameterFunction -> {
+        val param1 = getParamOrThrow(declaration.param1.name, call)
+        val param2 = getParamOrThrow(declaration.param2.name, call)
+        val param3 = getParamOrThrow(declaration.param3.name, call)
+        declaration.function.invoke(param1, param2, param3)
+      }
+      is FourParameterFunction -> {
+        val param1 = getParamOrThrow(declaration.param1.name, call)
+        val param2 = getParamOrThrow(declaration.param2.name, call)
+        val param3 = getParamOrThrow(declaration.param3.name, call)
+        val param4 = getParamOrThrow(declaration.param4.name, call)
+        declaration.function.invoke(param1, param2, param3, param4)
+      }
+      else -> {
+        throw RuntimeException("UNREACHABLE")
+      }
+    }
+  }
+
+  private fun getParamOrThrow(paramName: String, part: FunctionCallPart): String {
+    return part.args[paramName]
+      ?: throw RuntimeException("Missing parameter named $paramName for function ${part.name}")
+  }
+
   private fun constructRequest(vararg prompt: Content) =
     GenerateContentRequest(
       modelName,
       prompt.map { it.toInternal() },
       safetySettings?.map { it.toInternal() },
-      generationConfig?.toInternal()
+      generationConfig?.toInternal(),
+      tools?.map { it.toInternal() }
     )
 
   private fun constructCountTokensRequest(vararg prompt: Content) =

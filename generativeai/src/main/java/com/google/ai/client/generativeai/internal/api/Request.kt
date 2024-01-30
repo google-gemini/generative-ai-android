@@ -17,6 +17,7 @@
 package com.google.ai.client.generativeai.internal.api
 
 import com.google.ai.client.generativeai.internal.api.client.GenerationConfig
+import com.google.ai.client.generativeai.internal.api.client.Tool
 import com.google.ai.client.generativeai.internal.api.shared.Content
 import com.google.ai.client.generativeai.internal.api.shared.SafetySetting
 import kotlinx.serialization.SerialName
@@ -30,6 +31,7 @@ internal data class GenerateContentRequest(
   val contents: List<Content>,
   @SerialName("safety_settings") val safetySettings: List<SafetySetting>? = null,
   @SerialName("generation_config") val generationConfig: GenerationConfig? = null,
+  val tools: List<Tool>? = null
 ) : Request
 
 @Serializable

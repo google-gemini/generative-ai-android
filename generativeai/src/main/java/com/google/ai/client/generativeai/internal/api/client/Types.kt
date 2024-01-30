@@ -18,6 +18,7 @@ package com.google.ai.client.generativeai.internal.api.client
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 
 @Serializable
 internal data class GenerationConfig(
@@ -27,4 +28,20 @@ internal data class GenerationConfig(
   @SerialName("candidate_count") val candidateCount: Int?,
   @SerialName("max_output_tokens") val maxOutputTokens: Int?,
   @SerialName("stop_sequences") val stopSequences: List<String>?
+)
+
+@Serializable internal data class Tool(val functionDeclarations: List<FunctionDeclaration>)
+
+@Serializable
+internal data class FunctionDeclaration(
+  val name: String,
+  val description: String,
+  val parameters: FunctionParameters
+)
+
+@Serializable
+internal data class FunctionParameters(
+  val properties: JsonObject,
+  val required: List<String>,
+  val type: String,
 )
