@@ -114,7 +114,7 @@ internal class APIController(
  * Models must be prepended with the `models/` prefix when communicating with the backend.
  */
 private fun fullModelName(name: String): String =
-  name.takeIf { it.startsWith("models/") } ?: "models/$name"
+  name.takeIf { it.startsWith("models/") || it.startsWith("tunedModels/") } ?: "models/$name"
 
 /**
  * Makes a POST request to the specified [url] and returns a [Flow] of deserialized response objects
