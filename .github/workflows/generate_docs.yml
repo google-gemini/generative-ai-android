@@ -29,7 +29,7 @@ jobs:
       - name: Run dokka
         run: ./gradlew generativeai:dokkaHtml
       - name: Upload generated docs
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: google-ai-android
           path: generativeai/build/dokka/html
