@@ -113,8 +113,7 @@ internal class APIController(
  *
  * Models must be prepended with the `models/` prefix when communicating with the backend.
  */
-private fun fullModelName(name: String): String =
-  name.takeIf { it.contains("/") } ?: "models/$name"
+private fun fullModelName(name: String): String = name.takeIf { it.contains("/") } ?: "models/$name"
 
 /**
  * Makes a POST request to the specified [url] and returns a [Flow] of deserialized response objects
