@@ -85,10 +85,10 @@ internal class ModelNamingTests(private val modelName: String, private val actua
     fun data() =
       listOf(
         arrayOf("gemini-pro", "models/gemini-pro"),
-        arrayOf("x/gemini-pro", "models/x/gemini-pro"),
+        arrayOf("x/gemini-pro", "x/gemini-pro"),
         arrayOf("models/gemini-pro", "models/gemini-pro"),
-        arrayOf("tunedModels/mymodel", "tunedModels/mymodel"),
-        arrayOf("tuneModels/mymodel", "models/tuneModels/mymodel"),
+        arrayOf("/modelname", "/modelname"),
+        arrayOf("modifiedNaming/mymodel", "modifiedNaming/mymodel"),
       )
   }
 }
