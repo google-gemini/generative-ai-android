@@ -32,7 +32,6 @@ import java.util.concurrent.Semaphore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.transform
 
 /**
@@ -127,9 +126,7 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
      *   represented as image/text
      */
     return flow
-      .transform { response ->
-        automaticFunctionExecutingTransform(this, tempHistory, response)
-      }
+      .transform { response -> automaticFunctionExecutingTransform(this, tempHistory, response) }
       .onCompletion {
         lock.release()
         if (it == null) {
