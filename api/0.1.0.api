@@ -1,11 +1,3 @@
-public final class com/google/ai/client/generativeai/BuildConfig {
-	public static final field BUILD_TYPE Ljava/lang/String;
-	public static final field DEBUG Z
-	public static final field LIBRARY_PACKAGE_NAME Ljava/lang/String;
-	public static final field VERSION_NAME Ljava/lang/String;
-	public fun <init> ()V
-}
-
 public final class com/google/ai/client/generativeai/Chat {
 	public fun <init> (Lcom/google/ai/client/generativeai/GenerativeModel;Ljava/util/List;)V
 	public synthetic fun <init> (Lcom/google/ai/client/generativeai/GenerativeModel;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
@@ -43,7 +35,6 @@ public final class com/google/ai/client/generativeai/GenerativeModel {
 public abstract class com/google/ai/client/generativeai/java/ChatFutures {
 	public static final field Companion Lcom/google/ai/client/generativeai/java/ChatFutures$Companion;
 	public static final fun from (Lcom/google/ai/client/generativeai/Chat;)Lcom/google/ai/client/generativeai/java/ChatFutures;
-	public abstract fun getChat ()Lcom/google/ai/client/generativeai/Chat;
 	public abstract fun sendMessage (Lcom/google/ai/client/generativeai/type/Content;)Lcom/google/common/util/concurrent/ListenableFuture;
 	public abstract fun sendMessageStream (Lcom/google/ai/client/generativeai/type/Content;)Lorg/reactivestreams/Publisher;
 }
@@ -58,7 +49,6 @@ public abstract class com/google/ai/client/generativeai/java/GenerativeModelFutu
 	public static final fun from (Lcom/google/ai/client/generativeai/GenerativeModel;)Lcom/google/ai/client/generativeai/java/GenerativeModelFutures;
 	public abstract fun generateContent ([Lcom/google/ai/client/generativeai/type/Content;)Lcom/google/common/util/concurrent/ListenableFuture;
 	public abstract fun generateContentStream ([Lcom/google/ai/client/generativeai/type/Content;)Lorg/reactivestreams/Publisher;
-	public abstract fun getGenerativeModel ()Lcom/google/ai/client/generativeai/GenerativeModel;
 	public abstract fun startChat ()Lcom/google/ai/client/generativeai/java/ChatFutures;
 	public abstract fun startChat (Ljava/util/List;)Lcom/google/ai/client/generativeai/java/ChatFutures;
 }
@@ -78,6 +68,7 @@ public final class com/google/ai/client/generativeai/type/BlockReason : java/lan
 	public static final field SAFETY Lcom/google/ai/client/generativeai/type/BlockReason;
 	public static final field UNKNOWN Lcom/google/ai/client/generativeai/type/BlockReason;
 	public static final field UNSPECIFIED Lcom/google/ai/client/generativeai/type/BlockReason;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lcom/google/ai/client/generativeai/type/BlockReason;
 	public static fun values ()[Lcom/google/ai/client/generativeai/type/BlockReason;
 }
@@ -88,6 +79,7 @@ public final class com/google/ai/client/generativeai/type/BlockThreshold : java/
 	public static final field NONE Lcom/google/ai/client/generativeai/type/BlockThreshold;
 	public static final field ONLY_HIGH Lcom/google/ai/client/generativeai/type/BlockThreshold;
 	public static final field UNSPECIFIED Lcom/google/ai/client/generativeai/type/BlockThreshold;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lcom/google/ai/client/generativeai/type/BlockThreshold;
 	public static fun values ()[Lcom/google/ai/client/generativeai/type/BlockThreshold;
 }
@@ -147,6 +139,7 @@ public final class com/google/ai/client/generativeai/type/FinishReason : java/la
 	public static final field STOP Lcom/google/ai/client/generativeai/type/FinishReason;
 	public static final field UNKNOWN Lcom/google/ai/client/generativeai/type/FinishReason;
 	public static final field UNSPECIFIED Lcom/google/ai/client/generativeai/type/FinishReason;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lcom/google/ai/client/generativeai/type/FinishReason;
 	public static fun values ()[Lcom/google/ai/client/generativeai/type/FinishReason;
 }
@@ -204,6 +197,7 @@ public final class com/google/ai/client/generativeai/type/HarmCategory : java/la
 	public static final field HATE_SPEECH Lcom/google/ai/client/generativeai/type/HarmCategory;
 	public static final field SEXUALLY_EXPLICIT Lcom/google/ai/client/generativeai/type/HarmCategory;
 	public static final field UNKNOWN Lcom/google/ai/client/generativeai/type/HarmCategory;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lcom/google/ai/client/generativeai/type/HarmCategory;
 	public static fun values ()[Lcom/google/ai/client/generativeai/type/HarmCategory;
 }
@@ -215,6 +209,7 @@ public final class com/google/ai/client/generativeai/type/HarmProbability : java
 	public static final field NEGLIGIBLE Lcom/google/ai/client/generativeai/type/HarmProbability;
 	public static final field UNKNOWN Lcom/google/ai/client/generativeai/type/HarmProbability;
 	public static final field UNSPECIFIED Lcom/google/ai/client/generativeai/type/HarmProbability;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
 	public static fun valueOf (Ljava/lang/String;)Lcom/google/ai/client/generativeai/type/HarmProbability;
 	public static fun values ()[Lcom/google/ai/client/generativeai/type/HarmProbability;
 }
@@ -287,4 +282,3 @@ public final class com/google/ai/client/generativeai/type/UnknownException : com
 	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 }
-
