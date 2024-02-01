@@ -78,10 +78,6 @@ internal class APIController(
         requestTimeoutMillis = HttpTimeout.INFINITE_TIMEOUT_MS
         socketTimeoutMillis = 80_000
       }
-      install(Logging) {
-        logger = Logger.ANDROID
-        level = LogLevel.BODY
-      }
       install(ContentNegotiation) { json(JSON) }
     }
 
