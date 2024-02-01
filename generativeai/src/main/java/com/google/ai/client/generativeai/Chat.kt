@@ -63,13 +63,14 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
     attemptLock()
     var response: GenerateContentResponse
     var prompt = inputPrompt
+    val tempHistory = LinkedList<Content>()
     try {
       while (true) {
-        response = model.generateContent(*history.toTypedArray(), prompt)
+        response = model.generateContent(*history.toTypedArray(), *tempHistory.toTypedArray(), prompt)
         val responsePart = response.candidates.first().content.parts.first()
 
-        history.add(prompt)
-        history.add(response.candidates.first().content)
+        tempHistory.add(prompt)
+        tempHistory.add(response.candidates.first().content)
         if (responsePart is FunctionCallPart) {
           val output = model.executeFunction(responsePart)
           prompt = Content("function", listOf(FunctionResponsePart(responsePart.name, output)))
@@ -77,6 +78,7 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
           break
         }
       }
+      history.addAll(tempHistory)
       return response
     } finally {
       lock.release()
