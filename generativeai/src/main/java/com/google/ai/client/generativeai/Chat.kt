@@ -66,7 +66,8 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
     val tempHistory = LinkedList<Content>()
     try {
       while (true) {
-        response = model.generateContent(*history.toTypedArray(), *tempHistory.toTypedArray(), prompt)
+        response =
+          model.generateContent(*history.toTypedArray(), *tempHistory.toTypedArray(), prompt)
         val responsePart = response.candidates.first().content.parts.first()
 
         tempHistory.add(prompt)
