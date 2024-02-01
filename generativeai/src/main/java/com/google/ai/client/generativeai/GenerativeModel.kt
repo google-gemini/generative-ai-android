@@ -22,6 +22,7 @@ import com.google.ai.client.generativeai.internal.api.CountTokensRequest
 import com.google.ai.client.generativeai.internal.api.GenerateContentRequest
 import com.google.ai.client.generativeai.internal.util.toInternal
 import com.google.ai.client.generativeai.internal.util.toPublic
+import com.google.ai.client.generativeai.type.BetaGenAiAPI
 import com.google.ai.client.generativeai.type.Content
 import com.google.ai.client.generativeai.type.CountTokensResponse
 import com.google.ai.client.generativeai.type.FinishReason
@@ -53,6 +54,7 @@ import kotlinx.coroutines.flow.map
  * @property safetySettings the safety bounds to use during alongside prompts during content
  *   generation
  */
+@OptIn(BetaGenAiAPI::class)
 class GenerativeModel
 internal constructor(
   val modelName: String,
@@ -182,6 +184,7 @@ internal constructor(
    * @param call A [FunctionCallPart] from the model, containing a function call and parameters
    * @return The output of the requested function call
    */
+  @BetaGenAiAPI
   suspend fun executeFunction(call: FunctionCallPart): String {
     if (tools == null) {
       throw RuntimeException("No registered tools")

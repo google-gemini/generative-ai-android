@@ -6,6 +6,7 @@ package com.google.ai.client.generativeai.type
  *
  * @param functionDeclarations The set of functions that this tool allows the model access to
  */
+@BetaGenAiAPI
 class Tool(
   val functionDeclarations: List<FunctionDeclaration>,
 )

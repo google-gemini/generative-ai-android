@@ -8,6 +8,7 @@ package com.google.ai.client.generativeai.type
  * @property description A description of what the function does and its output.
  * @property function the function implementation
  */
+@BetaGenAiAPI
 class NoParameterFunction(
   name: String,
   description: String,
@@ -25,6 +26,7 @@ class NoParameterFunction(
  * @property param A description of the first function parameter
  * @property function the function implementation
  */
+@BetaGenAiAPI
 class OneParameterFunction(
   name: String,
   description: String,
@@ -44,6 +46,7 @@ class OneParameterFunction(
  * @property param2 A description of the second function parameter
  * @property function the function implementation
  */
+@BetaGenAiAPI
 class TwoParameterFunction(
   name: String,
   description: String,
@@ -65,6 +68,7 @@ class TwoParameterFunction(
  * @property param3 A description of the third function parameter
  * @property function the function implementation
  */
+@BetaGenAiAPI
 class ThreeParameterFunction(
   name: String,
   description: String,
@@ -88,6 +92,7 @@ class ThreeParameterFunction(
  * @property param4 A description of the fourth function parameter
  * @property function the function implementation
  */
+@BetaGenAiAPI
 class FourParameterFunction(
   name: String,
   description: String,
@@ -100,6 +105,7 @@ class FourParameterFunction(
   override fun getParameters() = listOf(param1, param2, param3, param4)
 }
 
+@BetaGenAiAPI
 abstract class FunctionDeclaration(
   val name: String,
   val description: String,
@@ -113,6 +119,7 @@ abstract class FunctionDeclaration(
  * @property name The name of the function call, this should be clear and descriptive for the model
  * @property description A description of what the function does and its output.
  */
+@BetaGenAiAPI
 class FunctionBuilder(private val name: String, private val description: String) {
 
   fun build(function: suspend () -> String): FunctionDeclaration {
@@ -124,6 +131,7 @@ class FunctionBuilder(private val name: String, private val description: String)
   }
 }
 
+@BetaGenAiAPI
 class OneFunctionBuilder(
   private val name: String,
   private val description: String,
@@ -138,6 +146,7 @@ class OneFunctionBuilder(
   }
 }
 
+@BetaGenAiAPI
 class TwoFunctionBuilder(
   private val name: String,
   private val description: String,
@@ -153,6 +162,7 @@ class TwoFunctionBuilder(
   }
 }
 
+@BetaGenAiAPI
 class ThreeFunctionBuilder(
   private val name: String,
   private val description: String,
@@ -169,6 +179,7 @@ class ThreeFunctionBuilder(
   }
 }
 
+@BetaGenAiAPI
 class FourFunctionBuilder(
   private val name: String,
   private val description: String,

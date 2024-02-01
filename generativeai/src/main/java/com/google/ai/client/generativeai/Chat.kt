@@ -17,6 +17,7 @@
 package com.google.ai.client.generativeai
 
 import android.graphics.Bitmap
+import com.google.ai.client.generativeai.type.BetaGenAiAPI
 import com.google.ai.client.generativeai.type.BlobPart
 import com.google.ai.client.generativeai.type.Content
 import com.google.ai.client.generativeai.type.FunctionCallPart
@@ -46,6 +47,7 @@ import kotlinx.coroutines.flow.transform
  * @param model the model to use for the interaction
  * @property history the previous interactions with the model
  */
+@OptIn(BetaGenAiAPI::class)
 class Chat(private val model: GenerativeModel, val history: MutableList<Content> = ArrayList()) {
   private var lock = Semaphore(1)
 
