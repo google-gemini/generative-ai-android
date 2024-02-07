@@ -30,7 +30,7 @@ class NoParameterFunction(
   description: String,
   val function: suspend () -> String,
 ) : FunctionDeclaration(name, description) {
-  override fun getParameters() = listOf<FunctionParameter>()
+  override fun getParameters() = listOf<FunctionParameter<Any>>()
 }
 
 /**
@@ -43,11 +43,11 @@ class NoParameterFunction(
  * @property function the function implementation
  */
 @BetaGenAiAPI
-class OneParameterFunction(
+class OneParameterFunction<T>(
   name: String,
   description: String,
-  val param: FunctionParameter,
-  val function: suspend (String) -> String,
+  val param: FunctionParameter<T>,
+  val function: suspend (T) -> String,
 ) : FunctionDeclaration(name, description) {
   override fun getParameters() = listOf(param)
 }
@@ -63,12 +63,12 @@ class OneParameterFunction(
  * @property function the function implementation
  */
 @BetaGenAiAPI
-class TwoParameterFunction(
+class TwoParameterFunction<T, U>(
   name: String,
   description: String,
-  val param1: FunctionParameter,
-  val param2: FunctionParameter,
-  val function: suspend (String, String) -> String,
+  val param1: FunctionParameter<T>,
+  val param2: FunctionParameter<U>,
+  val function: suspend (T, U) -> String,
 ) : FunctionDeclaration(name, description) {
   override fun getParameters() = listOf(param1, param2)
 }
@@ -85,13 +85,13 @@ class TwoParameterFunction(
  * @property function the function implementation
  */
 @BetaGenAiAPI
-class ThreeParameterFunction(
+class ThreeParameterFunction<T, U, V>(
   name: String,
   description: String,
-  val param1: FunctionParameter,
-  val param2: FunctionParameter,
-  val param3: FunctionParameter,
-  val function: suspend (String, String, String) -> String,
+  val param1: FunctionParameter<T>,
+  val param2: FunctionParameter<U>,
+  val param3: FunctionParameter<V>,
+  val function: suspend (T, U, V) -> String,
 ) : FunctionDeclaration(name, description) {
   override fun getParameters() = listOf(param1, param2, param3)
 }
@@ -109,14 +109,14 @@ class ThreeParameterFunction(
  * @property function the function implementation
  */
 @BetaGenAiAPI
-class FourParameterFunction(
+class FourParameterFunction<T, U, V, W>(
   name: String,
   description: String,
-  val param1: FunctionParameter,
-  val param2: FunctionParameter,
-  val param3: FunctionParameter,
-  val param4: FunctionParameter,
-  val function: suspend (String, String, String, String) -> String,
+  val param1: FunctionParameter<T>,
+  val param2: FunctionParameter<U>,
+  val param3: FunctionParameter<V>,
+  val param4: FunctionParameter<W>,
+  val function: suspend (T, U, V, W) -> String,
 ) : FunctionDeclaration(name, description) {
   override fun getParameters() = listOf(param1, param2, param3, param4)
 }
@@ -126,7 +126,7 @@ abstract class FunctionDeclaration(
   val name: String,
   val description: String,
 ) {
-  abstract fun getParameters(): List<FunctionParameter>
+  abstract fun getParameters(): List<FunctionParameter<out Any?>>
 }
 
 /**
@@ -142,69 +142,243 @@ class FunctionBuilder(private val name: String, private val description: String)
     return NoParameterFunction(name, description, function)
   }
 
-  fun param(param: FunctionParameter): OneFunctionBuilder {
-    return OneFunctionBuilder(name, description, param)
+  fun <T> param(param: FunctionParameter<T>): OneFunctionBuilder<T> {
+    return OneFunctionBuilder<T>(name, description, param)
+  }
+
+  fun <T> param(
+    paramName: String,
+    paramDescription: String,
+    type: FunctionType<T>
+  ): OneFunctionBuilder<T> {
+    return OneFunctionBuilder<T>(
+      name,
+      description,
+      FunctionParameter(paramName, paramDescription, type)
+    )
+  }
+
+  fun stringParam(paramName: String, paramDescription: String): OneFunctionBuilder<String> {
+    return OneFunctionBuilder(
+      name,
+      description,
+      FunctionParameter(paramName, paramDescription, FunctionType.STRING)
+    )
+  }
+
+  fun intParam(paramName: String, paramDescription: String): OneFunctionBuilder<Int> {
+    return OneFunctionBuilder(
+      name,
+      description,
+      FunctionParameter(paramName, paramDescription, FunctionType.INT)
+    )
+  }
+
+  fun boolParam(paramName: String, paramDescription: String): OneFunctionBuilder<Boolean> {
+    return OneFunctionBuilder(
+      name,
+      description,
+      FunctionParameter(paramName, paramDescription, FunctionType.BOOLEAN)
+    )
   }
 }
 
 @BetaGenAiAPI
-class OneFunctionBuilder(
+class OneFunctionBuilder<T>(
   private val name: String,
   private val description: String,
-  private val param1: FunctionParameter
+  private val param1: FunctionParameter<T>
 ) {
-  fun build(function: suspend (String) -> String): FunctionDeclaration {
+  fun build(function: suspend (T) -> String): FunctionDeclaration {
     return OneParameterFunction(name, description, param1, function)
   }
 
-  fun param(param: FunctionParameter): TwoFunctionBuilder {
+  fun <U> param(param: FunctionParameter<U>): TwoFunctionBuilder<T, U> {
     return TwoFunctionBuilder(name, description, param1, param)
+  }
+
+  fun <U> param(
+    paramName: String,
+    paramDescription: String,
+    type: FunctionType<U>
+  ): TwoFunctionBuilder<T, U> {
+    return TwoFunctionBuilder(
+      name,
+      description,
+      param1,
+      FunctionParameter(paramName, paramDescription, type)
+    )
+  }
+
+  fun stringParam(paramName: String, paramDescription: String): TwoFunctionBuilder<T, String> {
+    return TwoFunctionBuilder(
+      name,
+      description,
+      param1,
+      FunctionParameter(paramName, paramDescription, FunctionType.STRING)
+    )
+  }
+
+  fun intParam(paramName: String, paramDescription: String): TwoFunctionBuilder<T, Int> {
+    return TwoFunctionBuilder(
+      name,
+      description,
+      param1,
+      FunctionParameter(paramName, paramDescription, FunctionType.INT)
+    )
+  }
+
+  fun boolParam(paramName: String, paramDescription: String): TwoFunctionBuilder<T, Boolean> {
+    return TwoFunctionBuilder(
+      name,
+      description,
+      param1,
+      FunctionParameter(paramName, paramDescription, FunctionType.BOOLEAN)
+    )
   }
 }
 
 @BetaGenAiAPI
-class TwoFunctionBuilder(
+class TwoFunctionBuilder<T, U>(
   private val name: String,
   private val description: String,
-  private val param1: FunctionParameter,
-  private val param2: FunctionParameter,
+  private val param1: FunctionParameter<T>,
+  private val param2: FunctionParameter<U>,
 ) {
-  fun build(function: suspend (String, String) -> String): FunctionDeclaration {
+  fun build(function: suspend (T, U) -> String): FunctionDeclaration {
     return TwoParameterFunction(name, description, param1, param2, function)
   }
 
-  fun param(param: FunctionParameter): ThreeFunctionBuilder {
+  fun <V> param(param: FunctionParameter<V>): ThreeFunctionBuilder<T, U, V> {
     return ThreeFunctionBuilder(name, description, param1, param2, param)
+  }
+
+  fun <V> param(
+    paramName: String,
+    paramDescription: String,
+    type: FunctionType<V>
+  ): ThreeFunctionBuilder<T, U, V> {
+    return ThreeFunctionBuilder(
+      name,
+      description,
+      param1,
+      param2,
+      FunctionParameter(paramName, paramDescription, type)
+    )
+  }
+
+  fun stringParam(paramName: String, paramDescription: String): ThreeFunctionBuilder<T, U, String> {
+    return ThreeFunctionBuilder(
+      name,
+      description,
+      param1,
+      param2,
+      FunctionParameter(paramName, paramDescription, FunctionType.STRING)
+    )
+  }
+
+  fun intParam(paramName: String, paramDescription: String): ThreeFunctionBuilder<T, U, Int> {
+    return ThreeFunctionBuilder(
+      name,
+      description,
+      param1,
+      param2,
+      FunctionParameter(paramName, paramDescription, FunctionType.INT)
+    )
+  }
+
+  fun boolParam(paramName: String, paramDescription: String): ThreeFunctionBuilder<T, U, Boolean> {
+    return ThreeFunctionBuilder(
+      name,
+      description,
+      param1,
+      param2,
+      FunctionParameter(paramName, paramDescription, FunctionType.BOOLEAN)
+    )
   }
 }
 
 @BetaGenAiAPI
-class ThreeFunctionBuilder(
+class ThreeFunctionBuilder<T, U, V>(
   private val name: String,
   private val description: String,
-  private val param1: FunctionParameter,
-  private val param2: FunctionParameter,
-  private val param3: FunctionParameter,
+  private val param1: FunctionParameter<T>,
+  private val param2: FunctionParameter<U>,
+  private val param3: FunctionParameter<V>,
 ) {
-  fun build(function: suspend (String, String, String) -> String): FunctionDeclaration {
+  fun build(function: suspend (T, U, V) -> String): FunctionDeclaration {
     return ThreeParameterFunction(name, description, param1, param2, param3, function)
   }
 
-  fun param(param: FunctionParameter): FourFunctionBuilder {
+  fun <W> param(param: FunctionParameter<W>): FourFunctionBuilder<T, U, V, W> {
     return FourFunctionBuilder(name, description, param1, param2, param3, param)
+  }
+
+  fun <W> param(
+    paramName: String,
+    paramDescription: String,
+    type: FunctionType<W>
+  ): FourFunctionBuilder<T, U, V, W> {
+    return FourFunctionBuilder(
+      name,
+      description,
+      param1,
+      param2,
+      param3,
+      FunctionParameter(paramName, paramDescription, type)
+    )
+  }
+
+  fun stringParam(
+    paramName: String,
+    paramDescription: String
+  ): FourFunctionBuilder<T, U, V, String> {
+    return FourFunctionBuilder(
+      name,
+      description,
+      param1,
+      param2,
+      param3,
+      FunctionParameter(paramName, paramDescription, FunctionType.STRING)
+    )
+  }
+
+  fun intParam(paramName: String, paramDescription: String): FourFunctionBuilder<T, U, V, Int> {
+    return FourFunctionBuilder(
+      name,
+      description,
+      param1,
+      param2,
+      param3,
+      FunctionParameter(paramName, paramDescription, FunctionType.INT)
+    )
+  }
+
+  fun boolParam(
+    paramName: String,
+    paramDescription: String
+  ): FourFunctionBuilder<T, U, V, Boolean> {
+    return FourFunctionBuilder(
+      name,
+      description,
+      param1,
+      param2,
+      param3,
+      FunctionParameter(paramName, paramDescription, FunctionType.BOOLEAN)
+    )
   }
 }
 
 @BetaGenAiAPI
-class FourFunctionBuilder(
+class FourFunctionBuilder<T, U, V, W>(
   private val name: String,
   private val description: String,
-  private val param1: FunctionParameter,
-  private val param2: FunctionParameter,
-  private val param3: FunctionParameter,
-  private val param4: FunctionParameter,
+  private val param1: FunctionParameter<T>,
+  private val param2: FunctionParameter<U>,
+  private val param3: FunctionParameter<V>,
+  private val param4: FunctionParameter<W>,
 ) {
-  fun build(function: suspend (String, String, String, String) -> String): FunctionDeclaration {
+  fun build(function: suspend (T, U, V, W) -> String): FunctionDeclaration {
     return FourParameterFunction(name, description, param1, param2, param3, param4, function)
   }
 }

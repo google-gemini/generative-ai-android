@@ -28,6 +28,7 @@ import com.google.ai.client.generativeai.type.CountTokensResponse
 import com.google.ai.client.generativeai.type.FinishReason
 import com.google.ai.client.generativeai.type.FourParameterFunction
 import com.google.ai.client.generativeai.type.FunctionCallPart
+import com.google.ai.client.generativeai.type.FunctionParameter
 import com.google.ai.client.generativeai.type.GenerateContentResponse
 import com.google.ai.client.generativeai.type.GenerationConfig
 import com.google.ai.client.generativeai.type.GoogleGenerativeAIException
@@ -197,27 +198,43 @@ internal constructor(
       is NoParameterFunction -> {
         declaration.function.invoke()
       }
-      is OneParameterFunction -> {
-        val param1 = getParamOrThrow(declaration.param.name, call)
-        declaration.function.invoke(param1)
+      is OneParameterFunction<*> -> {
+        declaration
+          .let { declaration as OneParameterFunction<Any?> }
+          .let {
+            val param1 = getParamOrThrow(it.param, call)
+            it.function.invoke(param1)
+          }
       }
-      is TwoParameterFunction -> {
-        val param1 = getParamOrThrow(declaration.param1.name, call)
-        val param2 = getParamOrThrow(declaration.param2.name, call)
-        declaration.function.invoke(param1, param2)
+      is TwoParameterFunction<*, *> -> {
+        declaration
+          .let { declaration as TwoParameterFunction<Any?, Any?> }
+          .let {
+            val param1 = getParamOrThrow(it.param1, call)
+            val param2 = getParamOrThrow(it.param2, call)
+            it.function.invoke(param1, param2)
+          }
       }
-      is ThreeParameterFunction -> {
-        val param1 = getParamOrThrow(declaration.param1.name, call)
-        val param2 = getParamOrThrow(declaration.param2.name, call)
-        val param3 = getParamOrThrow(declaration.param3.name, call)
-        declaration.function.invoke(param1, param2, param3)
+      is ThreeParameterFunction<*, *, *> -> {
+        declaration
+          .let { declaration as ThreeParameterFunction<Any?, Any?, Any?> }
+          .let {
+            val param1 = getParamOrThrow(it.param1, call)
+            val param2 = getParamOrThrow(it.param2, call)
+            val param3 = getParamOrThrow(it.param3, call)
+            it.function.invoke(param1, param2, param3)
+          }
       }
-      is FourParameterFunction -> {
-        val param1 = getParamOrThrow(declaration.param1.name, call)
-        val param2 = getParamOrThrow(declaration.param2.name, call)
-        val param3 = getParamOrThrow(declaration.param3.name, call)
-        val param4 = getParamOrThrow(declaration.param4.name, call)
-        declaration.function.invoke(param1, param2, param3, param4)
+      is FourParameterFunction<*, *, *, *> -> {
+        declaration
+          .let { declaration as FourParameterFunction<Any?, Any?, Any?, Any?> }
+          .let {
+            val param1 = getParamOrThrow(it.param1, call)
+            val param2 = getParamOrThrow(it.param2, call)
+            val param3 = getParamOrThrow(it.param3, call)
+            val param4 = getParamOrThrow(it.param4, call)
+            it.function.invoke(param1, param2, param3, param4)
+          }
       }
       else -> {
         throw RuntimeException("UNREACHABLE")
@@ -225,9 +242,9 @@ internal constructor(
     }
   }
 
-  private fun getParamOrThrow(paramName: String, part: FunctionCallPart): String {
-    return part.args[paramName]
-      ?: throw RuntimeException("Missing parameter named $paramName for function ${part.name}")
+  private fun <T> getParamOrThrow(param: FunctionParameter<T>, part: FunctionCallPart): T {
+    return param.type.parse.invoke(part.args[param.name])
+      ?: throw RuntimeException("Missing parameter named ${param.name} for function ${part.name}")
   }
 
   private fun constructRequest(vararg prompt: Content) =
