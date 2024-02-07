@@ -11,6 +11,6 @@ import kotlin.time.Duration.Companion.milliseconds
  * @property apiVersion the api endpoint to call.
  */
 class RequestOptions(
-    val timeout: Duration = HttpTimeout.INFINITE_TIMEOUT_MS.milliseconds,
-    val apiVersion: String = "v1"
+  val timeout: Duration = HttpTimeout.INFINITE_TIMEOUT_MS.milliseconds,
+  val apiVersion: String = "v1"
 )

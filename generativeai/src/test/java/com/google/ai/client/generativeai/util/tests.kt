@@ -40,7 +40,6 @@ import io.ktor.utils.io.writeFully
 import java.io.File
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
-import kotlin.time.Duration
 
 internal fun prepareStreamingResponse(response: List<GenerateContentResponse>): List<ByteArray> =
   response.map { "data: ${JSON.encodeToString(it)}$SSE_SEPARATOR".toByteArray() }
@@ -99,16 +98,26 @@ internal typealias CommonTest = suspend CommonTestScope.() -> Unit
  * @param block The test contents themselves, with the [CommonTestScope] implicitly provided
  * @see CommonTestScope
  */
-internal fun commonTest(status: HttpStatusCode = HttpStatusCode.OK, requestOptions: RequestOptions = RequestOptions(), block: CommonTest) =
-  doBlocking {
-    val channel = ByteChannel(autoFlush = true)
-    val mockEngine = MockEngine {
-      respond(channel, status, headersOf(HttpHeaders.ContentType, "application/json"))
-    }
-    val controller = APIController("super_cool_test_key", "gemini-pro", requestOptions.apiVersion, requestOptions.timeout, mockEngine)
-    val model = GenerativeModel("gemini-pro", "super_cool_test_key", controller = controller)
-    CommonTestScope(channel, model).block()
+internal fun commonTest(
+  status: HttpStatusCode = HttpStatusCode.OK,
+  requestOptions: RequestOptions = RequestOptions(),
+  block: CommonTest
+) = doBlocking {
+  val channel = ByteChannel(autoFlush = true)
+  val mockEngine = MockEngine {
+    respond(channel, status, headersOf(HttpHeaders.ContentType, "application/json"))
   }
+  val controller =
+    APIController(
+      "super_cool_test_key",
+      "gemini-pro",
+      requestOptions.apiVersion,
+      requestOptions.timeout,
+      mockEngine
+    )
+  val model = GenerativeModel("gemini-pro", "super_cool_test_key", controller = controller)
+  CommonTestScope(channel, model).block()
+}
 
 /**
  * A variant of [commonTest] for performing *streaming-based* snapshot tests.

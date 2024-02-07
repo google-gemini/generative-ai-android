@@ -65,7 +65,14 @@ internal constructor(
     generationConfig: GenerationConfig? = null,
     safetySettings: List<SafetySetting>? = null,
     requestOptions: RequestOptions = RequestOptions(),
-  ) : this(modelName, apiKey, generationConfig, safetySettings, requestOptions, APIController(apiKey, modelName, requestOptions.apiVersion, requestOptions.timeout))
+  ) : this(
+    modelName,
+    apiKey,
+    generationConfig,
+    safetySettings,
+    requestOptions,
+    APIController(apiKey, modelName, requestOptions.apiVersion, requestOptions.timeout)
+  )
 
   /**
    * Generates a response from the backend with the provided [Content]s.

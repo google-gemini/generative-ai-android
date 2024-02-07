@@ -14,14 +14,12 @@
  * limitations under the License.
  */
 
-
 @file:OptIn(FlowPreview::class)
 
 package com.google.ai.client.generativeai.internal.api
 
 import com.google.ai.client.generativeai.BuildConfig
 import com.google.ai.client.generativeai.internal.util.decodeToFlow
-import com.google.ai.client.generativeai.type.GoogleGenerativeAIException
 import com.google.ai.client.generativeai.type.ServerException
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -41,6 +39,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import kotlin.time.Duration
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -49,8 +48,6 @@ import kotlinx.coroutines.flow.timeout
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.json.Json
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.seconds
 
 internal const val DOMAIN = "https://generativelanguage.googleapis.com"
 
@@ -99,9 +96,13 @@ internal class APIController(
   }
 
   fun generateContentStream(request: GenerateContentRequest): Flow<GenerateContentResponse> {
-    return client.postStream<GenerateContentResponse>("$DOMAIN/$apiVersion/$model:streamGenerateContent?alt=sse") {
-      applyCommonConfiguration(request)
-    }.timeout(timeout)
+    return client
+      .postStream<GenerateContentResponse>(
+        "$DOMAIN/$apiVersion/$model:streamGenerateContent?alt=sse"
+      ) {
+        applyCommonConfiguration(request)
+      }
+      .timeout(timeout)
   }
 
   suspend fun countTokens(request: CountTokensRequest): CountTokensResponse {

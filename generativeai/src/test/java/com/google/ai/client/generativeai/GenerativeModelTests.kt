@@ -22,21 +22,13 @@ import com.google.ai.client.generativeai.util.commonTest
 import com.google.ai.client.generativeai.util.createResponses
 import com.google.ai.client.generativeai.util.prepareStreamingResponse
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.matchers.concurrent.shouldTimeout
 import io.kotest.matchers.shouldBe
 import io.ktor.utils.io.close
 import io.ktor.utils.io.writeFully
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import org.junit.Test
-import java.util.concurrent.TimeUnit
-import kotlin.coroutines.coroutineContext
-import kotlin.time.Duration
 
 internal class GenerativeModelTests {
   private val testTimeout = 5.seconds
@@ -58,11 +50,10 @@ internal class GenerativeModelTests {
   }
 
   @Test
-  fun `(generateContent) respects a custom timeout`() = commonTest(requestOptions = RequestOptions(2.seconds)) {
-    shouldThrow<RequestTimeoutException> {
-      withTimeout(testTimeout) {
-        model.generateContent("d")
+  fun `(generateContent) respects a custom timeout`() =
+    commonTest(requestOptions = RequestOptions(2.seconds)) {
+      shouldThrow<RequestTimeoutException> {
+        withTimeout(testTimeout) { model.generateContent("d") }
       }
     }
-  }
 }
