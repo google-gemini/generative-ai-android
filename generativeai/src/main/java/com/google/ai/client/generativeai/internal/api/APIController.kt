@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
+
+@file:OptIn(FlowPreview::class)
+
 package com.google.ai.client.generativeai.internal.api
 
 import com.google.ai.client.generativeai.BuildConfig
 import com.google.ai.client.generativeai.internal.util.decodeToFlow
+import com.google.ai.client.generativeai.type.GoogleGenerativeAIException
 import com.google.ai.client.generativeai.type.ServerException
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -38,13 +42,17 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.timeout
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.json.Json
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
-// TODO: Should these stay here or be moved elsewhere?
-internal const val DOMAIN = "https://generativelanguage.googleapis.com/v1"
+internal const val DOMAIN = "https://generativelanguage.googleapis.com"
 
 internal val JSON = Json {
   ignoreUnknownKeys = true
@@ -60,11 +68,15 @@ internal val JSON = Json {
  *   Exposed primarily for DI in tests.
  * @property key The API key used for authentication.
  * @property model The model to use for generation.
+ * @property apiVersion the endpoint version to communicate with.
+ * @property timeout the maximum amount of time for a request to take.
  */
 internal class APIController(
   private val key: String,
   model: String,
-  httpEngine: HttpClientEngine = OkHttp.create()
+  private val apiVersion: String,
+  private val timeout: Duration,
+  httpEngine: HttpClientEngine = OkHttp.create(),
 ) {
   private val model = fullModelName(model)
 
@@ -78,23 +90,27 @@ internal class APIController(
     }
 
   suspend fun generateContent(request: GenerateContentRequest): GenerateContentResponse {
-    return client
-      .post("$DOMAIN/$model:generateContent") { applyCommonConfiguration(request) }
-      .also { validateResponse(it) }
-      .body()
-  }
-
-  fun generateContentStream(request: GenerateContentRequest): Flow<GenerateContentResponse> {
-    return client.postStream("$DOMAIN/$model:streamGenerateContent?alt=sse") {
-      applyCommonConfiguration(request)
+    return withTimeout(timeout) {
+      client
+        .post("$DOMAIN/$apiVersion/$model:generateContent") { applyCommonConfiguration(request) }
+        .also { validateResponse(it) }
+        .body()
     }
   }
 
+  fun generateContentStream(request: GenerateContentRequest): Flow<GenerateContentResponse> {
+    return client.postStream<GenerateContentResponse>("$DOMAIN/$apiVersion/$model:streamGenerateContent?alt=sse") {
+      applyCommonConfiguration(request)
+    }.timeout(timeout)
+  }
+
   suspend fun countTokens(request: CountTokensRequest): CountTokensResponse {
-    return client
-      .post("$DOMAIN/$model:countTokens") { applyCommonConfiguration(request) }
-      .also { validateResponse(it) }
-      .body()
+    return withTimeout(timeout) {
+      client
+        .post("$DOMAIN/$apiVersion/$model:countTokens") { applyCommonConfiguration(request) }
+        .also { validateResponse(it) }
+        .body()
+    }
   }
 
   private fun HttpRequestBuilder.applyCommonConfiguration(request: Request) {
