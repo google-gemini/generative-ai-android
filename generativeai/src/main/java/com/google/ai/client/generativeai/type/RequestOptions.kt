@@ -23,7 +23,8 @@ import kotlin.time.Duration.Companion.milliseconds
 /**
  * Configurable options unique to how requests to the backend are performed.
  *
- * @property timeout the maximum amount of time for a request to take, from start to finish.
+ * @property timeout the maximum amount of time for a request to take, from the first request to
+ *   first response.
  * @property apiVersion the api endpoint to call.
  */
 class RequestOptions(
