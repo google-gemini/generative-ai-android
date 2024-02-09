@@ -16,9 +16,12 @@
 
 package com.google.ai.client.generativeai
 
+import com.google.ai.client.generativeai.type.RequestOptions
+import com.google.ai.client.generativeai.type.RequestTimeoutException
 import com.google.ai.client.generativeai.util.commonTest
 import com.google.ai.client.generativeai.util.createResponses
 import com.google.ai.client.generativeai.util.prepareStreamingResponse
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import io.ktor.utils.io.close
 import io.ktor.utils.io.writeFully
@@ -45,4 +48,12 @@ internal class GenerativeModelTests {
       }
     }
   }
+
+  @Test
+  fun `(generateContent) respects a custom timeout`() =
+    commonTest(requestOptions = RequestOptions(2.seconds)) {
+      shouldThrow<RequestTimeoutException> {
+        withTimeout(testTimeout) { model.generateContent("d") }
+      }
+    }
 }
