@@ -29,6 +29,7 @@ import com.google.ai.client.generativeai.type.GenerateContentResponse
 import com.google.ai.client.generativeai.type.GenerationConfig
 import com.google.ai.client.generativeai.type.GoogleGenerativeAIException
 import com.google.ai.client.generativeai.type.PromptBlockedException
+import com.google.ai.client.generativeai.type.RequestOptions
 import com.google.ai.client.generativeai.type.ResponseStoppedException
 import com.google.ai.client.generativeai.type.SafetySetting
 import com.google.ai.client.generativeai.type.SerializationException
@@ -45,6 +46,7 @@ import kotlinx.coroutines.flow.map
  * @property generationConfig configuration parameters to use for content generation
  * @property safetySettings the safety bounds to use during alongside prompts during content
  *   generation
+ * @property requestOptions configuration options to utilize during backend communication
  */
 class GenerativeModel
 internal constructor(
@@ -52,6 +54,7 @@ internal constructor(
   val apiKey: String,
   val generationConfig: GenerationConfig? = null,
   val safetySettings: List<SafetySetting>? = null,
+  val requestOptions: RequestOptions = RequestOptions(),
   private val controller: APIController
 ) {
 
@@ -61,7 +64,15 @@ internal constructor(
     apiKey: String,
     generationConfig: GenerationConfig? = null,
     safetySettings: List<SafetySetting>? = null,
-  ) : this(modelName, apiKey, generationConfig, safetySettings, APIController(apiKey, modelName))
+    requestOptions: RequestOptions = RequestOptions(),
+  ) : this(
+    modelName,
+    apiKey,
+    generationConfig,
+    safetySettings,
+    requestOptions,
+    APIController(apiKey, modelName, requestOptions.apiVersion, requestOptions.timeout)
+  )
 
   /**
    * Generates a response from the backend with the provided [Content]s.
