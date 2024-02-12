@@ -28,6 +28,7 @@ import com.google.ai.client.generativeai.internal.api.shared.Content
 import com.google.ai.client.generativeai.internal.api.shared.TextPart
 import com.google.ai.client.generativeai.internal.util.SSE_SEPARATOR
 import com.google.ai.client.generativeai.internal.util.send
+import com.google.ai.client.generativeai.type.RequestOptions
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.http.HttpHeaders
@@ -93,22 +94,42 @@ internal typealias CommonTest = suspend CommonTestScope.() -> Unit
  * ```
  *
  * @param status An optional [HttpStatusCode] to return as a response
+ * @param requestOptions Optional [RequestOptions] to utilize in the underlying controller
  * @param block The test contents themselves, with the [CommonTestScope] implicitly provided
  * @see CommonTestScope
  */
-internal fun commonTest(status: HttpStatusCode = HttpStatusCode.OK, block: CommonTest) =
-  doBlocking {
-    val channel = ByteChannel(autoFlush = true)
-    val mockEngine = MockEngine {
-      respond(channel, status, headersOf(HttpHeaders.ContentType, "application/json"))
-    }
-    val model = createGenerativeModel("gemini-pro", "super_cool_test_key", mockEngine)
-    CommonTestScope(channel, model).block()
+internal fun commonTest(
+  status: HttpStatusCode = HttpStatusCode.OK,
+  requestOptions: RequestOptions = RequestOptions(),
+  block: CommonTest
+) = doBlocking {
+  val channel = ByteChannel(autoFlush = true)
+  val mockEngine = MockEngine {
+    respond(channel, status, headersOf(HttpHeaders.ContentType, "application/json"))
   }
+  val model = createGenerativeModel("gemini-pro", "super_cool_test_key", requestOptions, mockEngine)
+  CommonTestScope(channel, model).block()
+}
 
 /** Simple wrapper that guarantees the model and APIController are created using the same data */
-internal fun createGenerativeModel(name: String, apikey: String, engine: MockEngine) =
-  GenerativeModel(name, apikey, controller = APIController(apikey, name, engine))
+internal fun createGenerativeModel(
+  name: String,
+  apikey: String,
+  requestOptions: RequestOptions = RequestOptions(),
+  engine: MockEngine
+) =
+  GenerativeModel(
+    name,
+    apikey,
+    controller =
+      APIController(
+        "super_cool_test_key",
+        name,
+        requestOptions.apiVersion,
+        requestOptions.timeout,
+        engine
+      )
+  )
 
 /**
  * A variant of [commonTest] for performing *streaming-based* snapshot tests.

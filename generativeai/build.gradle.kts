@@ -83,7 +83,7 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation("androidx.core:core-ktx:1.12.0")
-    implementation("org.slf4j:slf4j-android:1.7.36")
+    implementation("org.slf4j:slf4j-nop:2.0.9")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.7.3")
     implementation("org.reactivestreams:reactive-streams:1.0.3")

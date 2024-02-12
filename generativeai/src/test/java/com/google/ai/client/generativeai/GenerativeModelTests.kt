@@ -16,11 +16,14 @@
 
 package com.google.ai.client.generativeai
 
+import com.google.ai.client.generativeai.type.RequestOptions
+import com.google.ai.client.generativeai.type.RequestTimeoutException
 import com.google.ai.client.generativeai.util.commonTest
 import com.google.ai.client.generativeai.util.createGenerativeModel
 import com.google.ai.client.generativeai.util.createResponses
 import com.google.ai.client.generativeai.util.doBlocking
 import com.google.ai.client.generativeai.util.prepareStreamingResponse
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.ktor.client.engine.mock.MockEngine
@@ -55,6 +58,14 @@ internal class GenerativeModelTests {
       }
     }
   }
+
+  @Test
+  fun `(generateContent) respects a custom timeout`() =
+    commonTest(requestOptions = RequestOptions(2.seconds)) {
+      shouldThrow<RequestTimeoutException> {
+        withTimeout(testTimeout) { model.generateContent("d") }
+      }
+    }
 }
 
 @RunWith(Parameterized::class)
@@ -67,7 +78,8 @@ internal class ModelNamingTests(private val modelName: String, private val actua
       respond(channel, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
     }
     prepareStreamingResponse(createResponses("Random")).forEach { channel.writeFully(it) }
-    val model = createGenerativeModel(modelName, "super_cool_test_key", mockEngine)
+    val model =
+      createGenerativeModel(modelName, "super_cool_test_key", RequestOptions(), mockEngine)
 
     withTimeout(5.seconds) {
       model.generateContentStream().collect {
