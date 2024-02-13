@@ -83,7 +83,7 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation("androidx.core:core-ktx:1.12.0")
-    implementation("org.slf4j:slf4j-android:1.7.36")
+    implementation("org.slf4j:slf4j-nop:2.0.9")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.7.3")
     implementation("org.reactivestreams:reactive-streams:1.0.3")
@@ -94,6 +94,7 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     testImplementation("io.kotest:kotest-assertions-core:4.0.7")
     testImplementation("io.kotest:kotest-assertions-jvm:4.0.7")
+    testImplementation("io.kotest:kotest-assertions-json:4.0.7")
     testImplementation("io.ktor:ktor-client-mock:$ktorVersion")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
