@@ -1,1 +1,0 @@
-{"type":"MINOR","changes":["Add RequestOptions; configuration points for backend implementation details such as api version and timeout."]}
