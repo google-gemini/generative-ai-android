@@ -23,6 +23,7 @@ import com.google.ai.client.generativeai.type.PromptBlockedException
 import com.google.ai.client.generativeai.type.ResponseStoppedException
 import com.google.ai.client.generativeai.type.SerializationException
 import com.google.ai.client.generativeai.type.ServerException
+import com.google.ai.client.generativeai.type.UnsupportedUserLocationException
 import com.google.ai.client.generativeai.util.goldenUnaryFile
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.should
@@ -92,6 +93,14 @@ internal class UnarySnapshotTests {
   fun `http error`() =
     goldenUnaryFile("failure-http-error.json", HttpStatusCode.PreconditionFailed) {
       withTimeout(testTimeout) { shouldThrow<ServerException> { model.generateContent() } }
+    }
+
+  @Test
+  fun `user location error`() =
+    goldenUnaryFile("failure-unsupported-user-location.json", HttpStatusCode.PreconditionFailed) {
+      withTimeout(testTimeout) {
+        shouldThrow<UnsupportedUserLocationException> { model.generateContent() }
+      }
     }
 
   @Test
