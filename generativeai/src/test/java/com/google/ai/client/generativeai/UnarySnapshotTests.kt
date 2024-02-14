@@ -98,7 +98,9 @@ internal class UnarySnapshotTests {
   @Test
   fun `user location error`() =
     goldenUnaryFile("failure-unsupported-user-location.json", HttpStatusCode.PreconditionFailed) {
-      withTimeout(testTimeout) { shouldThrow<UnsupportedUserLocationException> { model.generateContent() } }
+      withTimeout(testTimeout) {
+        shouldThrow<UnsupportedUserLocationException> { model.generateContent() }
+      }
     }
 
   @Test
