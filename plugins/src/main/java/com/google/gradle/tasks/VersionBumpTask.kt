@@ -49,6 +49,9 @@ abstract class VersionBumpTask : DefaultTask() {
 
   @TaskAction
   fun build() {
+    if(newVersion.get().major > 0)
+      throw RuntimeException("You're trying to bump the major version. This is a no 1.0+ zone!!")
+
     versionFile.get().rewriteLines {
       when {
         it.startsWith("version=") -> "version=${newVersion.get()}"
