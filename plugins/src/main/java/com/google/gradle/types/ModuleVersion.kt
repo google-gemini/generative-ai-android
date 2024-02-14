@@ -223,11 +223,20 @@ data class ModuleVersion(
     version
       .let { it ?: if (pre != null) VersionType.PRE else VersionType.PATCH }
       .let {
-        when (it) {
+        when (it.adjustForUnreleased()) {
           VersionType.MAJOR -> copy(major = major + 1, minor = 0, patch = 0)
           VersionType.MINOR -> copy(minor = minor + 1, patch = 0)
           VersionType.PATCH -> copy(patch = patch + 1)
           VersionType.PRE -> copy(pre = pre?.bump())
         }
       }
+
+  /**
+   * Adjusts the [VersionType] to be at most a minor- if the current version is unreleased.
+   *
+   * Unreleased versions follow a convention of major = minor. So any major change needs to be
+   * adjusted to be a minor change- otherwise you risk releasing the project out of development.
+   */
+  private fun VersionType.adjustForUnreleased(): VersionType =
+    takeUnless { major == 0 } ?: coerceAtLeast(VersionType.MINOR)
 }
