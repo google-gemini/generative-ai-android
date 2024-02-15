@@ -40,7 +40,7 @@ val GenerativeViewModelFactory = object : ViewModelProvider.Factory {
                     // Initialize a GenerativeModel with the `gemini-pro` AI model
                     // for text generation
                     val generativeModel = GenerativeModel(
-                        modelName = "gemini-pro",
+                        modelName = "gemini-1.0-pro",
                         apiKey = BuildConfig.apiKey,
                         generationConfig = config
                     )
@@ -51,7 +51,7 @@ val GenerativeViewModelFactory = object : ViewModelProvider.Factory {
                     // Initialize a GenerativeModel with the `gemini-pro-vision` AI model
                     // for multimodal text generation
                     val generativeModel = GenerativeModel(
-                        modelName = "gemini-pro-vision",
+                        modelName = "gemini-1.0-pro-vision-latest",
                         apiKey = BuildConfig.apiKey,
                         generationConfig = config
                     )
@@ -61,7 +61,7 @@ val GenerativeViewModelFactory = object : ViewModelProvider.Factory {
                 isAssignableFrom(ChatViewModel::class.java) -> {
                     // Initialize a GenerativeModel with the `gemini-pro` AI model for chat
                     val generativeModel = GenerativeModel(
-                        modelName = "gemini-pro",
+                        modelName = "gemini-1.0-pro",
                         apiKey = BuildConfig.apiKey,
                         generationConfig = config
                     )

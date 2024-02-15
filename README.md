@@ -9,7 +9,7 @@ For example, with just a few lines of code, you can access Gemini's multimodal c
 
 ```kotlin
 val generativeModel = GenerativeModel(
-    modelName = "gemini-pro-vision",
+    modelName = "gemini-1.0-pro-vision-latest",
     apiKey = BuildConfig.apiKey
 )
 
