@@ -186,7 +186,7 @@ internal constructor(
    * @return The output of the requested function call
    */
   @GenerativeBeta
-  fun executeFunction(functionCallPart: FunctionCallPart): String {
+  suspend fun executeFunction(functionCallPart: FunctionCallPart): String {
     if (tools == null) {
       throw RuntimeException("No registered tools")
     }
@@ -195,14 +195,14 @@ internal constructor(
       tool.functionDeclarations.firstOrNull() { it.name == functionCallPart.name }
         ?: throw RuntimeException("No registered function named ${functionCallPart.name}")
     return when (callable) {
-      is NoParameterFunction -> callable()
-      is OneParameterFunction<*> -> (callable as OneParameterFunction<Any?>)(functionCallPart)
+      is NoParameterFunction -> callable.execute()
+      is OneParameterFunction<*> -> (callable as OneParameterFunction<Any?>).execute(functionCallPart)
       is TwoParameterFunction<*, *> ->
-        (callable as TwoParameterFunction<Any?, Any?>)(functionCallPart)
+        (callable as TwoParameterFunction<Any?, Any?>).execute(functionCallPart)
       is ThreeParameterFunction<*, *, *> ->
-        (callable as ThreeParameterFunction<Any?, Any?, Any?>)(functionCallPart)
+        (callable as ThreeParameterFunction<Any?, Any?, Any?>).execute(functionCallPart)
       is FourParameterFunction<*, *, *, *> ->
-        (callable as FourParameterFunction<Any?, Any?, Any?, Any?>)(functionCallPart)
+        (callable as FourParameterFunction<Any?, Any?, Any?, Any?>).execute(functionCallPart)
       else -> {
         throw RuntimeException("UNREACHABLE")
       }

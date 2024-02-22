@@ -28,13 +28,13 @@ package com.google.ai.client.generativeai.type
 class NoParameterFunction(
   name: String,
   description: String,
-  val function: () -> String,
+  val function: suspend () -> String,
 ) : FunctionDeclaration(name, description) {
   override fun getParameters() = listOf<ParameterDeclaration<Any>>()
 
-  operator fun invoke() = function()
+  suspend fun execute() = function()
 
-  operator fun invoke(part: FunctionCallPart) = invoke()
+  override suspend fun execute(part: FunctionCallPart) = function()
 }
 
 /**
@@ -51,11 +51,11 @@ class OneParameterFunction<T>(
   name: String,
   description: String,
   val param: ParameterDeclaration<T>,
-  val function: (T) -> String,
+  val function: suspend (T) -> String,
 ) : FunctionDeclaration(name, description) {
   override fun getParameters() = listOf(param)
 
-  operator fun invoke(part: FunctionCallPart): String {
+  override suspend fun execute(part: FunctionCallPart): String {
     val arg1 = part.getArgOrThrow(param)
     return function(arg1)
   }
@@ -77,11 +77,11 @@ class TwoParameterFunction<T, U>(
   description: String,
   val param1: ParameterDeclaration<T>,
   val param2: ParameterDeclaration<U>,
-  val function: (T, U) -> String,
+  val function: suspend (T, U) -> String,
 ) : FunctionDeclaration(name, description) {
   override fun getParameters() = listOf(param1, param2)
 
-  operator fun invoke(part: FunctionCallPart): String {
+  override suspend fun execute(part: FunctionCallPart): String {
     val arg1 = part.getArgOrThrow(param1)
     val arg2 = part.getArgOrThrow(param2)
     return function(arg1, arg2)
@@ -106,11 +106,11 @@ class ThreeParameterFunction<T, U, V>(
   val param1: ParameterDeclaration<T>,
   val param2: ParameterDeclaration<U>,
   val param3: ParameterDeclaration<V>,
-  val function: (T, U, V) -> String,
+  val function: suspend (T, U, V) -> String,
 ) : FunctionDeclaration(name, description) {
   override fun getParameters() = listOf(param1, param2, param3)
 
-  operator fun invoke(part: FunctionCallPart): String {
+  override suspend fun execute(part: FunctionCallPart): String {
     val arg1 = part.getArgOrThrow(param1)
     val arg2 = part.getArgOrThrow(param2)
     val arg3 = part.getArgOrThrow(param3)
@@ -138,11 +138,11 @@ class FourParameterFunction<T, U, V, W>(
   val param2: ParameterDeclaration<U>,
   val param3: ParameterDeclaration<V>,
   val param4: ParameterDeclaration<W>,
-  val function: (T, U, V, W) -> String,
+  val function: suspend (T, U, V, W) -> String,
 ) : FunctionDeclaration(name, description) {
   override fun getParameters() = listOf(param1, param2, param3, param4)
 
-  operator fun invoke(part: FunctionCallPart): String {
+  override suspend  fun execute(part: FunctionCallPart): String {
     val arg1 = part.getArgOrThrow(param1)
     val arg2 = part.getArgOrThrow(param2)
     val arg3 = part.getArgOrThrow(param3)
@@ -157,6 +157,7 @@ abstract class FunctionDeclaration(
   val description: String,
 ) {
   abstract fun getParameters(): List<ParameterDeclaration<out Any?>>
+  abstract suspend fun execute(part: FunctionCallPart): String
 }
 
 class ParameterDeclaration<T>(
@@ -179,7 +180,7 @@ class ParameterDeclaration<T>(
 }
 
 @GenerativeBeta
-fun defineFunction(name: String, description: String, function: () -> String) =
+fun defineFunction(name: String, description: String, function: suspend () -> String) =
   NoParameterFunction(name, description, function)
 
 @GenerativeBeta
@@ -187,7 +188,7 @@ fun <T> defineFunction(
   name: String,
   description: String,
   arg1: ParameterDeclaration<T>,
-  function: (T) -> String
+  function: suspend (T) -> String
 ) = OneParameterFunction(name, description, arg1, function)
 
 @GenerativeBeta
@@ -196,7 +197,7 @@ fun <T, U> defineFunction(
   description: String,
   arg1: ParameterDeclaration<T>,
   arg2: ParameterDeclaration<U>,
-  function: (T, U) -> String
+  function: suspend (T, U) -> String
 ) = TwoParameterFunction(name, description, arg1, arg2, function)
 
 @GenerativeBeta
@@ -206,7 +207,7 @@ fun <T, U, W> defineFunction(
   arg1: ParameterDeclaration<T>,
   arg2: ParameterDeclaration<U>,
   arg3: ParameterDeclaration<W>,
-  function: (T, U, W) -> String
+  function: suspend (T, U, W) -> String
 ) = ThreeParameterFunction(name, description, arg1, arg2, arg3, function)
 
 @GenerativeBeta
@@ -217,7 +218,7 @@ fun <T, U, W, Z> defineFunction(
   arg2: ParameterDeclaration<U>,
   arg3: ParameterDeclaration<W>,
   arg4: ParameterDeclaration<Z>,
-  function: (T, U, W, Z) -> String
+  function: suspend (T, U, W, Z) -> String
 ) = FourParameterFunction(name, description, arg1, arg2, arg3, arg4, function)
 
 private fun <T> FunctionCallPart.getArgOrThrow(param: ParameterDeclaration<T>): T {
