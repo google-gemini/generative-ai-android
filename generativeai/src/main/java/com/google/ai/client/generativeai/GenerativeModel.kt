@@ -22,7 +22,6 @@ import com.google.ai.client.generativeai.internal.api.CountTokensRequest
 import com.google.ai.client.generativeai.internal.api.GenerateContentRequest
 import com.google.ai.client.generativeai.internal.util.toInternal
 import com.google.ai.client.generativeai.internal.util.toPublic
-import com.google.ai.client.generativeai.type.GenerativeBeta
 import com.google.ai.client.generativeai.type.Content
 import com.google.ai.client.generativeai.type.CountTokensResponse
 import com.google.ai.client.generativeai.type.FinishReason
@@ -30,6 +29,7 @@ import com.google.ai.client.generativeai.type.FourParameterFunction
 import com.google.ai.client.generativeai.type.FunctionCallPart
 import com.google.ai.client.generativeai.type.GenerateContentResponse
 import com.google.ai.client.generativeai.type.GenerationConfig
+import com.google.ai.client.generativeai.type.GenerativeBeta
 import com.google.ai.client.generativeai.type.GoogleGenerativeAIException
 import com.google.ai.client.generativeai.type.NoParameterFunction
 import com.google.ai.client.generativeai.type.OneParameterFunction
@@ -74,7 +74,7 @@ internal constructor(
     apiKey: String,
     generationConfig: GenerationConfig? = null,
     safetySettings: List<SafetySetting>? = null,
-    tools: List<Tool>? = null
+    tools: List<Tool>? = null,
     requestOptions: RequestOptions = RequestOptions(),
   ) : this(
     modelName,
@@ -201,7 +201,8 @@ internal constructor(
         ?: throw RuntimeException("No registered function named ${functionCallPart.name}")
     return when (callable) {
       is NoParameterFunction -> callable.execute()
-      is OneParameterFunction<*> -> (callable as OneParameterFunction<Any?>).execute(functionCallPart)
+      is OneParameterFunction<*> ->
+        (callable as OneParameterFunction<Any?>).execute(functionCallPart)
       is TwoParameterFunction<*, *> ->
         (callable as TwoParameterFunction<Any?, Any?>).execute(functionCallPart)
       is ThreeParameterFunction<*, *, *> ->

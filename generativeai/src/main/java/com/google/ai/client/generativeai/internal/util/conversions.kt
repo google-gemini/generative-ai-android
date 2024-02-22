@@ -42,10 +42,10 @@ import com.google.ai.client.generativeai.internal.api.shared.HarmCategory
 import com.google.ai.client.generativeai.internal.api.shared.Part
 import com.google.ai.client.generativeai.internal.api.shared.SafetySetting
 import com.google.ai.client.generativeai.internal.api.shared.TextPart
-import com.google.ai.client.generativeai.type.GenerativeBeta
 import com.google.ai.client.generativeai.type.BlockThreshold
 import com.google.ai.client.generativeai.type.CitationMetadata
 import com.google.ai.client.generativeai.type.FunctionDeclaration
+import com.google.ai.client.generativeai.type.GenerativeBeta
 import com.google.ai.client.generativeai.type.ImagePart
 import com.google.ai.client.generativeai.type.SerializationException
 import com.google.ai.client.generativeai.type.Tool

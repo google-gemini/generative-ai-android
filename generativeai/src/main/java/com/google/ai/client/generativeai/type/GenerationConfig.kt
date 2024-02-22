@@ -25,7 +25,6 @@ package com.google.ai.client.generativeai.type
  * @property candidateCount The max *unique* responses to return
  * @property maxOutputTokens The max tokens to generate per response
  * @property stopSequences A list of strings to stop generation on occurrence of
- * @property autoFunction if false, auto functions will not be automatically executed
  */
 class GenerationConfig
 private constructor(
@@ -35,7 +34,6 @@ private constructor(
   val candidateCount: Int?,
   val maxOutputTokens: Int?,
   val stopSequences: List<String>?,
-  val autoFunction: Boolean?
 ) {
 
   class Builder {
@@ -45,7 +43,6 @@ private constructor(
     @JvmField var candidateCount: Int? = null
     @JvmField var maxOutputTokens: Int? = null
     @JvmField var stopSequences: List<String>? = null
-    @JvmField var autoFunction:Boolean? = null
 
     fun build() =
       GenerationConfig(
@@ -55,7 +52,6 @@ private constructor(
         candidateCount = candidateCount,
         maxOutputTokens = maxOutputTokens,
         stopSequences = stopSequences,
-        autoFunction = autoFunction
       )
   }
 

@@ -142,7 +142,7 @@ class FourParameterFunction<T, U, V, W>(
 ) : FunctionDeclaration(name, description) {
   override fun getParameters() = listOf(param1, param2, param3, param4)
 
-  override suspend  fun execute(part: FunctionCallPart): String {
+  override suspend fun execute(part: FunctionCallPart): String {
     val arg1 = part.getArgOrThrow(param1)
     val arg2 = part.getArgOrThrow(param2)
     val arg3 = part.getArgOrThrow(param3)
@@ -157,6 +157,7 @@ abstract class FunctionDeclaration(
   val description: String,
 ) {
   abstract fun getParameters(): List<ParameterDeclaration<out Any?>>
+
   abstract suspend fun execute(part: FunctionCallPart): String
 }
 

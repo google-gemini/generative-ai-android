@@ -17,12 +17,12 @@
 package com.google.ai.client.generativeai
 
 import android.graphics.Bitmap
-import com.google.ai.client.generativeai.type.GenerativeBeta
 import com.google.ai.client.generativeai.type.BlobPart
 import com.google.ai.client.generativeai.type.Content
 import com.google.ai.client.generativeai.type.FunctionCallPart
 import com.google.ai.client.generativeai.type.FunctionResponsePart
 import com.google.ai.client.generativeai.type.GenerateContentResponse
+import com.google.ai.client.generativeai.type.GenerativeBeta
 import com.google.ai.client.generativeai.type.ImagePart
 import com.google.ai.client.generativeai.type.InvalidStateException
 import com.google.ai.client.generativeai.type.TextPart
@@ -73,7 +73,7 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
         tempHistory.add(prompt)
         tempHistory.add(response.candidates.first().content)
         if (responsePart is FunctionCallPart) {
-          if (model.generationConfig?.autoFunction == false) {
+          if (!model.requestOptions.autoFunction) {
             break
           }
           val output = model.executeFunction(responsePart)
@@ -191,7 +191,7 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
           tempHistory.add(Content("model", listOf(part)))
         }
         is FunctionCallPart -> {
-          if (model.generationConfig?.autoFunction == false) {
+          if (!model.requestOptions.autoFunction) {
             tempHistory.add(response.candidates.first().content)
             continue
           }
