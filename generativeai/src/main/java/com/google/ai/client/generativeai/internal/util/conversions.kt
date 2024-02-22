@@ -42,7 +42,7 @@ import com.google.ai.client.generativeai.internal.api.shared.HarmCategory
 import com.google.ai.client.generativeai.internal.api.shared.Part
 import com.google.ai.client.generativeai.internal.api.shared.SafetySetting
 import com.google.ai.client.generativeai.internal.api.shared.TextPart
-import com.google.ai.client.generativeai.type.BetaGenAiAPI
+import com.google.ai.client.generativeai.type.GenerativeBeta
 import com.google.ai.client.generativeai.type.BlockThreshold
 import com.google.ai.client.generativeai.type.CitationMetadata
 import com.google.ai.client.generativeai.type.FunctionDeclaration
@@ -109,13 +109,13 @@ internal fun BlockThreshold.toInternal() =
     BlockThreshold.UNSPECIFIED -> HarmBlockThreshold.UNSPECIFIED
   }
 
-@BetaGenAiAPI
+@GenerativeBeta
 internal fun Tool.toInternal() =
   com.google.ai.client.generativeai.internal.api.client.Tool(
     functionDeclarations.map { it.toInternal() }
   )
 
-@BetaGenAiAPI
+@GenerativeBeta
 internal fun FunctionDeclaration.toInternal():
   com.google.ai.client.generativeai.internal.api.client.FunctionDeclaration {
   val convertedParams = buildJsonObject {

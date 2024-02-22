@@ -22,7 +22,7 @@ import com.google.ai.client.generativeai.internal.api.CountTokensRequest
 import com.google.ai.client.generativeai.internal.api.GenerateContentRequest
 import com.google.ai.client.generativeai.internal.util.toInternal
 import com.google.ai.client.generativeai.internal.util.toPublic
-import com.google.ai.client.generativeai.type.BetaGenAiAPI
+import com.google.ai.client.generativeai.type.GenerativeBeta
 import com.google.ai.client.generativeai.type.Content
 import com.google.ai.client.generativeai.type.CountTokensResponse
 import com.google.ai.client.generativeai.type.FinishReason
@@ -33,7 +33,6 @@ import com.google.ai.client.generativeai.type.GenerationConfig
 import com.google.ai.client.generativeai.type.GoogleGenerativeAIException
 import com.google.ai.client.generativeai.type.NoParameterFunction
 import com.google.ai.client.generativeai.type.OneParameterFunction
-import com.google.ai.client.generativeai.type.ParameterDeclaration
 import com.google.ai.client.generativeai.type.PromptBlockedException
 import com.google.ai.client.generativeai.type.ResponseStoppedException
 import com.google.ai.client.generativeai.type.SafetySetting
@@ -55,7 +54,7 @@ import kotlinx.coroutines.flow.map
  * @property safetySettings the safety bounds to use during alongside prompts during content
  *   generation
  */
-@OptIn(BetaGenAiAPI::class)
+@OptIn(GenerativeBeta::class)
 class GenerativeModel
 internal constructor(
   val modelName: String,
@@ -186,7 +185,7 @@ internal constructor(
    *   parameters
    * @return The output of the requested function call
    */
-  @BetaGenAiAPI
+  @GenerativeBeta
   fun executeFunction(functionCallPart: FunctionCallPart): String {
     if (tools == null) {
       throw RuntimeException("No registered tools")

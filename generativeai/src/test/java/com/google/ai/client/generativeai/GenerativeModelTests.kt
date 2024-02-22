@@ -16,21 +16,15 @@
 
 package com.google.ai.client.generativeai
 
-import com.google.ai.client.generativeai.type.BetaGenAiAPI
-import com.google.ai.client.generativeai.type.FunctionCallPart
-import com.google.ai.client.generativeai.type.ParameterDeclaration
-import com.google.ai.client.generativeai.type.TwoParameterFunction
-import com.google.ai.client.generativeai.type.defineFunction
 import com.google.ai.client.generativeai.util.commonTest
 import com.google.ai.client.generativeai.util.createResponses
 import com.google.ai.client.generativeai.util.prepareStreamingResponse
 import io.kotest.matchers.shouldBe
 import io.ktor.utils.io.close
 import io.ktor.utils.io.writeFully
-import kotlin.time.Duration.Companion.seconds
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import org.junit.Test
+import kotlin.time.Duration.Companion.seconds
 
 internal class GenerativeModelTests {
   private val testTimeout = 5.seconds
@@ -49,41 +43,5 @@ internal class GenerativeModelTests {
         channel.close()
       }
     }
-  }
-
-  //
-  //
-  // FOR DEV PURPOSES ONLY
-  //
-  //
-
-  fun myfun(a: Int, b: Int): String {
-    return (a + b).toString()
-  }
-
-  @OptIn(BetaGenAiAPI::class)
-  @Test
-  fun `calling test`(): Unit = runBlocking {
-    //    val f =
-    //      FunctionBuilder("sum", "add two numbers together")
-    //        .intParam("a", "First number to add together")
-    //        .intParam("b", "Second number to add together")
-    //        .build(::myfun)
-
-    val f =
-      defineFunction(
-        "sum",
-        "add two numbers together",
-        ParameterDeclaration.int("a", "First number to add together"),
-        ParameterDeclaration.int("b", "Second number to add together")
-      ) { a, b ->
-        (a + b).toString()
-      }
-
-    val x = f as TwoParameterFunction<Any?, Any?>
-    val p = FunctionCallPart("sum", mapOf("a" to "2", "b" to "3"))
-    val q = x(p)
-
-    q shouldBe "5"
   }
 }

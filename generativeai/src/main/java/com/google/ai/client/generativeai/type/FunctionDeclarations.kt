@@ -24,7 +24,7 @@ package com.google.ai.client.generativeai.type
  * @property description A description of what the function does and its output.
  * @property function the function implementation
  */
-@BetaGenAiAPI
+@GenerativeBeta
 class NoParameterFunction(
   name: String,
   description: String,
@@ -46,7 +46,7 @@ class NoParameterFunction(
  * @property param A description of the first function parameter
  * @property function the function implementation
  */
-@BetaGenAiAPI
+@GenerativeBeta
 class OneParameterFunction<T>(
   name: String,
   description: String,
@@ -71,7 +71,7 @@ class OneParameterFunction<T>(
  * @property param2 A description of the second function parameter
  * @property function the function implementation
  */
-@BetaGenAiAPI
+@GenerativeBeta
 class TwoParameterFunction<T, U>(
   name: String,
   description: String,
@@ -99,7 +99,7 @@ class TwoParameterFunction<T, U>(
  * @property param3 A description of the third function parameter
  * @property function the function implementation
  */
-@BetaGenAiAPI
+@GenerativeBeta
 class ThreeParameterFunction<T, U, V>(
   name: String,
   description: String,
@@ -130,7 +130,7 @@ class ThreeParameterFunction<T, U, V>(
  * @property param4 A description of the fourth function parameter
  * @property function the function implementation
  */
-@BetaGenAiAPI
+@GenerativeBeta
 class FourParameterFunction<T, U, V, W>(
   name: String,
   description: String,
@@ -151,7 +151,7 @@ class FourParameterFunction<T, U, V, W>(
   }
 }
 
-@BetaGenAiAPI
+@GenerativeBeta
 abstract class FunctionDeclaration(
   val name: String,
   val description: String,
@@ -178,11 +178,11 @@ class ParameterDeclaration<T>(
   }
 }
 
-@BetaGenAiAPI
+@GenerativeBeta
 fun defineFunction(name: String, description: String, function: () -> String) =
   NoParameterFunction(name, description, function)
 
-@BetaGenAiAPI
+@GenerativeBeta
 fun <T> defineFunction(
   name: String,
   description: String,
@@ -190,7 +190,7 @@ fun <T> defineFunction(
   function: (T) -> String
 ) = OneParameterFunction(name, description, arg1, function)
 
-@BetaGenAiAPI
+@GenerativeBeta
 fun <T, U> defineFunction(
   name: String,
   description: String,
@@ -199,7 +199,7 @@ fun <T, U> defineFunction(
   function: (T, U) -> String
 ) = TwoParameterFunction(name, description, arg1, arg2, function)
 
-@BetaGenAiAPI
+@GenerativeBeta
 fun <T, U, W> defineFunction(
   name: String,
   description: String,
@@ -209,7 +209,7 @@ fun <T, U, W> defineFunction(
   function: (T, U, W) -> String
 ) = ThreeParameterFunction(name, description, arg1, arg2, arg3, function)
 
-@BetaGenAiAPI
+@GenerativeBeta
 fun <T, U, W, Z> defineFunction(
   name: String,
   description: String,
