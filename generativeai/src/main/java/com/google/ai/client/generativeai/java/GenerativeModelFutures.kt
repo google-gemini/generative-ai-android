@@ -74,7 +74,7 @@ abstract class GenerativeModelFutures internal constructor() {
       SuspendToFutureAdapter.launchFuture { model.generateContent(*prompt) }
 
     override fun generateContentStream(vararg prompt: Content): Publisher<GenerateContentResponse> =
-      model.generateContentStream().asPublisher()
+      model.generateContentStream(*prompt).asPublisher()
 
     override fun countTokens(vararg prompt: Content): ListenableFuture<CountTokensResponse> =
       SuspendToFutureAdapter.launchFuture { model.countTokens(*prompt) }
