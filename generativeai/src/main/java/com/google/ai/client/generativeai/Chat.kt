@@ -73,7 +73,7 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
         tempHistory.add(prompt)
         tempHistory.add(response.candidates.first().content)
         if (responsePart is FunctionCallPart) {
-          if (!model.requestOptions.autoFunction) {
+          if (!model.requestOptions.disableAutoFunction) {
             break
           }
           val output = model.executeFunction(responsePart)
@@ -191,7 +191,7 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
           tempHistory.add(Content("model", listOf(part)))
         }
         is FunctionCallPart -> {
-          if (!model.requestOptions.autoFunction) {
+          if (!model.requestOptions.disableAutoFunction) {
             tempHistory.add(response.candidates.first().content)
             continue
           }
