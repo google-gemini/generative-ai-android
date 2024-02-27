@@ -18,6 +18,7 @@ package com.google.ai.client.generativeai.internal.api
 
 import com.google.ai.client.generativeai.BuildConfig
 import com.google.ai.client.generativeai.internal.util.decodeToFlow
+import com.google.ai.client.generativeai.type.InvalidAPIKeyException
 import com.google.ai.client.generativeai.type.ServerException
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -173,7 +174,9 @@ private suspend fun validateResponse(response: HttpResponse) {
       } catch (e: Throwable) {
         "Unexpected Response:\n$text"
       }
-
+    if (message.contains("API key not valid")) {
+      throw InvalidAPIKeyException(message)
+    }
     throw ServerException(message)
   }
 }

@@ -55,6 +55,10 @@ class SerializationException(message: String, cause: Throwable? = null) :
 class ServerException(message: String, cause: Throwable? = null) :
   GoogleGenerativeAIException(message, cause)
 
+/** The server responded that the API Key is no valid */
+class InvalidAPIKeyException(message: String, cause: Throwable? = null):
+  GoogleGenerativeAIException(message, cause)
+
 /**
  * A request was blocked for some reason.
  *
