@@ -153,7 +153,6 @@ internal class StreamingSnapshotTests {
       }
     }
 
-
   @Test
   fun `stopped for recitation`() =
     goldenStreamingFile("failure-recitation-no-content.txt") {
