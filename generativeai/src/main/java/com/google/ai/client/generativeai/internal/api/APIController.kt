@@ -20,6 +20,7 @@ import com.google.ai.client.generativeai.BuildConfig
 import com.google.ai.client.generativeai.internal.util.decodeToFlow
 import com.google.ai.client.generativeai.type.InvalidAPIKeyException
 import com.google.ai.client.generativeai.type.ServerException
+import com.google.ai.client.generativeai.type.UnsupportedGeoException
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.HttpClientEngine
@@ -176,6 +177,9 @@ private suspend fun validateResponse(response: HttpResponse) {
       }
     if (message.contains("API key not valid")) {
       throw InvalidAPIKeyException(message)
+    }
+    if (message.contains("User location is not supported")) {
+      throw UnsupportedGeoException(message)
     }
     throw ServerException(message)
   }

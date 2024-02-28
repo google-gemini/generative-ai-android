@@ -55,8 +55,12 @@ class SerializationException(message: String, cause: Throwable? = null) :
 class ServerException(message: String, cause: Throwable? = null) :
   GoogleGenerativeAIException(message, cause)
 
-/** The server responded that the API Key is no valid */
+/** The server responded that the API Key is no valid. */
 class InvalidAPIKeyException(message: String, cause: Throwable? = null) :
+  GoogleGenerativeAIException(message, cause)
+
+/** The server responded that the user's geo location is not supported to access this model. */
+class UnsupportedGeoException(message: String, cause: Throwable? = null) :
   GoogleGenerativeAIException(message, cause)
 
 /**

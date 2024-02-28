@@ -24,6 +24,7 @@ import com.google.ai.client.generativeai.type.PromptBlockedException
 import com.google.ai.client.generativeai.type.ResponseStoppedException
 import com.google.ai.client.generativeai.type.SerializationException
 import com.google.ai.client.generativeai.type.ServerException
+import com.google.ai.client.generativeai.type.UnsupportedGeoException
 import com.google.ai.client.generativeai.util.goldenUnaryFile
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.should
@@ -131,6 +132,12 @@ internal class UnarySnapshotTests {
   fun `invalid api key`() =
     goldenUnaryFile("failure-api-key.json", HttpStatusCode.BadRequest) {
       withTimeout(testTimeout) { shouldThrow<InvalidAPIKeyException> { model.generateContent() } }
+    }
+
+  @Test
+  fun `invalid geo location`() =
+    goldenUnaryFile("failure-unsupported-user-location.json", HttpStatusCode.BadRequest) {
+      withTimeout(testTimeout) { shouldThrow<UnsupportedGeoException> { model.generateContent() } }
     }
 
   @Test
