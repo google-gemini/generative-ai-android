@@ -143,6 +143,18 @@ internal class StreamingSnapshotTests {
     }
 
   @Test
+  fun `citation returns correctly when using alternative name`() =
+    goldenStreamingFile("success-citations-altname.txt") {
+      val responses = model.generateContentStream()
+
+      withTimeout(testTimeout) {
+        val responseList = responses.toList()
+        responseList.any { it.candidates.any { it.citationMetadata.isNotEmpty() } } shouldBe true
+      }
+    }
+
+
+  @Test
   fun `stopped for recitation`() =
     goldenStreamingFile("failure-recitation-no-content.txt") {
       val responses = model.generateContentStream()

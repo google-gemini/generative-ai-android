@@ -19,9 +19,11 @@ package com.google.ai.client.generativeai.internal.api.server
 import com.google.ai.client.generativeai.internal.api.shared.Content
 import com.google.ai.client.generativeai.internal.api.shared.HarmCategory
 import com.google.ai.client.generativeai.internal.util.FirstOrdinalSerializer
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNames
 
 internal object BlockReasonSerializer :
   KSerializer<BlockReason> by FirstOrdinalSerializer(BlockReason::class)
@@ -54,7 +56,10 @@ internal data class Candidate(
   val citationMetadata: CitationMetadata? = null
 )
 
-@Serializable internal data class CitationMetadata(val citationSources: List<CitationSources>)
+@Serializable
+internal data class CitationMetadata
+@OptIn(ExperimentalSerializationApi::class)
+constructor(@JsonNames("citations") val citationSources: List<CitationSources>)
 
 @Serializable
 internal data class CitationSources(
