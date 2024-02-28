@@ -18,8 +18,8 @@ package com.google.ai.client.generativeai.internal.api
 
 import com.google.ai.client.generativeai.BuildConfig
 import com.google.ai.client.generativeai.internal.util.decodeToFlow
-import com.google.ai.client.generativeai.type.RequestOptions
 import com.google.ai.client.generativeai.type.InvalidAPIKeyException
+import com.google.ai.client.generativeai.type.RequestOptions
 import com.google.ai.client.generativeai.type.ServerException
 import com.google.ai.client.generativeai.type.UnsupportedUserLocationException
 import io.ktor.client.HttpClient
