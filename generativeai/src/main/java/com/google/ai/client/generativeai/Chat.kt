@@ -73,7 +73,7 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
    * @throws InvalidStateException if the [Chat] instance has an active request.
    */
   suspend fun sendMessage(prompt: String): GenerateContentResponse {
-    val content = content("user") { text(prompt) }
+    val content = content { text(prompt) }
     return sendMessage(content)
   }
 
@@ -84,7 +84,7 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
    * @throws InvalidStateException if the [Chat] instance has an active request.
    */
   suspend fun sendMessage(prompt: Bitmap): GenerateContentResponse {
-    val content = content("user") { image(prompt) }
+    val content = content { image(prompt) }
     return sendMessage(content)
   }
 
@@ -150,7 +150,7 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
    * @throws InvalidStateException if the [Chat] instance has an active request.
    */
   fun sendMessageStream(prompt: String): Flow<GenerateContentResponse> {
-    val content = content("user") { text(prompt) }
+    val content = content { text(prompt) }
     return sendMessageStream(content)
   }
 
@@ -162,7 +162,7 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
    * @throws InvalidStateException if the [Chat] instance has an active request.
    */
   fun sendMessageStream(prompt: Bitmap): Flow<GenerateContentResponse> {
-    val content = content("user") { image(prompt) }
+    val content = content { image(prompt) }
     return sendMessageStream(content)
   }
 

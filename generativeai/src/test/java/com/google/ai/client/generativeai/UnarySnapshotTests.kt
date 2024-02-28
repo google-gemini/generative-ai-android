@@ -19,10 +19,12 @@ package com.google.ai.client.generativeai
 import com.google.ai.client.generativeai.type.BlockReason
 import com.google.ai.client.generativeai.type.FinishReason
 import com.google.ai.client.generativeai.type.HarmCategory
+import com.google.ai.client.generativeai.type.InvalidAPIKeyException
 import com.google.ai.client.generativeai.type.PromptBlockedException
 import com.google.ai.client.generativeai.type.ResponseStoppedException
 import com.google.ai.client.generativeai.type.SerializationException
 import com.google.ai.client.generativeai.type.ServerException
+import com.google.ai.client.generativeai.type.UnsupportedUserLocationException
 import com.google.ai.client.generativeai.util.goldenUnaryFile
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.should
@@ -95,6 +97,14 @@ internal class UnarySnapshotTests {
     }
 
   @Test
+  fun `user location error`() =
+    goldenUnaryFile("failure-unsupported-user-location.json", HttpStatusCode.PreconditionFailed) {
+      withTimeout(testTimeout) {
+        shouldThrow<UnsupportedUserLocationException> { model.generateContent() }
+      }
+    }
+
+  @Test
   fun `stopped for safety`() =
     goldenUnaryFile("failure-finish-reason-safety.json") {
       withTimeout(testTimeout) {
@@ -129,7 +139,7 @@ internal class UnarySnapshotTests {
   @Test
   fun `invalid api key`() =
     goldenUnaryFile("failure-api-key.json", HttpStatusCode.BadRequest) {
-      withTimeout(testTimeout) { shouldThrow<ServerException> { model.generateContent() } }
+      withTimeout(testTimeout) { shouldThrow<InvalidAPIKeyException> { model.generateContent() } }
     }
 
   @Test
