@@ -24,7 +24,6 @@ import com.google.ai.client.generativeai.type.PromptBlockedException
 import com.google.ai.client.generativeai.type.ResponseStoppedException
 import com.google.ai.client.generativeai.type.SerializationException
 import com.google.ai.client.generativeai.type.ServerException
-import com.google.ai.client.generativeai.type.UnsupportedGeoException
 import com.google.ai.client.generativeai.util.goldenUnaryFile
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.should
