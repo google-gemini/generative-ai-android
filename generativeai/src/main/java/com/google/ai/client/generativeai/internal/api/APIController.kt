@@ -18,6 +18,7 @@ package com.google.ai.client.generativeai.internal.api
 
 import com.google.ai.client.generativeai.BuildConfig
 import com.google.ai.client.generativeai.internal.util.decodeToFlow
+import com.google.ai.client.generativeai.type.InvalidAPIKeyException
 import com.google.ai.client.generativeai.type.ServerException
 import com.google.ai.client.generativeai.type.UnsupportedUserLocationException
 import io.ktor.client.HttpClient
@@ -174,7 +175,9 @@ private suspend fun validateResponse(response: HttpResponse) {
       } catch (e: Throwable) {
         "Unexpected Response:\n$text"
       }
-
+    if (message.contains("API key not valid")) {
+      throw InvalidAPIKeyException(message)
+    }
     // TODO (b/325117891): Use a better method than string matching.
     if (message == "User location is not supported for the API use.") {
       throw UnsupportedUserLocationException()
