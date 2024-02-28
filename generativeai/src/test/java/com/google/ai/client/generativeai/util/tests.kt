@@ -121,14 +121,7 @@ internal fun createGenerativeModel(
   GenerativeModel(
     name,
     apikey,
-    controller =
-      APIController(
-        "super_cool_test_key",
-        name,
-        requestOptions.apiVersion,
-        requestOptions.timeout,
-        engine
-      )
+    controller = APIController("super_cool_test_key", name, requestOptions, engine)
   )
 
 /**
