@@ -73,6 +73,16 @@ class PromptBlockedException(val response: GenerateContentResponse, cause: Throw
   )
 
 /**
+ * The user's location (region) is not supported by the API.
+ *
+ * See the Google documentation for a
+ * [list of regions](https://ai.google.dev/available_regions#available_regions) (countries and
+ * territories) where the API is available.
+ */
+class UnsupportedUserLocationException(cause: Throwable? = null) :
+  GoogleGenerativeAIException("User location is not supported for the API use.", cause)
+
+/**
  * Some form of state occurred that shouldn't have.
  *
  * Usually indicative of consumer error.
