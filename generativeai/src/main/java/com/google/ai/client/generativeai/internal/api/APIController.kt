@@ -178,9 +178,6 @@ private suspend fun validateResponse(response: HttpResponse) {
     if (message.contains("API key not valid")) {
       throw InvalidAPIKeyException(message)
     }
-    if (message.contains("User location is not supported")) {
-      throw UnsupportedGeoException(message)
-    }
     throw ServerException(message)
   }
 }

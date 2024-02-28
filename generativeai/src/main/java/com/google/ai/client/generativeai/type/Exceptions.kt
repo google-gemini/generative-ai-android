@@ -59,10 +59,6 @@ class ServerException(message: String, cause: Throwable? = null) :
 class InvalidAPIKeyException(message: String, cause: Throwable? = null) :
   GoogleGenerativeAIException(message, cause)
 
-/** The server responded that the user's geo location is not supported to access this model. */
-class UnsupportedGeoException(message: String, cause: Throwable? = null) :
-  GoogleGenerativeAIException(message, cause)
-
 /**
  * A request was blocked for some reason.
  *

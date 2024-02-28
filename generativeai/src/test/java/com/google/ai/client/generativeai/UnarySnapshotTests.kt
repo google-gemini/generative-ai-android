@@ -135,12 +135,6 @@ internal class UnarySnapshotTests {
     }
 
   @Test
-  fun `invalid geo location`() =
-    goldenUnaryFile("failure-unsupported-user-location.json", HttpStatusCode.BadRequest) {
-      withTimeout(testTimeout) { shouldThrow<UnsupportedGeoException> { model.generateContent() } }
-    }
-
-  @Test
   fun `image rejected`() =
     goldenUnaryFile("failure-image-rejected.json", HttpStatusCode.BadRequest) {
       withTimeout(testTimeout) { shouldThrow<ServerException> { model.generateContent() } }
