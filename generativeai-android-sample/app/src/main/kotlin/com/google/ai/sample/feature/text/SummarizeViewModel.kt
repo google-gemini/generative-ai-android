@@ -18,14 +18,14 @@ package com.google.ai.sample.feature.text
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.ai.client.generativeai.LabsGenerativeModel
+import com.google.firebase.vertex.FirebaseGenerativeModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class SummarizeViewModel(
-    private val generativeModel: LabsGenerativeModel
+    private val generativeModel: FirebaseGenerativeModel
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<SummarizeUiState> =

@@ -18,16 +18,16 @@ package com.google.ai.sample.feature.chat
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.ai.client.generativeai.LabsGenerativeModel
 import com.google.ai.client.generativeai.type.asTextOrNull
 import com.google.ai.client.generativeai.type.content
+import com.google.firebase.vertex.FirebaseGenerativeModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ChatViewModel(
-    generativeModel: LabsGenerativeModel
+    generativeModel: FirebaseGenerativeModel
 ) : ViewModel() {
     private val chat = generativeModel.startChat(
         history = listOf(

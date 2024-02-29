@@ -19,11 +19,12 @@ package com.google.ai.sample
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
-import com.google.ai.client.generativeai.LabsGenerativeModel
 import com.google.ai.client.generativeai.type.generationConfig
 import com.google.ai.sample.feature.chat.ChatViewModel
 import com.google.ai.sample.feature.multimodal.PhotoReasoningViewModel
 import com.google.ai.sample.feature.text.SummarizeViewModel
+import com.google.firebase.Firebase
+import com.google.firebase.vertex.vertex
 
 val GenerativeViewModelFactory = object : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(
@@ -39,10 +40,9 @@ val GenerativeViewModelFactory = object : ViewModelProvider.Factory {
                 isAssignableFrom(SummarizeViewModel::class.java) -> {
                     // Initialize a GenerativeModel with the `gemini-pro` AI model
                     // for text generation
-                    val generativeModel = LabsGenerativeModel(
+                    val generativeModel = Firebase.vertex.getModel(
                         modelName = "gemini-1.0-pro",
-                        apiKey = BuildConfig.apiKey,
-                        generationConfig = config
+                        location = "us-central1"
                     )
                     SummarizeViewModel(generativeModel)
                 }
@@ -50,20 +50,18 @@ val GenerativeViewModelFactory = object : ViewModelProvider.Factory {
                 isAssignableFrom(PhotoReasoningViewModel::class.java) -> {
                     // Initialize a GenerativeModel with the `gemini-pro-vision` AI model
                     // for multimodal text generation
-                    val generativeModel = LabsGenerativeModel(
-                        modelName = "gemini-1.0-pro-vision-latest",
-                        apiKey = BuildConfig.apiKey,
-                        generationConfig = config
+                    val generativeModel = Firebase.vertex.getModel(
+                        modelName = "gemini-1.0-pro",
+                        location = "us-central1"
                     )
                     PhotoReasoningViewModel(generativeModel)
                 }
 
                 isAssignableFrom(ChatViewModel::class.java) -> {
                     // Initialize a GenerativeModel with the `gemini-pro` AI model for chat
-                    val generativeModel = LabsGenerativeModel(
+                    val generativeModel = Firebase.vertex.getModel(
                         modelName = "gemini-1.0-pro",
-                        apiKey = BuildConfig.apiKey,
-                        generationConfig = config
+                        location = "us-central1"
                     )
                     ChatViewModel(generativeModel)
                 }

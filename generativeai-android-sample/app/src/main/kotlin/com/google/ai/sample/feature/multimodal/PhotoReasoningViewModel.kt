@@ -19,8 +19,8 @@ package com.google.ai.sample.feature.multimodal
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.ai.client.generativeai.LabsGenerativeModel
 import com.google.ai.client.generativeai.type.content
+import com.google.firebase.vertex.FirebaseGenerativeModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class PhotoReasoningViewModel(
-    private val generativeModel: LabsGenerativeModel
+    private val generativeModel: FirebaseGenerativeModel
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<PhotoReasoningUiState> =
