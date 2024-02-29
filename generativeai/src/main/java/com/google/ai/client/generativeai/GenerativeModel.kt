@@ -71,7 +71,7 @@ internal constructor(
     generationConfig,
     safetySettings,
     requestOptions,
-    APIController(apiKey, modelName, requestOptions.apiVersion, requestOptions.timeout)
+    APIController(apiKey, modelName, requestOptions)
   )
 
   /**
