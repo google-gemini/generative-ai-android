@@ -19,6 +19,7 @@ package com.google.ai.client.generativeai.internal.api
 import com.google.ai.client.generativeai.BuildConfig
 import com.google.ai.client.generativeai.internal.util.decodeToFlow
 import com.google.ai.client.generativeai.type.InvalidAPIKeyException
+import com.google.ai.client.generativeai.type.RequestOptions
 import com.google.ai.client.generativeai.type.ServerException
 import com.google.ai.client.generativeai.type.UnsupportedUserLocationException
 import io.ktor.client.HttpClient
@@ -39,7 +40,6 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
-import kotlin.time.Duration
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
@@ -69,8 +69,7 @@ internal val JSON = Json {
 internal class APIController(
   private val key: String,
   model: String,
-  private val apiVersion: String,
-  private val timeout: Duration,
+  private val requestOptions: RequestOptions,
   httpEngine: HttpClientEngine = OkHttp.create(),
 ) {
   private val model = fullModelName(model)
@@ -78,7 +77,7 @@ internal class APIController(
   private val client =
     HttpClient(httpEngine) {
       install(HttpTimeout) {
-        requestTimeoutMillis = timeout.inWholeMilliseconds
+        requestTimeoutMillis = requestOptions.timeout.inWholeMilliseconds
         socketTimeoutMillis = 80_000
       }
       install(ContentNegotiation) { json(JSON) }
@@ -86,13 +85,15 @@ internal class APIController(
 
   suspend fun generateContent(request: GenerateContentRequest): GenerateContentResponse =
     client
-      .post("$DOMAIN/$apiVersion/$model:generateContent") { applyCommonConfiguration(request) }
+      .post("$DOMAIN/${requestOptions.apiVersion}/$model:generateContent") {
+        applyCommonConfiguration(request)
+      }
       .also { validateResponse(it) }
       .body()
 
   fun generateContentStream(request: GenerateContentRequest): Flow<GenerateContentResponse> {
     return client.postStream<GenerateContentResponse>(
-      "$DOMAIN/$apiVersion/$model:streamGenerateContent?alt=sse"
+      "$DOMAIN/${requestOptions.apiVersion}/$model:streamGenerateContent?alt=sse"
     ) {
       applyCommonConfiguration(request)
     }
@@ -100,7 +101,9 @@ internal class APIController(
 
   suspend fun countTokens(request: CountTokensRequest): CountTokensResponse =
     client
-      .post("$DOMAIN/$apiVersion/$model:countTokens") { applyCommonConfiguration(request) }
+      .post("$DOMAIN/${requestOptions.apiVersion}/$model:countTokens") {
+        applyCommonConfiguration(request)
+      }
       .also { validateResponse(it) }
       .body()
 
