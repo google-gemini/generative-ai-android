@@ -18,7 +18,7 @@
 
 package com.google.ai.client.generativeai.util
 
-import com.google.ai.client.generativeai.GenerativeModel
+import com.google.ai.client.generativeai.LabsGenerativeModel
 import com.google.ai.client.generativeai.internal.api.APIController
 import com.google.ai.client.generativeai.internal.api.GenerateContentRequest
 import com.google.ai.client.generativeai.internal.api.GenerateContentResponse
@@ -65,11 +65,11 @@ internal fun createResponses(vararg text: String): List<GenerateContentResponse>
  * Wrapper around common instances needed in tests.
  *
  * @param channel A [ByteChannel] for sending responses through the mock HTTP engine
- * @param model A [GenerativeModel] that consumes the [channel]
+ * @param model A [LabsGenerativeModel] that consumes the [channel]
  * @see commonTest
  * @see send
  */
-internal data class CommonTestScope(val channel: ByteChannel, val model: GenerativeModel)
+internal data class CommonTestScope(val channel: ByteChannel, val model: LabsGenerativeModel)
 
 /** A test that runs under a [CommonTestScope]. */
 internal typealias CommonTest = suspend CommonTestScope.() -> Unit
@@ -118,7 +118,7 @@ internal fun createGenerativeModel(
   requestOptions: RequestOptions = RequestOptions(),
   engine: MockEngine
 ) =
-  GenerativeModel(
+  LabsGenerativeModel(
     name,
     apikey,
     controller =

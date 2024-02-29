@@ -21,7 +21,7 @@ package com.google.ai.client.generativeai.type
  * optional [FinishReason] in addition to the [Content] of the response.
  */
 class Candidate
-internal constructor(
+ constructor(
   val content: Content,
   val safetyRatings: List<SafetyRating>,
   val citationMetadata: List<CitationMetadata>,

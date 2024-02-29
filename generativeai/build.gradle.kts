@@ -91,6 +91,9 @@ dependencies {
     implementation("com.google.guava:listenablefuture:1.0")
     implementation("androidx.concurrent:concurrent-futures:1.2.0-alpha02")
     implementation("androidx.concurrent:concurrent-futures-ktx:1.2.0-alpha02")
+
+    api(project(":generativeai-common"))
+
     testImplementation("junit:junit:4.13.2")
     testImplementation("io.kotest:kotest-assertions-core:4.0.7")
     testImplementation("io.kotest:kotest-assertions-jvm:4.0.7")

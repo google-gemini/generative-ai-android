@@ -48,15 +48,15 @@ import kotlinx.coroutines.flow.map
  *   generation
  * @property requestOptions configuration options to utilize during backend communication
  */
-class GenerativeModel
+class LabsGenerativeModel
 internal constructor(
-  val modelName: String,
+  override val modelName: String,
   val apiKey: String,
   val generationConfig: GenerationConfig? = null,
   val safetySettings: List<SafetySetting>? = null,
   val requestOptions: RequestOptions = RequestOptions(),
   private val controller: APIController
-) {
+) : GenerativeModel {
 
   @JvmOverloads
   constructor(
@@ -81,7 +81,7 @@ internal constructor(
    * @return A [GenerateContentResponse] after some delay. Function should be called within a
    *   suspend context to properly manage concurrency.
    */
-  suspend fun generateContent(vararg prompt: Content): GenerateContentResponse =
+  override suspend fun generateContent(vararg prompt: Content): GenerateContentResponse =
     try {
       controller.generateContent(constructRequest(*prompt)).toPublic().validate()
     } catch (e: Throwable) {
@@ -94,7 +94,7 @@ internal constructor(
    * @param prompt A group of [Content]s to send to the model.
    * @return A [Flow] which will emit responses as they are returned from the model.
    */
-  fun generateContentStream(vararg prompt: Content): Flow<GenerateContentResponse> =
+  override fun generateContentStream(vararg prompt: Content): Flow<GenerateContentResponse> =
     controller
       .generateContentStream(constructRequest(*prompt))
       .map { it.toPublic().validate() }
@@ -107,7 +107,7 @@ internal constructor(
    * @return A [GenerateContentResponse] after some delay. Function should be called within a
    *   suspend context to properly manage concurrency.
    */
-  suspend fun generateContent(prompt: String): GenerateContentResponse =
+  override suspend fun generateContent(prompt: String): GenerateContentResponse =
     generateContent(content { text(prompt) })
 
   /**
@@ -139,7 +139,7 @@ internal constructor(
     generateContentStream(content { image(prompt) })
 
   /** Creates a chat instance which internally tracks the ongoing conversation with the model */
-  fun startChat(history: List<Content> = emptyList()): Chat = Chat(this, history.toMutableList())
+  override fun startChat(history: List<Content>): LabsChat = LabsChat(this, history.toMutableList())
 
   /**
    * Counts the number of tokens used in a prompt.
@@ -147,7 +147,7 @@ internal constructor(
    * @param prompt A group of [Content]s to count tokens of.
    * @return A [CountTokensResponse] containing the number of tokens in the prompt.
    */
-  suspend fun countTokens(vararg prompt: Content): CountTokensResponse {
+  override suspend fun countTokens(vararg prompt: Content): CountTokensResponse {
     return controller.countTokens(constructCountTokensRequest(*prompt)).toPublic()
   }
 
@@ -157,7 +157,7 @@ internal constructor(
    * @param prompt The text to be converted to a single piece of [Content] to count the tokens of.
    * @return A [CountTokensResponse] containing the number of tokens in the prompt.
    */
-  suspend fun countTokens(prompt: String): CountTokensResponse {
+  override suspend fun countTokens(prompt: String): CountTokensResponse {
     return countTokens(content { text(prompt) })
   }
 
