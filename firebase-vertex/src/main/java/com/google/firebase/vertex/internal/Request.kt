@@ -14,23 +14,15 @@
  * limitations under the License.
  */
 
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
+package com.google.firebase.vertex.internal
 
-rootProject.name = "generativeai"
-include(":generativeai")
-includeBuild("./plugins")
-include(":generativeai-common")
-include(":firebase-vertex")
+import com.google.ai.client.generativeai.type.Content
+
+internal sealed interface Request
+
+internal data class GenerateContentRequest(
+  val model: String,
+  val contents: List<Content>
+) : Request
+
+internal data class CountTokensRequest(val model: String, val contents: List<Content>) : Request
