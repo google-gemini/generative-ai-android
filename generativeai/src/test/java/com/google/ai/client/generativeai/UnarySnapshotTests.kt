@@ -125,6 +125,17 @@ internal class UnarySnapshotTests {
     }
 
   @Test
+  fun `citation returns correctly when using alternative name`() =
+    goldenUnaryFile("success-citations-altname.json") {
+      withTimeout(testTimeout) {
+        val response = model.generateContent()
+
+        response.candidates.isEmpty() shouldBe false
+        response.candidates.first().citationMetadata.isNotEmpty() shouldBe true
+      }
+    }
+
+  @Test
   fun `invalid response`() =
     goldenUnaryFile("failure-invalid-response.json") {
       withTimeout(testTimeout) { shouldThrow<SerializationException> { model.generateContent() } }
