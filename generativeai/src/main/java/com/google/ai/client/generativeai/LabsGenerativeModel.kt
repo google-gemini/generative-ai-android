@@ -25,6 +25,7 @@ import com.google.ai.client.generativeai.internal.util.toPublic
 import com.google.ai.client.generativeai.type.Content
 import com.google.ai.client.generativeai.type.CountTokensResponse
 import com.google.ai.client.generativeai.type.FinishReason
+import com.google.ai.client.generativeai.type.FunctionCallResponse
 import com.google.ai.client.generativeai.type.GenerateContentResponse
 import com.google.ai.client.generativeai.type.GenerationConfig
 import com.google.ai.client.generativeai.type.GoogleGenerativeAIException
@@ -149,6 +150,10 @@ internal constructor(
    */
   override suspend fun countTokens(vararg prompt: Content): CountTokensResponse {
     return controller.countTokens(constructCountTokensRequest(*prompt)).toPublic()
+  }
+
+  override suspend fun executeFunction(function: () -> Unit): FunctionCallResponse {
+    TODO("Labs' implementation of function calling")
   }
 
   /**

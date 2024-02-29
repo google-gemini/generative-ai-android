@@ -4,6 +4,7 @@ import com.google.ai.client.generativeai.Chat
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.Content
 import com.google.ai.client.generativeai.type.CountTokensResponse
+import com.google.ai.client.generativeai.type.FunctionCallResponse
 import com.google.ai.client.generativeai.type.GenerateContentResponse
 import com.google.firebase.vertex.internal.FakeAPIController
 import kotlinx.coroutines.flow.Flow
@@ -42,5 +43,9 @@ internal constructor(
 
     override suspend fun countTokens(vararg prompt: Content): CountTokensResponse {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun executeFunction(function: () -> Unit): FunctionCallResponse {
+        TODO("Vertex's implementation of function calling")
     }
 }
