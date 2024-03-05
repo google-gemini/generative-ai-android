@@ -50,8 +50,12 @@ import com.google.ai.client.generativeai.type.SerializationException
 import com.google.ai.client.generativeai.type.Tool
 import com.google.ai.client.generativeai.type.content
 import java.io.ByteArrayOutputStream
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
+import org.json.JSONObject
 
 private const val BASE_64_FLAGS = Base64.NO_WRAP
 
@@ -67,7 +71,7 @@ internal fun com.google.ai.client.generativeai.type.Part.toInternal(): Part {
     is com.google.ai.client.generativeai.type.FunctionCallPart ->
       FunctionCallPart(FunctionCall(name, args))
     is com.google.ai.client.generativeai.type.FunctionResponsePart ->
-      FunctionResponsePart(FunctionResponse(name, response))
+      FunctionResponsePart(FunctionResponse(name, response.toInternal()))
     else ->
       throw SerializationException(
         "The given subclass of Part (${javaClass.simpleName}) is not supported in the serialization yet."
@@ -139,6 +143,8 @@ internal fun FunctionDeclaration.toInternal():
   )
 }
 
+internal fun JSONObject.toInternal() = Json.decodeFromString<JsonObject>(toString())
+
 internal fun Candidate.toPublic(): com.google.ai.client.generativeai.type.Candidate {
   val safetyRatings = safetyRatings?.map { it.toPublic() }.orEmpty()
   val citations = citationMetadata?.citationSources?.map { it.toPublic() }.orEmpty()
@@ -174,7 +180,7 @@ internal fun Part.toPublic(): com.google.ai.client.generativeai.type.Part {
     is FunctionResponsePart ->
       com.google.ai.client.generativeai.type.FunctionResponsePart(
         functionResponse.name,
-        functionResponse.response
+        functionResponse.response.toPublic()
       )
   }
 }
@@ -243,6 +249,8 @@ internal fun GenerateContentResponse.toPublic() =
 
 internal fun CountTokensResponse.toPublic() =
   com.google.ai.client.generativeai.type.CountTokensResponse(totalTokens)
+
+internal fun JsonObject.toPublic() = JSONObject(toString())
 
 private fun encodeBitmapToBase64Png(input: Bitmap): String {
   ByteArrayOutputStream().let {

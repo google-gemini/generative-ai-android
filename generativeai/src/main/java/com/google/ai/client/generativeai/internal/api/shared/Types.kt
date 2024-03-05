@@ -26,7 +26,6 @@ import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonObject
-import org.json.JSONObject
 
 internal object HarmCategorySerializer :
   KSerializer<HarmCategory> by FirstOrdinalSerializer(HarmCategory::class)
@@ -61,8 +60,7 @@ internal data class Blob(
   val data: Base64,
 )
 
-@Serializable
-internal data class FunctionResponse(val name: String, val response: JsonObject)
+@Serializable internal data class FunctionResponse(val name: String, val response: JsonObject)
 
 @Serializable internal data class FunctionCall(val name: String, val args: Map<String, String>)
 

@@ -17,7 +17,7 @@
 package com.google.ai.client.generativeai.type
 
 import android.graphics.Bitmap
-import kotlinx.serialization.json.JsonObject
+import org.json.JSONObject
 
 /**
  * Interface representing data sent to and received from requests.
@@ -45,7 +45,7 @@ class BlobPart(val mimeType: String, val blob: ByteArray) : Part
 class FunctionCallPart(val name: String, val args: Map<String, String>) : Part
 
 /** Represents function call output to be returned to the model when it requests a function call */
-class FunctionResponsePart(val name: String, val response: JsonObject) : Part
+class FunctionResponsePart(val name: String, val response: JSONObject) : Part
 
 /** @return The part as a [String] if it represents text, and null otherwise */
 fun Part.asTextOrNull(): String? = (this as? TextPart)?.text
