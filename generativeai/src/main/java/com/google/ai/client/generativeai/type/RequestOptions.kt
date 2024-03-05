@@ -38,10 +38,10 @@ class RequestOptions(
   constructor(
     timeout: Long? = HttpTimeout.INFINITE_TIMEOUT_MS,
     apiVersion: String = "v1",
-    autoFunction: Boolean = true
+    disableAutoFunction: Boolean = false
   ) : this(
     (timeout ?: HttpTimeout.INFINITE_TIMEOUT_MS).toDuration(DurationUnit.MILLISECONDS),
     apiVersion,
-    autoFunction
+    disableAutoFunction
   )
 }
