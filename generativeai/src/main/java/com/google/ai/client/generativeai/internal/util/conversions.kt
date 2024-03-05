@@ -35,7 +35,6 @@ import com.google.ai.client.generativeai.internal.api.shared.Content
 import com.google.ai.client.generativeai.internal.api.shared.FunctionCall
 import com.google.ai.client.generativeai.internal.api.shared.FunctionCallPart
 import com.google.ai.client.generativeai.internal.api.shared.FunctionResponse
-import com.google.ai.client.generativeai.internal.api.shared.FunctionResponseData
 import com.google.ai.client.generativeai.internal.api.shared.FunctionResponsePart
 import com.google.ai.client.generativeai.internal.api.shared.HarmBlockThreshold
 import com.google.ai.client.generativeai.internal.api.shared.HarmCategory
@@ -68,7 +67,7 @@ internal fun com.google.ai.client.generativeai.type.Part.toInternal(): Part {
     is com.google.ai.client.generativeai.type.FunctionCallPart ->
       FunctionCallPart(FunctionCall(name, args))
     is com.google.ai.client.generativeai.type.FunctionResponsePart ->
-      FunctionResponsePart(FunctionResponse(name, FunctionResponseData(name, response)))
+      FunctionResponsePart(FunctionResponse(name, response))
     else ->
       throw SerializationException(
         "The given subclass of Part (${javaClass.simpleName}) is not supported in the serialization yet."
@@ -175,7 +174,7 @@ internal fun Part.toPublic(): com.google.ai.client.generativeai.type.Part {
     is FunctionResponsePart ->
       com.google.ai.client.generativeai.type.FunctionResponsePart(
         functionResponse.name,
-        functionResponse.response.content
+        functionResponse.response
       )
   }
 }

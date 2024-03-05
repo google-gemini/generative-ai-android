@@ -24,7 +24,9 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonObject
+import org.json.JSONObject
 
 internal object HarmCategorySerializer :
   KSerializer<HarmCategory> by FirstOrdinalSerializer(HarmCategory::class)
@@ -60,11 +62,9 @@ internal data class Blob(
 )
 
 @Serializable
-internal data class FunctionResponse(val name: String, val response: FunctionResponseData)
+internal data class FunctionResponse(val name: String, val response: JsonObject)
 
 @Serializable internal data class FunctionCall(val name: String, val args: Map<String, String>)
-
-@Serializable internal data class FunctionResponseData(val name: String, val content: String)
 
 @Serializable
 internal data class SafetySetting(val category: HarmCategory, val threshold: HarmBlockThreshold)

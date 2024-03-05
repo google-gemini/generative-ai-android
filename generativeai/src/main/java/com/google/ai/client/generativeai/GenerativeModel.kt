@@ -45,6 +45,7 @@ import com.google.ai.client.generativeai.type.content
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.json.JsonObject
 
 /**
  * A facilitator for a given multimodal model (eg; Gemini).
@@ -191,7 +192,7 @@ internal constructor(
    * @return The output of the requested function call
    */
   @GenerativeBeta
-  suspend fun executeFunction(functionCallPart: FunctionCallPart): String {
+  suspend fun executeFunction(functionCallPart: FunctionCallPart): JsonObject {
     if (tools == null) {
       throw RuntimeException("No registered tools")
     }

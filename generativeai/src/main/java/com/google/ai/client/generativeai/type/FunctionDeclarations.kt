@@ -16,6 +16,8 @@
 
 package com.google.ai.client.generativeai.type
 
+import kotlinx.serialization.json.JsonObject
+
 /**
  * A declared function, including implementation, that a model can be given access to in order to
  * gain info or complete tasks.
@@ -28,7 +30,7 @@ package com.google.ai.client.generativeai.type
 class NoParameterFunction(
   name: String,
   description: String,
-  val function: suspend () -> String,
+  val function: suspend () -> JsonObject,
 ) : FunctionDeclaration(name, description) {
   override fun getParameters() = listOf<ParameterDeclaration<Any>>()
 
@@ -51,11 +53,11 @@ class OneParameterFunction<T>(
   name: String,
   description: String,
   val param: ParameterDeclaration<T>,
-  val function: suspend (T) -> String,
+  val function: suspend (T) -> JsonObject,
 ) : FunctionDeclaration(name, description) {
   override fun getParameters() = listOf(param)
 
-  override suspend fun execute(part: FunctionCallPart): String {
+  override suspend fun execute(part: FunctionCallPart): JsonObject {
     val arg1 = part.getArgOrThrow(param)
     return function(arg1)
   }
@@ -77,11 +79,11 @@ class TwoParameterFunction<T, U>(
   description: String,
   val param1: ParameterDeclaration<T>,
   val param2: ParameterDeclaration<U>,
-  val function: suspend (T, U) -> String,
+  val function: suspend (T, U) -> JsonObject,
 ) : FunctionDeclaration(name, description) {
   override fun getParameters() = listOf(param1, param2)
 
-  override suspend fun execute(part: FunctionCallPart): String {
+  override suspend fun execute(part: FunctionCallPart): JsonObject {
     val arg1 = part.getArgOrThrow(param1)
     val arg2 = part.getArgOrThrow(param2)
     return function(arg1, arg2)
@@ -106,11 +108,11 @@ class ThreeParameterFunction<T, U, V>(
   val param1: ParameterDeclaration<T>,
   val param2: ParameterDeclaration<U>,
   val param3: ParameterDeclaration<V>,
-  val function: suspend (T, U, V) -> String,
+  val function: suspend (T, U, V) -> JsonObject,
 ) : FunctionDeclaration(name, description) {
   override fun getParameters() = listOf(param1, param2, param3)
 
-  override suspend fun execute(part: FunctionCallPart): String {
+  override suspend fun execute(part: FunctionCallPart): JsonObject {
     val arg1 = part.getArgOrThrow(param1)
     val arg2 = part.getArgOrThrow(param2)
     val arg3 = part.getArgOrThrow(param3)
@@ -138,11 +140,11 @@ class FourParameterFunction<T, U, V, W>(
   val param2: ParameterDeclaration<U>,
   val param3: ParameterDeclaration<V>,
   val param4: ParameterDeclaration<W>,
-  val function: suspend (T, U, V, W) -> String,
+  val function: suspend (T, U, V, W) -> JsonObject,
 ) : FunctionDeclaration(name, description) {
   override fun getParameters() = listOf(param1, param2, param3, param4)
 
-  override suspend fun execute(part: FunctionCallPart): String {
+  override suspend fun execute(part: FunctionCallPart): JsonObject {
     val arg1 = part.getArgOrThrow(param1)
     val arg2 = part.getArgOrThrow(param2)
     val arg3 = part.getArgOrThrow(param3)
@@ -158,7 +160,7 @@ abstract class FunctionDeclaration(
 ) {
   abstract fun getParameters(): List<ParameterDeclaration<out Any?>>
 
-  abstract suspend fun execute(part: FunctionCallPart): String
+  abstract suspend fun execute(part: FunctionCallPart): JsonObject
 }
 
 class ParameterDeclaration<T>(
@@ -181,7 +183,7 @@ class ParameterDeclaration<T>(
 }
 
 @GenerativeBeta
-fun defineFunction(name: String, description: String, function: suspend () -> String) =
+fun defineFunction(name: String, description: String, function: suspend () -> JsonObject) =
   NoParameterFunction(name, description, function)
 
 @GenerativeBeta
@@ -189,7 +191,7 @@ fun <T> defineFunction(
   name: String,
   description: String,
   arg1: ParameterDeclaration<T>,
-  function: suspend (T) -> String
+  function: suspend (T) -> JsonObject
 ) = OneParameterFunction(name, description, arg1, function)
 
 @GenerativeBeta
@@ -198,7 +200,7 @@ fun <T, U> defineFunction(
   description: String,
   arg1: ParameterDeclaration<T>,
   arg2: ParameterDeclaration<U>,
-  function: suspend (T, U) -> String
+  function: suspend (T, U) -> JsonObject
 ) = TwoParameterFunction(name, description, arg1, arg2, function)
 
 @GenerativeBeta
@@ -208,7 +210,7 @@ fun <T, U, W> defineFunction(
   arg1: ParameterDeclaration<T>,
   arg2: ParameterDeclaration<U>,
   arg3: ParameterDeclaration<W>,
-  function: suspend (T, U, W) -> String
+  function: suspend (T, U, W) -> JsonObject
 ) = ThreeParameterFunction(name, description, arg1, arg2, arg3, function)
 
 @GenerativeBeta
@@ -219,7 +221,7 @@ fun <T, U, W, Z> defineFunction(
   arg2: ParameterDeclaration<U>,
   arg3: ParameterDeclaration<W>,
   arg4: ParameterDeclaration<Z>,
-  function: suspend (T, U, W, Z) -> String
+  function: suspend (T, U, W, Z) -> JsonObject
 ) = FourParameterFunction(name, description, arg1, arg2, arg3, arg4, function)
 
 private fun <T> FunctionCallPart.getArgOrThrow(param: ParameterDeclaration<T>): T {
