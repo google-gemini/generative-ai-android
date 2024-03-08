@@ -48,7 +48,7 @@ internal fun prepareResponse(response: GenerateContentResponse) =
   JSON.encodeToString(response).toByteArray()
 
 internal fun createRequest(vararg text: String): GenerateContentRequest {
-  val contents = text.map { Content(role="user", parts = listOf(TextPart(it))) }
+  val contents = text.map { Content(role = "user", parts = listOf(TextPart(it))) }
 
   return GenerateContentRequest("gemini", contents)
 }
@@ -56,7 +56,7 @@ internal fun createRequest(vararg text: String): GenerateContentRequest {
 internal fun createResponse(text: String) = createResponses(text).single()
 
 internal fun createResponses(vararg text: String): List<GenerateContentResponse> {
-  val candidates = text.map { Candidate(Content(role="user",parts = listOf(TextPart(it)))) }
+  val candidates = text.map { Candidate(Content(role = "user", parts = listOf(TextPart(it)))) }
 
   return candidates.map { GenerateContentResponse(candidates = listOf(it)) }
 }
