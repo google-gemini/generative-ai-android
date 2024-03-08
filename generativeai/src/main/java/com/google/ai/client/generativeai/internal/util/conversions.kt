@@ -47,7 +47,7 @@ import java.io.ByteArrayOutputStream
 private const val BASE_64_FLAGS = Base64.NO_WRAP
 
 internal fun com.google.ai.client.generativeai.type.Content.toInternal() =
-  Content(this.role, this.parts.map { it.toInternal() })
+  Content(this.role ?: "user", this.parts.map { it.toInternal() })
 
 internal fun com.google.ai.client.generativeai.type.Part.toInternal(): Part {
   return when (this) {

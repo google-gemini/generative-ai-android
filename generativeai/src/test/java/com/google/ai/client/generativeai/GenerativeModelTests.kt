@@ -30,6 +30,7 @@ import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.content.TextContent
 import io.ktor.http.headersOf
 import io.ktor.utils.io.ByteChannel
 import io.ktor.utils.io.close
@@ -82,13 +83,14 @@ internal class ModelNamingTests(private val modelName: String, private val actua
       createGenerativeModel(modelName, "super_cool_test_key", RequestOptions(), mockEngine)
 
     withTimeout(5.seconds) {
-      model.generateContentStream().collect {
+      model.generateContentStream("sample content").collect {
         it.candidates.isEmpty() shouldBe false
         channel.close()
       }
     }
 
     mockEngine.requestHistory.first().url.encodedPath shouldContain actualName
+    (mockEngine.requestHistory.first().body as TextContent).text shouldContain "role"
   }
 
   companion object {
