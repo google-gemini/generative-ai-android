@@ -72,15 +72,11 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
 
         tempHistory.add(prompt)
         tempHistory.add(response.candidates.first().content)
-        if (responsePart is FunctionCallPart) {
-          if (model.requestOptions.disableAutoFunction) {
-            break
-          }
-          val output = model.executeFunction(responsePart)
-          prompt = Content("function", listOf(FunctionResponsePart(responsePart.name, output)))
-        } else {
-          break
-        }
+        if (responsePart !is FunctionCallPart) break
+        if (model.requestOptions.disableAutoFunction) break
+
+        val output = model.executeFunction(responsePart)
+        prompt = Content("function", listOf(FunctionResponsePart(responsePart.name, output)))
       }
       history.addAll(tempHistory)
       return response
