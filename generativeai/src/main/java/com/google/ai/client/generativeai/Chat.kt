@@ -120,7 +120,7 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
     attemptLock()
 
     val flow = model.generateContentStream(*history.toTypedArray(), prompt)
-    val tempHistory = LinkedList<Content>()
+    val tempHistory = mutableListOf<Content>()
     tempHistory.add(prompt)
     /**
      * TODO: revisit when images and blobs are returned. This will cause issues with how things are
