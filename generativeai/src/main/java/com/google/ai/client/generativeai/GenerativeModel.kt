@@ -84,7 +84,7 @@ internal constructor(
     safetySettings,
     tools,
     requestOptions,
-    APIController(apiKey, modelName, requestOptions.apiVersion, requestOptions.timeout)
+    APIController(apiKey, modelName, requestOptions)
   )
 
   /**

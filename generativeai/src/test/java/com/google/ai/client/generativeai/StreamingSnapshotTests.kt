@@ -19,6 +19,7 @@ package com.google.ai.client.generativeai
 import com.google.ai.client.generativeai.type.BlockReason
 import com.google.ai.client.generativeai.type.FinishReason
 import com.google.ai.client.generativeai.type.HarmCategory
+import com.google.ai.client.generativeai.type.InvalidAPIKeyException
 import com.google.ai.client.generativeai.type.PromptBlockedException
 import com.google.ai.client.generativeai.type.ResponseStoppedException
 import com.google.ai.client.generativeai.type.SerializationException
@@ -142,6 +143,17 @@ internal class StreamingSnapshotTests {
     }
 
   @Test
+  fun `citation returns correctly when using alternative name`() =
+    goldenStreamingFile("success-citations-altname.txt") {
+      val responses = model.generateContentStream()
+
+      withTimeout(testTimeout) {
+        val responseList = responses.toList()
+        responseList.any { it.candidates.any { it.citationMetadata.isNotEmpty() } } shouldBe true
+      }
+    }
+
+  @Test
   fun `stopped for recitation`() =
     goldenStreamingFile("failure-recitation-no-content.txt") {
       val responses = model.generateContentStream()
@@ -173,6 +185,6 @@ internal class StreamingSnapshotTests {
     goldenStreamingFile("failure-api-key.txt", HttpStatusCode.BadRequest) {
       val responses = model.generateContentStream()
 
-      withTimeout(testTimeout) { shouldThrow<ServerException> { responses.collect() } }
+      withTimeout(testTimeout) { shouldThrow<InvalidAPIKeyException> { responses.collect() } }
     }
 }
