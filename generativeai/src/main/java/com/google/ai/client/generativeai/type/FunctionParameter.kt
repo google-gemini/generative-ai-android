@@ -16,5 +16,4 @@
 
 package com.google.ai.client.generativeai.type
 
-
 class FunctionParameter<T>(val name: String, val description: String, val type: FunctionType<T>) {}
