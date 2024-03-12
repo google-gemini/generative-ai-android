@@ -20,6 +20,13 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.jsonArray
 import org.json.JSONObject
 
+/**
+ * Represents and passes the type information for an automated function call.
+ *
+ * @property name: the enum name of the type
+ * @property parse: the deserialization function
+ * @property T: the type of the object that this maps to in code.
+ */
 class FunctionType<T>(val name: String, val parse: (String?) -> T?) {
   companion object {
     val STRING = FunctionType<String>("STRING") { it }

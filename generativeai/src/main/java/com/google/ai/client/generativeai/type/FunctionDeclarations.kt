@@ -160,6 +160,16 @@ abstract class FunctionDeclaration(val name: String, val description: String) {
   abstract suspend fun execute(part: FunctionCallPart): JSONObject
 }
 
+/**
+ * Represents a parameter for a declared function
+ *
+ * @property name: The name of the parameter
+ * @property description: The description of what the parameter should contain or represent
+ * @property format: format information for the parameter, this can include bitlength in the case of
+ *   int/float or keywords like "enum" for the string type
+ * @property enum: contains the enum values for a string enum
+ * @property type: contains the type info and parser
+ */
 class ParameterDeclaration<T>(
   val name: String,
   val description: String,
