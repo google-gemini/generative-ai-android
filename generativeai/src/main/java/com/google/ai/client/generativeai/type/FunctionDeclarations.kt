@@ -154,10 +154,7 @@ class FourParameterFunction<T, U, V, W>(
 }
 
 @GenerativeBeta
-abstract class FunctionDeclaration(
-  val name: String,
-  val description: String,
-) {
+abstract class FunctionDeclaration(val name: String, val description: String) {
   abstract fun getParameters(): List<ParameterDeclaration<out Any?>>
 
   abstract suspend fun execute(part: FunctionCallPart): JSONObject
@@ -166,19 +163,33 @@ abstract class FunctionDeclaration(
 class ParameterDeclaration<T>(
   val name: String,
   val description: String,
-  private val type: FunctionType<T>
+  val format: String? = null,
+  val enum: List<String>? = null,
+  val type: FunctionType<T>,
 ) {
   fun fromString(value: String?) = type.parse(value)
 
   companion object {
     fun int(name: String, description: String) =
-      ParameterDeclaration<Int>(name, description, FunctionType.INT)
+      ParameterDeclaration<Long>(name, description, null, null, FunctionType.INTEGER)
 
-    fun string(name: String, description: String) =
-      ParameterDeclaration<String>(name, description, FunctionType.STRING)
+    fun str(name: String, description: String) =
+      ParameterDeclaration<String>(name, description, null, null, FunctionType.STRING)
 
-    fun boolean(name: String, description: String) =
-      ParameterDeclaration<Boolean>(name, description, FunctionType.BOOLEAN)
+    fun bool(name: String, description: String) =
+      ParameterDeclaration<Boolean>(name, description, null, null, FunctionType.BOOLEAN)
+
+    fun num(name: String, description: String) =
+      ParameterDeclaration<Double>(name, description, null, null, FunctionType.NUMBER)
+
+    fun obj(name: String, description: String) =
+      ParameterDeclaration<JSONObject>(name, description, null, null, FunctionType.OBJECT)
+
+    fun arr(name: String, description: String) =
+      ParameterDeclaration<List<String>>(name, description, null, null, FunctionType.ARRAY)
+
+    fun enum(name: String, description: String, values: List<String>) =
+      ParameterDeclaration<String>(name, description, "enum", values, FunctionType.STRING)
   }
 }
 
@@ -191,7 +202,7 @@ fun <T> defineFunction(
   name: String,
   description: String,
   arg1: ParameterDeclaration<T>,
-  function: suspend (T) -> JSONObject
+  function: suspend (T) -> JSONObject,
 ) = OneParameterFunction(name, description, arg1, function)
 
 @GenerativeBeta
@@ -200,7 +211,7 @@ fun <T, U> defineFunction(
   description: String,
   arg1: ParameterDeclaration<T>,
   arg2: ParameterDeclaration<U>,
-  function: suspend (T, U) -> JSONObject
+  function: suspend (T, U) -> JSONObject,
 ) = TwoParameterFunction(name, description, arg1, arg2, function)
 
 @GenerativeBeta
@@ -210,7 +221,7 @@ fun <T, U, W> defineFunction(
   arg1: ParameterDeclaration<T>,
   arg2: ParameterDeclaration<U>,
   arg3: ParameterDeclaration<W>,
-  function: suspend (T, U, W) -> JSONObject
+  function: suspend (T, U, W) -> JSONObject,
 ) = ThreeParameterFunction(name, description, arg1, arg2, arg3, function)
 
 @GenerativeBeta
@@ -221,7 +232,7 @@ fun <T, U, W, Z> defineFunction(
   arg2: ParameterDeclaration<U>,
   arg3: ParameterDeclaration<W>,
   arg4: ParameterDeclaration<Z>,
-  function: suspend (T, U, W, Z) -> JSONObject
+  function: suspend (T, U, W, Z) -> JSONObject,
 ) = FourParameterFunction(name, description, arg1, arg2, arg3, arg4, function)
 
 private fun <T> FunctionCallPart.getArgOrThrow(param: ParameterDeclaration<T>): T {

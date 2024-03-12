@@ -16,10 +16,20 @@
 
 package com.google.ai.client.generativeai.type
 
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.jsonArray
+import org.json.JSONObject
+
 class FunctionType<T>(val name: String, val parse: (String?) -> T?) {
   companion object {
     val STRING = FunctionType<String>("STRING") { it }
-    val INT = FunctionType<Int>("INTEGER") { it?.toIntOrNull() }
+    val INTEGER = FunctionType<Long>("INTEGER") { it?.toLongOrNull() }
+    val NUMBER = FunctionType<Double>("NUMBER") { it?.toDoubleOrNull() }
     val BOOLEAN = FunctionType<Boolean>("BOOLEAN") { it?.toBoolean() }
+    val ARRAY =
+      FunctionType<List<String>>("ARRAY") { it ->
+        it?.let { Json.parseToJsonElement(it).jsonArray.map { element -> element.toString() } }
+      }
+    val OBJECT = FunctionType<JSONObject>("OBJECT") { it?.let { JSONObject(it) } }
   }
 }

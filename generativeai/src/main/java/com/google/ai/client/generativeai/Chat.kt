@@ -169,7 +169,7 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
 
   private suspend fun automaticFunctionExecutingTransform(
     transformer: FlowCollector<GenerateContentResponse>,
-    tempHistory: LinkedList<Content>,
+    tempHistory: MutableList<Content>,
     response: GenerateContentResponse
   ) {
     for (part in response.candidates.first().content.parts) {
@@ -207,7 +207,7 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
     }
   }
 
-  private fun addTextToHistory(tempHistory: LinkedList<Content>, textPart: TextPart) {
+  private fun addTextToHistory(tempHistory: MutableList<Content>, textPart: TextPart) {
     val lastContent = tempHistory.lastOrNull()
     if (lastContent?.role == "model" && lastContent.parts.any { it is TextPart }) {
       tempHistory.removeLast()

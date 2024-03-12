@@ -52,6 +52,7 @@ import com.google.ai.client.generativeai.type.content
 import java.io.ByteArrayOutputStream
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
@@ -89,7 +90,7 @@ internal fun com.google.ai.client.generativeai.type.GenerationConfig.toInternal(
     topK = topK,
     candidateCount = candidateCount,
     maxOutputTokens = maxOutputTokens,
-    stopSequences = stopSequences
+    stopSequences = stopSequences,
   )
 
 internal fun com.google.ai.client.generativeai.type.HarmCategory.toInternal() =
@@ -122,13 +123,17 @@ internal fun Tool.toInternal() =
 internal fun FunctionDeclaration.toInternal():
   com.google.ai.client.generativeai.internal.api.client.FunctionDeclaration {
   val convertedParams = buildJsonObject {
-    getParameters().forEach {
+    getParameters().forEach { pramDeclaration ->
       put(
-        it.name,
+        pramDeclaration.name,
         buildJsonObject {
-          put("type", JsonPrimitive("STRING"))
-          put("description", JsonPrimitive(it.description))
-        }
+          put("type", JsonPrimitive(pramDeclaration.type.name))
+          put("description", JsonPrimitive(pramDeclaration.description))
+          pramDeclaration.format?.let { format -> put("format", JsonPrimitive(format)) }
+          pramDeclaration.enum?.let { enum ->
+            put("enum", JsonArray(enum.map { JsonPrimitive(it) }))
+          }
+        },
       )
     }
   }
@@ -138,8 +143,8 @@ internal fun FunctionDeclaration.toInternal():
     com.google.ai.client.generativeai.internal.api.client.FunctionParameters(
       convertedParams,
       getParameters().map { it.name },
-      "OBJECT"
-    )
+      "OBJECT",
+    ),
   )
 }
 
@@ -154,7 +159,7 @@ internal fun Candidate.toPublic(): com.google.ai.client.generativeai.type.Candid
     this.content?.toPublic() ?: content("model") {},
     safetyRatings,
     citations,
-    finishReason
+    finishReason,
   )
 }
 
@@ -175,12 +180,12 @@ internal fun Part.toPublic(): com.google.ai.client.generativeai.type.Part {
     is FunctionCallPart ->
       com.google.ai.client.generativeai.type.FunctionCallPart(
         functionCall.name,
-        functionCall.args.orEmpty()
+        functionCall.args.orEmpty(),
       )
     is FunctionResponsePart ->
       com.google.ai.client.generativeai.type.FunctionResponsePart(
         functionResponse.name,
-        functionResponse.response.toPublic()
+        functionResponse.response.toPublic(),
       )
   }
 }
@@ -244,7 +249,7 @@ internal fun BlockReason.toPublic() =
 internal fun GenerateContentResponse.toPublic() =
   com.google.ai.client.generativeai.type.GenerateContentResponse(
     candidates?.map { it.toPublic() }.orEmpty(),
-    promptFeedback?.toPublic()
+    promptFeedback?.toPublic(),
   )
 
 internal fun CountTokensResponse.toPublic() =
