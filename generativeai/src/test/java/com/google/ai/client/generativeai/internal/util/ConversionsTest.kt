@@ -51,12 +51,6 @@ class ConversionsTest {
   }
 
   @Test
-  fun `test content conversion toPublic (role not mentioned)`() {
-    val content = Content(role = "user", parts = listOf(TextPart("test"))).toPublic()
-    content.role shouldBe "user"
-  }
-
-  @Test
   fun `test content conversion toPublic (role mentioned)`() {
     val content = Content(role = "model", parts = listOf(TextPart("test"))).toPublic()
     content.role shouldBe "model"
