@@ -18,6 +18,8 @@ package com.google.ai.client.generativeai.internal.api.shared
 
 import com.google.ai.client.generativeai.internal.util.FirstOrdinalSerializer
 import kotlinx.serialization.DeserializationStrategy
+import kotlinx.serialization.EncodeDefault
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -40,7 +42,9 @@ internal enum class HarmCategory {
 
 typealias Base64 = String
 
-@Serializable internal data class Content(val role: String? = "user", val parts: List<Part>)
+@ExperimentalSerializationApi
+@Serializable
+internal data class Content(@EncodeDefault val role: String? = "user", val parts: List<Part>)
 
 @Serializable(PartSerializer::class) internal sealed interface Part
 
