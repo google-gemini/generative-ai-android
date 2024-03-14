@@ -1,0 +1,319 @@
+public final class com/google/ai/client/generativeai/BuildConfig {
+	public static final field BUILD_TYPE Ljava/lang/String;
+	public static final field DEBUG Z
+	public static final field LIBRARY_PACKAGE_NAME Ljava/lang/String;
+	public static final field VERSION_NAME Ljava/lang/String;
+	public fun <init> ()V
+}
+
+public final class com/google/ai/client/generativeai/Chat {
+	public fun <init> (Lcom/google/ai/client/generativeai/GenerativeModel;Ljava/util/List;)V
+	public synthetic fun <init> (Lcom/google/ai/client/generativeai/GenerativeModel;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getHistory ()Ljava/util/List;
+	public final fun sendMessage (Landroid/graphics/Bitmap;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun sendMessage (Lcom/google/ai/client/generativeai/type/Content;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun sendMessage (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun sendMessageStream (Landroid/graphics/Bitmap;)Lkotlinx/coroutines/flow/Flow;
+	public final fun sendMessageStream (Lcom/google/ai/client/generativeai/type/Content;)Lkotlinx/coroutines/flow/Flow;
+	public final fun sendMessageStream (Ljava/lang/String;)Lkotlinx/coroutines/flow/Flow;
+}
+
+public final class com/google/ai/client/generativeai/GenerativeModel {
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lcom/google/ai/client/generativeai/type/GenerationConfig;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lcom/google/ai/client/generativeai/type/GenerationConfig;Ljava/util/List;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lcom/google/ai/client/generativeai/type/GenerationConfig;Ljava/util/List;Lcom/google/ai/client/generativeai/type/RequestOptions;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lcom/google/ai/client/generativeai/type/GenerationConfig;Ljava/util/List;Lcom/google/ai/client/generativeai/type/RequestOptions;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun countTokens (Landroid/graphics/Bitmap;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun countTokens (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun countTokens ([Lcom/google/ai/client/generativeai/type/Content;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun generateContent (Landroid/graphics/Bitmap;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun generateContent (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun generateContent ([Lcom/google/ai/client/generativeai/type/Content;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun generateContentStream (Landroid/graphics/Bitmap;)Lkotlinx/coroutines/flow/Flow;
+	public final fun generateContentStream (Ljava/lang/String;)Lkotlinx/coroutines/flow/Flow;
+	public final fun generateContentStream ([Lcom/google/ai/client/generativeai/type/Content;)Lkotlinx/coroutines/flow/Flow;
+	public final fun getApiKey ()Ljava/lang/String;
+	public final fun getGenerationConfig ()Lcom/google/ai/client/generativeai/type/GenerationConfig;
+	public final fun getModelName ()Ljava/lang/String;
+	public final fun getRequestOptions ()Lcom/google/ai/client/generativeai/type/RequestOptions;
+	public final fun getSafetySettings ()Ljava/util/List;
+	public final fun startChat (Ljava/util/List;)Lcom/google/ai/client/generativeai/Chat;
+	public static synthetic fun startChat$default (Lcom/google/ai/client/generativeai/GenerativeModel;Ljava/util/List;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/Chat;
+}
+
+public abstract class com/google/ai/client/generativeai/java/ChatFutures {
+	public static final field Companion Lcom/google/ai/client/generativeai/java/ChatFutures$Companion;
+	public static final fun from (Lcom/google/ai/client/generativeai/Chat;)Lcom/google/ai/client/generativeai/java/ChatFutures;
+	public abstract fun getChat ()Lcom/google/ai/client/generativeai/Chat;
+	public abstract fun sendMessage (Lcom/google/ai/client/generativeai/type/Content;)Lcom/google/common/util/concurrent/ListenableFuture;
+	public abstract fun sendMessageStream (Lcom/google/ai/client/generativeai/type/Content;)Lorg/reactivestreams/Publisher;
+}
+
+public final class com/google/ai/client/generativeai/java/ChatFutures$Companion {
+	public final fun from (Lcom/google/ai/client/generativeai/Chat;)Lcom/google/ai/client/generativeai/java/ChatFutures;
+}
+
+public abstract class com/google/ai/client/generativeai/java/GenerativeModelFutures {
+	public static final field Companion Lcom/google/ai/client/generativeai/java/GenerativeModelFutures$Companion;
+	public abstract fun countTokens ([Lcom/google/ai/client/generativeai/type/Content;)Lcom/google/common/util/concurrent/ListenableFuture;
+	public static final fun from (Lcom/google/ai/client/generativeai/GenerativeModel;)Lcom/google/ai/client/generativeai/java/GenerativeModelFutures;
+	public abstract fun generateContent ([Lcom/google/ai/client/generativeai/type/Content;)Lcom/google/common/util/concurrent/ListenableFuture;
+	public abstract fun generateContentStream ([Lcom/google/ai/client/generativeai/type/Content;)Lorg/reactivestreams/Publisher;
+	public abstract fun getGenerativeModel ()Lcom/google/ai/client/generativeai/GenerativeModel;
+	public abstract fun startChat ()Lcom/google/ai/client/generativeai/java/ChatFutures;
+	public abstract fun startChat (Ljava/util/List;)Lcom/google/ai/client/generativeai/java/ChatFutures;
+}
+
+public final class com/google/ai/client/generativeai/java/GenerativeModelFutures$Companion {
+	public final fun from (Lcom/google/ai/client/generativeai/GenerativeModel;)Lcom/google/ai/client/generativeai/java/GenerativeModelFutures;
+}
+
+public final class com/google/ai/client/generativeai/type/BlobPart : com/google/ai/client/generativeai/type/Part {
+	public fun <init> (Ljava/lang/String;[B)V
+	public final fun getBlob ()[B
+	public final fun getMimeType ()Ljava/lang/String;
+}
+
+public final class com/google/ai/client/generativeai/type/BlockReason : java/lang/Enum {
+	public static final field OTHER Lcom/google/ai/client/generativeai/type/BlockReason;
+	public static final field SAFETY Lcom/google/ai/client/generativeai/type/BlockReason;
+	public static final field UNKNOWN Lcom/google/ai/client/generativeai/type/BlockReason;
+	public static final field UNSPECIFIED Lcom/google/ai/client/generativeai/type/BlockReason;
+	public static fun valueOf (Ljava/lang/String;)Lcom/google/ai/client/generativeai/type/BlockReason;
+	public static fun values ()[Lcom/google/ai/client/generativeai/type/BlockReason;
+}
+
+public final class com/google/ai/client/generativeai/type/BlockThreshold : java/lang/Enum {
+	public static final field LOW_AND_ABOVE Lcom/google/ai/client/generativeai/type/BlockThreshold;
+	public static final field MEDIUM_AND_ABOVE Lcom/google/ai/client/generativeai/type/BlockThreshold;
+	public static final field NONE Lcom/google/ai/client/generativeai/type/BlockThreshold;
+	public static final field ONLY_HIGH Lcom/google/ai/client/generativeai/type/BlockThreshold;
+	public static final field UNSPECIFIED Lcom/google/ai/client/generativeai/type/BlockThreshold;
+	public static fun valueOf (Ljava/lang/String;)Lcom/google/ai/client/generativeai/type/BlockThreshold;
+	public static fun values ()[Lcom/google/ai/client/generativeai/type/BlockThreshold;
+}
+
+public final class com/google/ai/client/generativeai/type/Candidate {
+	public final fun getCitationMetadata ()Ljava/util/List;
+	public final fun getContent ()Lcom/google/ai/client/generativeai/type/Content;
+	public final fun getFinishReason ()Lcom/google/ai/client/generativeai/type/FinishReason;
+	public final fun getSafetyRatings ()Ljava/util/List;
+}
+
+public final class com/google/ai/client/generativeai/type/CitationMetadata {
+	public fun <init> (IILjava/lang/String;Ljava/lang/String;)V
+	public final fun getEndIndex ()I
+	public final fun getLicense ()Ljava/lang/String;
+	public final fun getStartIndex ()I
+	public final fun getUri ()Ljava/lang/String;
+}
+
+public final class com/google/ai/client/generativeai/type/Content {
+	public fun <init> (Ljava/lang/String;Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/util/List;)V
+	public final fun getParts ()Ljava/util/List;
+	public final fun getRole ()Ljava/lang/String;
+}
+
+public final class com/google/ai/client/generativeai/type/Content$Builder {
+	public fun <init> ()V
+	public final fun addBlob (Ljava/lang/String;[B)Lcom/google/ai/client/generativeai/type/Content$Builder;
+	public final fun addImage (Landroid/graphics/Bitmap;)Lcom/google/ai/client/generativeai/type/Content$Builder;
+	public final fun addPart (Lcom/google/ai/client/generativeai/type/Part;)Lcom/google/ai/client/generativeai/type/Content$Builder;
+	public final fun addText (Ljava/lang/String;)Lcom/google/ai/client/generativeai/type/Content$Builder;
+	public final fun build ()Lcom/google/ai/client/generativeai/type/Content;
+	public final fun getParts ()Ljava/util/List;
+	public final fun getRole ()Ljava/lang/String;
+	public final fun setParts (Ljava/util/List;)V
+	public final fun setRole (Ljava/lang/String;)V
+}
+
+public final class com/google/ai/client/generativeai/type/ContentKt {
+	public static final fun content (Ljava/lang/String;Lkotlin/jvm/functions/Function1;)Lcom/google/ai/client/generativeai/type/Content;
+	public static synthetic fun content$default (Ljava/lang/String;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/type/Content;
+}
+
+public final class com/google/ai/client/generativeai/type/CountTokensResponse {
+	public fun <init> (I)V
+	public final fun component1 ()I
+	public final fun getTotalTokens ()I
+}
+
+public final class com/google/ai/client/generativeai/type/FinishReason : java/lang/Enum {
+	public static final field MAX_TOKENS Lcom/google/ai/client/generativeai/type/FinishReason;
+	public static final field OTHER Lcom/google/ai/client/generativeai/type/FinishReason;
+	public static final field RECITATION Lcom/google/ai/client/generativeai/type/FinishReason;
+	public static final field SAFETY Lcom/google/ai/client/generativeai/type/FinishReason;
+	public static final field STOP Lcom/google/ai/client/generativeai/type/FinishReason;
+	public static final field UNKNOWN Lcom/google/ai/client/generativeai/type/FinishReason;
+	public static final field UNSPECIFIED Lcom/google/ai/client/generativeai/type/FinishReason;
+	public static fun valueOf (Ljava/lang/String;)Lcom/google/ai/client/generativeai/type/FinishReason;
+	public static fun values ()[Lcom/google/ai/client/generativeai/type/FinishReason;
+}
+
+public final class com/google/ai/client/generativeai/type/GenerateContentResponse {
+	public fun <init> (Ljava/util/List;Lcom/google/ai/client/generativeai/type/PromptFeedback;)V
+	public final fun getCandidates ()Ljava/util/List;
+	public final fun getPromptFeedback ()Lcom/google/ai/client/generativeai/type/PromptFeedback;
+	public final fun getText ()Ljava/lang/String;
+}
+
+public final class com/google/ai/client/generativeai/type/GenerationConfig {
+	public static final field Companion Lcom/google/ai/client/generativeai/type/GenerationConfig$Companion;
+	public synthetic fun <init> (Ljava/lang/Float;Ljava/lang/Integer;Ljava/lang/Float;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/util/List;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getCandidateCount ()Ljava/lang/Integer;
+	public final fun getMaxOutputTokens ()Ljava/lang/Integer;
+	public final fun getStopSequences ()Ljava/util/List;
+	public final fun getTemperature ()Ljava/lang/Float;
+	public final fun getTopK ()Ljava/lang/Integer;
+	public final fun getTopP ()Ljava/lang/Float;
+}
+
+public final class com/google/ai/client/generativeai/type/GenerationConfig$Builder {
+	public field candidateCount Ljava/lang/Integer;
+	public field maxOutputTokens Ljava/lang/Integer;
+	public field stopSequences Ljava/util/List;
+	public field temperature Ljava/lang/Float;
+	public field topK Ljava/lang/Integer;
+	public field topP Ljava/lang/Float;
+	public fun <init> ()V
+	public final fun build ()Lcom/google/ai/client/generativeai/type/GenerationConfig;
+}
+
+public final class com/google/ai/client/generativeai/type/GenerationConfig$Companion {
+	public final fun builder ()Lcom/google/ai/client/generativeai/type/GenerationConfig$Builder;
+}
+
+public final class com/google/ai/client/generativeai/type/GenerationConfigKt {
+	public static final fun generationConfig (Lkotlin/jvm/functions/Function1;)Lcom/google/ai/client/generativeai/type/GenerationConfig;
+}
+
+public abstract class com/google/ai/client/generativeai/type/GoogleGenerativeAIException : java/lang/RuntimeException {
+	public static final field Companion Lcom/google/ai/client/generativeai/type/GoogleGenerativeAIException$Companion;
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/google/ai/client/generativeai/type/GoogleGenerativeAIException$Companion {
+	public final fun from (Ljava/lang/Throwable;)Lcom/google/ai/client/generativeai/type/GoogleGenerativeAIException;
+}
+
+public final class com/google/ai/client/generativeai/type/HarmCategory : java/lang/Enum {
+	public static final field DANGEROUS_CONTENT Lcom/google/ai/client/generativeai/type/HarmCategory;
+	public static final field HARASSMENT Lcom/google/ai/client/generativeai/type/HarmCategory;
+	public static final field HATE_SPEECH Lcom/google/ai/client/generativeai/type/HarmCategory;
+	public static final field SEXUALLY_EXPLICIT Lcom/google/ai/client/generativeai/type/HarmCategory;
+	public static final field UNKNOWN Lcom/google/ai/client/generativeai/type/HarmCategory;
+	public static fun valueOf (Ljava/lang/String;)Lcom/google/ai/client/generativeai/type/HarmCategory;
+	public static fun values ()[Lcom/google/ai/client/generativeai/type/HarmCategory;
+}
+
+public final class com/google/ai/client/generativeai/type/HarmProbability : java/lang/Enum {
+	public static final field HIGH Lcom/google/ai/client/generativeai/type/HarmProbability;
+	public static final field LOW Lcom/google/ai/client/generativeai/type/HarmProbability;
+	public static final field MEDIUM Lcom/google/ai/client/generativeai/type/HarmProbability;
+	public static final field NEGLIGIBLE Lcom/google/ai/client/generativeai/type/HarmProbability;
+	public static final field UNKNOWN Lcom/google/ai/client/generativeai/type/HarmProbability;
+	public static final field UNSPECIFIED Lcom/google/ai/client/generativeai/type/HarmProbability;
+	public static fun valueOf (Ljava/lang/String;)Lcom/google/ai/client/generativeai/type/HarmProbability;
+	public static fun values ()[Lcom/google/ai/client/generativeai/type/HarmProbability;
+}
+
+public final class com/google/ai/client/generativeai/type/ImagePart : com/google/ai/client/generativeai/type/Part {
+	public fun <init> (Landroid/graphics/Bitmap;)V
+	public final fun getImage ()Landroid/graphics/Bitmap;
+}
+
+public final class com/google/ai/client/generativeai/type/InvalidAPIKeyException : com/google/ai/client/generativeai/type/GoogleGenerativeAIException {
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/google/ai/client/generativeai/type/InvalidStateException : com/google/ai/client/generativeai/type/GoogleGenerativeAIException {
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public abstract interface class com/google/ai/client/generativeai/type/Part {
+}
+
+public final class com/google/ai/client/generativeai/type/PartKt {
+	public static final fun asBlobPartOrNull (Lcom/google/ai/client/generativeai/type/Part;)Lcom/google/ai/client/generativeai/type/BlobPart;
+	public static final fun asImageOrNull (Lcom/google/ai/client/generativeai/type/Part;)Landroid/graphics/Bitmap;
+	public static final fun asTextOrNull (Lcom/google/ai/client/generativeai/type/Part;)Ljava/lang/String;
+}
+
+public final class com/google/ai/client/generativeai/type/PromptBlockedException : com/google/ai/client/generativeai/type/GoogleGenerativeAIException {
+	public fun <init> (Lcom/google/ai/client/generativeai/type/GenerateContentResponse;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Lcom/google/ai/client/generativeai/type/GenerateContentResponse;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getResponse ()Lcom/google/ai/client/generativeai/type/GenerateContentResponse;
+}
+
+public final class com/google/ai/client/generativeai/type/PromptFeedback {
+	public fun <init> (Lcom/google/ai/client/generativeai/type/BlockReason;Ljava/util/List;)V
+	public final fun getBlockReason ()Lcom/google/ai/client/generativeai/type/BlockReason;
+	public final fun getSafetyRatings ()Ljava/util/List;
+}
+
+public final class com/google/ai/client/generativeai/type/RequestOptions {
+	public fun <init> ()V
+	public synthetic fun <init> (JLjava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JLjava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/lang/Long;)V
+	public fun <init> (Ljava/lang/Long;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/Long;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getApiVersion ()Ljava/lang/String;
+	public final fun getTimeout-UwyO8pc ()J
+}
+
+public final class com/google/ai/client/generativeai/type/RequestTimeoutException : com/google/ai/client/generativeai/type/GoogleGenerativeAIException {
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/google/ai/client/generativeai/type/ResponseStoppedException : com/google/ai/client/generativeai/type/GoogleGenerativeAIException {
+	public fun <init> (Lcom/google/ai/client/generativeai/type/GenerateContentResponse;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Lcom/google/ai/client/generativeai/type/GenerateContentResponse;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getResponse ()Lcom/google/ai/client/generativeai/type/GenerateContentResponse;
+}
+
+public final class com/google/ai/client/generativeai/type/SafetyRating {
+	public fun <init> (Lcom/google/ai/client/generativeai/type/HarmCategory;Lcom/google/ai/client/generativeai/type/HarmProbability;)V
+	public final fun getCategory ()Lcom/google/ai/client/generativeai/type/HarmCategory;
+	public final fun getProbability ()Lcom/google/ai/client/generativeai/type/HarmProbability;
+}
+
+public final class com/google/ai/client/generativeai/type/SafetySetting {
+	public fun <init> (Lcom/google/ai/client/generativeai/type/HarmCategory;Lcom/google/ai/client/generativeai/type/BlockThreshold;)V
+	public final fun getHarmCategory ()Lcom/google/ai/client/generativeai/type/HarmCategory;
+	public final fun getThreshold ()Lcom/google/ai/client/generativeai/type/BlockThreshold;
+}
+
+public final class com/google/ai/client/generativeai/type/SerializationException : com/google/ai/client/generativeai/type/GoogleGenerativeAIException {
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/google/ai/client/generativeai/type/ServerException : com/google/ai/client/generativeai/type/GoogleGenerativeAIException {
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/google/ai/client/generativeai/type/TextPart : com/google/ai/client/generativeai/type/Part {
+	public fun <init> (Ljava/lang/String;)V
+	public final fun getText ()Ljava/lang/String;
+}
+
+public final class com/google/ai/client/generativeai/type/UnknownException : com/google/ai/client/generativeai/type/GoogleGenerativeAIException {
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/google/ai/client/generativeai/type/UnsupportedUserLocationException : com/google/ai/client/generativeai/type/GoogleGenerativeAIException {
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
