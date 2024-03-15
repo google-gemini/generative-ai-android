@@ -16,7 +16,6 @@
 
 package com.google.ai.client.generativeai.common
 
-import com.google.ai.client.generativeai.common.BuildConfig
 import com.google.ai.client.generativeai.common.util.decodeToFlow
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
