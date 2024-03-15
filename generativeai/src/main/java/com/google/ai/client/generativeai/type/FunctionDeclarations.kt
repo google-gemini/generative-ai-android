@@ -181,22 +181,46 @@ class ParameterDeclaration<T>(
 
   companion object {
     fun int(name: String, description: String) =
-      ParameterDeclaration<Long>(name, description, null, null, FunctionType.INTEGER)
+      ParameterDeclaration<Long>(
+        name = name,
+        description = description,
+        type = FunctionType.INTEGER,
+      )
 
     fun str(name: String, description: String) =
-      ParameterDeclaration<String>(name, description, null, null, FunctionType.STRING)
+      ParameterDeclaration<String>(
+        name = name,
+        description = description,
+        type = FunctionType.STRING,
+      )
 
     fun bool(name: String, description: String) =
-      ParameterDeclaration<Boolean>(name, description, null, null, FunctionType.BOOLEAN)
+      ParameterDeclaration<Boolean>(
+        name = name,
+        description = description,
+        type = FunctionType.BOOLEAN,
+      )
 
     fun num(name: String, description: String) =
-      ParameterDeclaration<Double>(name, description, null, null, FunctionType.NUMBER)
+      ParameterDeclaration<Double>(
+        name = name,
+        description = description,
+        type = FunctionType.NUMBER,
+      )
 
     fun obj(name: String, description: String) =
-      ParameterDeclaration<JSONObject>(name, description, null, null, FunctionType.OBJECT)
+      ParameterDeclaration<JSONObject>(
+        name = name,
+        description = description,
+        type = FunctionType.OBJECT,
+      )
 
     fun arr(name: String, description: String) =
-      ParameterDeclaration<List<String>>(name, description, null, null, FunctionType.ARRAY)
+      ParameterDeclaration<List<String>>(
+        name = name,
+        description = description,
+        type = FunctionType.ARRAY,
+      )
 
     fun enum(name: String, description: String, values: List<String>) =
       ParameterDeclaration<String>(name, description, "enum", values, FunctionType.STRING)

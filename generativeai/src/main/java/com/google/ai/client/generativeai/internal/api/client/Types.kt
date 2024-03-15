@@ -18,7 +18,6 @@ package com.google.ai.client.generativeai.internal.api.client
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonObject
 
 @Serializable
 internal data class GenerationConfig(
@@ -41,7 +40,15 @@ internal data class FunctionDeclaration(
 
 @Serializable
 internal data class FunctionParameters(
-  val properties: JsonObject,
+  val properties: Map<String, FunctionParameterProperties>,
   val required: List<String>,
   val type: String,
+)
+
+@Serializable
+internal data class FunctionParameterProperties(
+  val type: String,
+  val description: String,
+  val format: String?,
+  val enum: List<String>?
 )

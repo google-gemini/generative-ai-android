@@ -21,6 +21,7 @@ import android.graphics.BitmapFactory
 import android.util.Base64
 import com.google.ai.client.generativeai.internal.api.CountTokensResponse
 import com.google.ai.client.generativeai.internal.api.GenerateContentResponse
+import com.google.ai.client.generativeai.internal.api.client.FunctionParameterProperties
 import com.google.ai.client.generativeai.internal.api.client.GenerationConfig
 import com.google.ai.client.generativeai.internal.api.server.BlockReason
 import com.google.ai.client.generativeai.internal.api.server.Candidate
@@ -46,16 +47,14 @@ import com.google.ai.client.generativeai.type.CitationMetadata
 import com.google.ai.client.generativeai.type.FunctionDeclaration
 import com.google.ai.client.generativeai.type.GenerativeBeta
 import com.google.ai.client.generativeai.type.ImagePart
+import com.google.ai.client.generativeai.type.ParameterDeclaration
 import com.google.ai.client.generativeai.type.SerializationException
 import com.google.ai.client.generativeai.type.Tool
 import com.google.ai.client.generativeai.type.content
 import java.io.ByteArrayOutputStream
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.buildJsonObject
 import org.json.JSONObject
 
 private const val BASE_64_FLAGS = Base64.NO_WRAP
@@ -120,33 +119,19 @@ internal fun Tool.toInternal() =
   )
 
 @GenerativeBeta
-internal fun FunctionDeclaration.toInternal():
-  com.google.ai.client.generativeai.internal.api.client.FunctionDeclaration {
-  val convertedParams = buildJsonObject {
-    getParameters().forEach { pramDeclaration ->
-      put(
-        pramDeclaration.name,
-        buildJsonObject {
-          put("type", JsonPrimitive(pramDeclaration.type.name))
-          put("description", JsonPrimitive(pramDeclaration.description))
-          pramDeclaration.format?.let { format -> put("format", JsonPrimitive(format)) }
-          pramDeclaration.enum?.let { enum ->
-            put("enum", JsonArray(enum.map { JsonPrimitive(it) }))
-          }
-        },
-      )
-    }
-  }
-  return com.google.ai.client.generativeai.internal.api.client.FunctionDeclaration(
+internal fun FunctionDeclaration.toInternal() =
+  com.google.ai.client.generativeai.internal.api.client.FunctionDeclaration(
     name,
     description,
     com.google.ai.client.generativeai.internal.api.client.FunctionParameters(
-      convertedParams,
+      getParameters().associate { it.name to it.toInternal() },
       getParameters().map { it.name },
       "OBJECT",
     ),
   )
-}
+
+internal fun <T> ParameterDeclaration<T>.toInternal() =
+  FunctionParameterProperties(type.name, description, format, enum)
 
 internal fun JSONObject.toInternal() = Json.decodeFromString<JsonObject>(toString())
 
