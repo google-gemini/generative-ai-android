@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,17 @@
  * limitations under the License.
  */
 
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
+package com.google.ai.client.generativeai.common.client
 
-rootProject.name = "generativeai"
-include(":generativeai")
-include(":common")
-includeBuild("./plugins")
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class GenerationConfig(
+  val temperature: Float?,
+  @SerialName("top_p") val topP: Float?,
+  @SerialName("top_k") val topK: Int?,
+  @SerialName("candidate_count") val candidateCount: Int?,
+  @SerialName("max_output_tokens") val maxOutputTokens: Int?,
+  @SerialName("stop_sequences") val stopSequences: List<String>?
+)
