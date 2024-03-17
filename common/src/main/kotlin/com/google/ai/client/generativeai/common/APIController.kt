@@ -16,6 +16,7 @@
 
 package com.google.ai.client.generativeai.common
 
+import com.google.ai.client.generativeai.common.server.FinishReason
 import com.google.ai.client.generativeai.common.util.decodeToFlow
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -37,7 +38,9 @@ import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.timeout
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
@@ -79,28 +82,39 @@ class APIController(
     }
 
   suspend fun generateContent(request: GenerateContentRequest): GenerateContentResponse =
+    try {
+      client
+        .post("$DOMAIN/${requestOptions.apiVersion}/$model:generateContent") {
+          applyCommonConfiguration(request)
+        }
+        .also { validateResponse(it) }
+        .body<GenerateContentResponse>()
+        .validate()
+    } catch (e: Throwable) {
+      throw GoogleGenerativeAIException.from(e)
+    }
+
+  fun generateContentStream(request: GenerateContentRequest): Flow<GenerateContentResponse> =
     client
-      .post("$DOMAIN/${requestOptions.apiVersion}/$model:generateContent") {
+      .postStream<GenerateContentResponse>(
+        "$DOMAIN/${requestOptions.apiVersion}/$model:streamGenerateContent?alt=sse"
+      ) {
         applyCommonConfiguration(request)
       }
-      .also { validateResponse(it) }
-      .body()
-
-  fun generateContentStream(request: GenerateContentRequest): Flow<GenerateContentResponse> {
-    return client.postStream<GenerateContentResponse>(
-      "$DOMAIN/${requestOptions.apiVersion}/$model:streamGenerateContent?alt=sse"
-    ) {
-      applyCommonConfiguration(request)
-    }
-  }
+      .map { it.validate() }
+      .catch { throw GoogleGenerativeAIException.from(it) }
 
   suspend fun countTokens(request: CountTokensRequest): CountTokensResponse =
-    client
-      .post("$DOMAIN/${requestOptions.apiVersion}/$model:countTokens") {
-        applyCommonConfiguration(request)
-      }
-      .also { validateResponse(it) }
-      .body()
+    try {
+      client
+        .post("$DOMAIN/${requestOptions.apiVersion}/$model:countTokens") {
+          applyCommonConfiguration(request)
+        }
+        .also { validateResponse(it) }
+        .body()
+    } catch (e: Throwable) {
+      throw GoogleGenerativeAIException.from(e)
+    }
 
   private fun HttpRequestBuilder.applyCommonConfiguration(request: Request) {
     when (request) {
@@ -165,21 +179,31 @@ private inline fun <reified R : Response> HttpClient.postStream(
 }
 
 private suspend fun validateResponse(response: HttpResponse) {
-  if (response.status != HttpStatusCode.OK) {
-    val text = response.bodyAsText()
-    val message =
-      try {
-        JSON.decodeFromString<GRpcErrorResponse>(text).error.message
-      } catch (e: Throwable) {
-        "Unexpected Response:\n$text"
-      }
-    if (message.contains("API key not valid")) {
-      throw InvalidAPIKeyException(message)
+  if (response.status == HttpStatusCode.OK) return
+  val text = response.bodyAsText()
+  val message =
+    try {
+      JSON.decodeFromString<GRpcErrorResponse>(text).error.message
+    } catch (e: Throwable) {
+      "Unexpected Response:\n$text"
     }
-    // TODO (b/325117891): Use a better method than string matching.
-    if (message == "User location is not supported for the API use.") {
-      throw UnsupportedUserLocationException()
-    }
-    throw ServerException(message)
+  if (message.contains("API key not valid")) {
+    throw InvalidAPIKeyException(message)
   }
+  // TODO (b/325117891): Use a better method than string matching.
+  if (message == "User location is not supported for the API use.") {
+    throw UnsupportedUserLocationException()
+  }
+  throw ServerException(message)
+}
+
+private fun GenerateContentResponse.validate() = apply {
+  if ((candidates?.isEmpty() != false) && promptFeedback == null) {
+    throw SerializationException("Error deserializing response, found no valid fields")
+  }
+  promptFeedback?.blockReason?.let { throw PromptBlockedException(this) }
+  candidates
+    ?.mapNotNull { it.finishReason }
+    ?.firstOrNull { it != FinishReason.STOP }
+    ?.let { throw ResponseStoppedException(this) }
 }
