@@ -41,7 +41,7 @@ internal enum class HarmCategory {
 
 typealias Base64 = String
 
-@Serializable internal data class Content(val role: String? = "user", val parts: List<Part>)
+@Serializable internal data class Content(val role: String?, val parts: List<Part>)
 
 @Serializable(PartSerializer::class) internal sealed interface Part
 

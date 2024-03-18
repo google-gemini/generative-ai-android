@@ -49,6 +49,7 @@ import kotlinx.coroutines.flow.transform
 @OptIn(GenerativeBeta::class)
 class Chat(private val model: GenerativeModel, val history: MutableList<Content> = ArrayList()) {
   private var lock = Semaphore(1)
+  private val VALID_ROLES = listOf("user","function")
 
   /**
    * Generates a response from the backend with the provided [Content], and any previous ones
@@ -162,8 +163,8 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
   }
 
   private fun Content.assertComesFromUser() {
-    if (role != "user") {
-      throw InvalidStateException("Chat prompts should come from the 'user' role.")
+    if (!VALID_ROLES.contains(role)) {
+      throw InvalidStateException("Chat prompts should come from the 'user' or 'function' role.")
     }
   }
 
