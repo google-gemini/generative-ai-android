@@ -24,6 +24,7 @@ import com.google.ai.client.generativeai.common.util.goldenStreamingFile
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 import io.ktor.http.HttpStatusCode
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.collect
@@ -90,7 +91,7 @@ internal class StreamingSnapshotTests {
         responseList.isEmpty() shouldBe false
         val part = responseList.first().candidates?.first()?.content?.parts?.first() as? TextPart
         part.shouldNotBeNull()
-        part.text shouldsContain "\""
+        part.text shouldContain "\""
       }
     }
 
