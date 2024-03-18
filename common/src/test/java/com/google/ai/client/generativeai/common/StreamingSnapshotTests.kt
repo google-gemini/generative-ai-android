@@ -22,14 +22,15 @@ import com.google.ai.client.generativeai.common.shared.HarmCategory
 import com.google.ai.client.generativeai.common.shared.TextPart
 import com.google.ai.client.generativeai.common.util.goldenStreamingFile
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.ktor.http.HttpStatusCode
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.withTimeout
 import org.junit.Test
+import kotlin.time.Duration.Companion.seconds
 
 internal class StreamingSnapshotTests {
   private val testTimeout = 5.seconds
@@ -87,9 +88,10 @@ internal class StreamingSnapshotTests {
         val responseList = responses.toList()
 
         responseList.isEmpty() shouldBe false
-        (responseList.first().candidates?.first()?.content?.parts?.first() as? TextPart)
-          ?.text!!
-          .contains("\"")
+        val part = responseList.first().candidates?.first()?.content?.parts?.first() as? TextPart
+        part.shouldNotBeNull()
+        part.text shouldsContain "\""
+
       }
     }
 
