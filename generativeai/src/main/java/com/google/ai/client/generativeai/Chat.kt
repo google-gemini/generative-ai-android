@@ -49,7 +49,7 @@ import kotlinx.coroutines.flow.transform
 @OptIn(GenerativeBeta::class)
 class Chat(private val model: GenerativeModel, val history: MutableList<Content> = ArrayList()) {
   private var lock = Semaphore(1)
-  private val VALID_ROLES = listOf("user","function")
+  private val VALID_ROLES = listOf("user", "function")
 
   /**
    * Generates a response from the backend with the provided [Content], and any previous ones

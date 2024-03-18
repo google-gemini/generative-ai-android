@@ -43,7 +43,6 @@ internal enum class HarmCategory {
 
 typealias Base64 = String
 
-
 @ExperimentalSerializationApi
 @Serializable
 internal data class Content(@EncodeDefault val role: String? = "user", val parts: List<Part>)
