@@ -123,15 +123,23 @@ internal fun FunctionDeclaration.toInternal() =
   com.google.ai.client.generativeai.internal.api.client.FunctionDeclaration(
     name,
     description,
-    com.google.ai.client.generativeai.internal.api.client.FunctionParameters(
-      getParameters().associate { it.name to it.toInternal() },
-      getParameters().map { it.name },
-      "OBJECT",
+    FunctionParameterProperties(
+      properties = getParameters().associate { it.name to it.toInternal() },
+      required = getParameters().map { it.name },
+      type = "OBJECT",
     ),
   )
 
-internal fun <T> ParameterDeclaration<T>.toInternal() =
-  FunctionParameterProperties(type.name, description, format, enum)
+internal fun <T> ParameterDeclaration<T>.toInternal(): FunctionParameterProperties =
+  FunctionParameterProperties(
+    type.name,
+    description,
+    format,
+    enum,
+    properties?.mapValues { it.value.toInternal() },
+    required,
+    items?.toInternal()
+  )
 
 internal fun JSONObject.toInternal() = Json.decodeFromString<JsonObject>(toString())
 

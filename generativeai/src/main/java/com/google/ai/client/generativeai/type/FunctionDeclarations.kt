@@ -169,12 +169,20 @@ abstract class FunctionDeclaration(val name: String, val description: String) {
  *   int/float or keywords like "enum" for the string type
  * @property enum: contains the enum values for a string enum
  * @property type: contains the type info and parser
+ * @property properties: if type is OBJECT, then this contains the description of the fields of the
+ *   object by name
+ * @property required: if type is OBJECT, then this contains the list of required keys
+ * @property items: if the type is ARRAY, then this contains a description of the objects in the
+ *   array
  */
 class ParameterDeclaration<T>(
   val name: String,
   val description: String,
   val format: String? = null,
   val enum: List<String>? = null,
+  val properties: Map<String, ParameterDeclaration<Any>>? = null,
+  val required: List<String>? = null,
+  val items: ParameterDeclaration<Any>? = null,
   val type: FunctionType<T>,
 ) {
   fun fromString(value: String?) = type.parse(value)
