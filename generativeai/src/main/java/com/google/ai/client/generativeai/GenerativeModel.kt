@@ -17,9 +17,9 @@
 package com.google.ai.client.generativeai
 
 import android.graphics.Bitmap
-import com.google.ai.client.generativeai.internal.api.APIController
-import com.google.ai.client.generativeai.internal.api.CountTokensRequest
-import com.google.ai.client.generativeai.internal.api.GenerateContentRequest
+import com.google.ai.client.generativeai.common.APIController
+import com.google.ai.client.generativeai.common.CountTokensRequest
+import com.google.ai.client.generativeai.common.GenerateContentRequest
 import com.google.ai.client.generativeai.internal.util.toInternal
 import com.google.ai.client.generativeai.internal.util.toPublic
 import com.google.ai.client.generativeai.type.Content
@@ -71,7 +71,14 @@ internal constructor(
     generationConfig,
     safetySettings,
     requestOptions,
-    APIController(apiKey, modelName, requestOptions)
+    APIController(
+      apiKey,
+      modelName,
+      com.google.ai.client.generativeai.common.RequestOptions(
+        requestOptions.timeout,
+        requestOptions.apiVersion
+      )
+    )
   )
 
   /**
