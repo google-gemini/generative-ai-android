@@ -21,6 +21,7 @@ import android.graphics.BitmapFactory
 import android.util.Base64
 import com.google.ai.client.generativeai.common.CountTokensResponse
 import com.google.ai.client.generativeai.common.GenerateContentResponse
+import com.google.ai.client.generativeai.common.RequestOptions
 import com.google.ai.client.generativeai.common.client.GenerationConfig
 import com.google.ai.client.generativeai.common.server.BlockReason
 import com.google.ai.client.generativeai.common.server.Candidate
@@ -45,6 +46,9 @@ import com.google.ai.client.generativeai.type.content
 import java.io.ByteArrayOutputStream
 
 private const val BASE_64_FLAGS = Base64.NO_WRAP
+
+internal fun com.google.ai.client.generativeai.type.RequestOptions.toInternal() =
+  RequestOptions(timeout, apiVersion)
 
 internal fun com.google.ai.client.generativeai.type.Content.toInternal() =
   Content(this.role, this.parts.map { it.toInternal() })

@@ -74,10 +74,7 @@ internal constructor(
     APIController(
       apiKey,
       modelName,
-      com.google.ai.client.generativeai.common.RequestOptions(
-        requestOptions.timeout,
-        requestOptions.apiVersion
-      )
+      requestOptions.toInternal()
     )
   )
 
