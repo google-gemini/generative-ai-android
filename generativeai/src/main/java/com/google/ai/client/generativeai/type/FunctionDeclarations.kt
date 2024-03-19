@@ -231,7 +231,13 @@ class ParameterDeclaration<T>(
       )
 
     fun enum(name: String, description: String, values: List<String>) =
-      ParameterDeclaration<String>(name, description, "enum", values, FunctionType.STRING)
+      ParameterDeclaration<String>(
+        name = name,
+        description = description,
+        format = "enum",
+        enum = values,
+        type = FunctionType.STRING,
+      )
   }
 }
 
