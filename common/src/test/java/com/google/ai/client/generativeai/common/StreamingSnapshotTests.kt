@@ -22,13 +22,9 @@ import com.google.ai.client.generativeai.common.shared.HarmCategory
 import com.google.ai.client.generativeai.common.shared.TextPart
 import com.google.ai.client.generativeai.common.util.goldenStreamingFile
 import io.kotest.assertions.throwables.shouldThrow
-<<<<<<< HEAD
-import io.kotest.matchers.shouldBe
-=======
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
->>>>>>> common_dev
 import io.ktor.http.HttpStatusCode
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.collect
