@@ -180,9 +180,9 @@ class ParameterDeclaration<T>(
   val description: String,
   val format: String? = null,
   val enum: List<String>? = null,
-  val properties: Map<String, ParameterDeclaration<Any>>? = null,
+  val properties: Map<String, ParameterDeclaration<out Any>>? = null,
   val required: List<String>? = null,
-  val items: ParameterDeclaration<Any>? = null,
+  val items: ParameterDeclaration<out Any>? = null,
   val type: FunctionType<T>,
 ) {
   fun fromString(value: String?) = type.parse(value)
