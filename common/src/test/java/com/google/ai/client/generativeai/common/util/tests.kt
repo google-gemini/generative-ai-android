@@ -18,8 +18,6 @@
 
 package com.google.ai.client.generativeai.common.util
 
-// import com.google.ai.client.generativeai.internal.util.send
-// import com.google.ai.client.generativeai.type.RequestOptions
 import com.google.ai.client.generativeai.common.APIController
 import com.google.ai.client.generativeai.common.GenerateContentRequest
 import com.google.ai.client.generativeai.common.GenerateContentResponse

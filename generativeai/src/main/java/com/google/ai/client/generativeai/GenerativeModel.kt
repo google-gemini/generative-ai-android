@@ -71,11 +71,7 @@ internal constructor(
     generationConfig,
     safetySettings,
     requestOptions,
-    APIController(
-      apiKey,
-      modelName,
-      requestOptions.toInternal()
-    )
+    APIController(apiKey, modelName, requestOptions.toInternal())
   )
 
   /**
@@ -101,8 +97,8 @@ internal constructor(
   fun generateContentStream(vararg prompt: Content): Flow<GenerateContentResponse> =
     controller
       .generateContentStream(constructRequest(*prompt))
-      .map { it.toPublic().validate() }
       .catch { throw GoogleGenerativeAIException.from(it) }
+      .map { it.toPublic().validate() }
 
   /**
    * Generates a response from the backend with the provided text represented [Content].
