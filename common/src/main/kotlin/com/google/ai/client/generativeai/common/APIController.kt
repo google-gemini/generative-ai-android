@@ -64,12 +64,20 @@ val JSON = Json {
  * @property apiVersion the endpoint version to communicate with.
  * @property timeout the maximum amount of time for a request to take in the initial exchange.
  */
-class APIController(
+class APIController
+internal constructor(
   private val key: String,
   model: String,
   private val requestOptions: RequestOptions,
-  httpEngine: HttpClientEngine = OkHttp.create(),
+  httpEngine: HttpClientEngine
 ) {
+
+  constructor(
+    key: String,
+    model: String,
+    requestOptions: RequestOptions
+  ) : this(key, model, requestOptions, OkHttp.create())
+
   private val model = fullModelName(model)
 
   private val client =

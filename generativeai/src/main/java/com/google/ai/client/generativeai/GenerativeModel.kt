@@ -17,9 +17,9 @@
 package com.google.ai.client.generativeai
 
 import android.graphics.Bitmap
-import com.google.ai.client.generativeai.internal.api.APIController
-import com.google.ai.client.generativeai.internal.api.CountTokensRequest
-import com.google.ai.client.generativeai.internal.api.GenerateContentRequest
+import com.google.ai.client.generativeai.common.APIController
+import com.google.ai.client.generativeai.common.CountTokensRequest
+import com.google.ai.client.generativeai.common.GenerateContentRequest
 import com.google.ai.client.generativeai.internal.util.toInternal
 import com.google.ai.client.generativeai.internal.util.toPublic
 import com.google.ai.client.generativeai.type.Content
@@ -71,7 +71,7 @@ internal constructor(
     generationConfig,
     safetySettings,
     requestOptions,
-    APIController(apiKey, modelName, requestOptions)
+    APIController(apiKey, modelName, requestOptions.toInternal())
   )
 
   /**
@@ -97,8 +97,8 @@ internal constructor(
   fun generateContentStream(vararg prompt: Content): Flow<GenerateContentResponse> =
     controller
       .generateContentStream(constructRequest(*prompt))
-      .map { it.toPublic().validate() }
       .catch { throw GoogleGenerativeAIException.from(it) }
+      .map { it.toPublic().validate() }
 
   /**
    * Generates a response from the backend with the provided text represented [Content].
