@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.google.ai.client.generativeai.type
+package com.google.ai.client.generativeai.common
 
+import io.ktor.client.plugins.HttpTimeout
 import kotlin.time.Duration
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -30,7 +31,10 @@ import kotlin.time.toDuration
 class RequestOptions(val timeout: Duration, val apiVersion: String = "v1") {
   @JvmOverloads
   constructor(
-    timeout: Long? = Long.MAX_VALUE,
+    timeout: Long? = HttpTimeout.INFINITE_TIMEOUT_MS,
     apiVersion: String = "v1"
-  ) : this((timeout ?: Long.MAX_VALUE).toDuration(DurationUnit.MILLISECONDS), apiVersion)
+  ) : this(
+    (timeout ?: HttpTimeout.INFINITE_TIMEOUT_MS).toDuration(DurationUnit.MILLISECONDS),
+    apiVersion
+  )
 }
