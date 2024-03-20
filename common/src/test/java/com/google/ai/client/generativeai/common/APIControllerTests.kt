@@ -39,7 +39,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
-internal class GenerativeModelTests {
+internal class APIControllerTests {
   private val testTimeout = 5.seconds
 
   @Test
@@ -67,6 +67,53 @@ internal class GenerativeModelTests {
         }
       }
     }
+}
+
+internal class EndpointTests {
+  @Test
+  fun `using default endpoint`() = doBlocking {
+    val channel = ByteChannel(autoFlush = true)
+    val mockEngine = MockEngine {
+      respond(channel, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
+    }
+    prepareStreamingResponse(createResponses("Random")).forEach { channel.writeFully(it) }
+    val controller =
+      APIController("super_cool_test_key", "gemini-pro-1.0", RequestOptions(), mockEngine)
+
+    withTimeout(5.seconds) {
+      controller.generateContentStream(textGenerateContentRequest("cats")).collect {
+        it.candidates?.isEmpty() shouldBe false
+        channel.close()
+      }
+    }
+
+    mockEngine.requestHistory.first().url.host shouldBe "generativelanguage.googleapis.com"
+  }
+
+  @Test
+  fun `using custom endpoint`() = doBlocking {
+    val channel = ByteChannel(autoFlush = true)
+    val mockEngine = MockEngine {
+      respond(channel, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
+    }
+    prepareStreamingResponse(createResponses("Random")).forEach { channel.writeFully(it) }
+    val controller =
+      APIController(
+        "super_cool_test_key",
+        "gemini-pro-1.0",
+        RequestOptions(endpoint = "https://my.custom.endpoint"),
+        mockEngine
+      )
+
+    withTimeout(5.seconds) {
+      controller.generateContentStream(textGenerateContentRequest("cats")).collect {
+        it.candidates?.isEmpty() shouldBe false
+        channel.close()
+      }
+    }
+
+    mockEngine.requestHistory.first().url.host shouldBe "my.custom.endpoint"
+  }
 }
 
 @RunWith(Parameterized::class)

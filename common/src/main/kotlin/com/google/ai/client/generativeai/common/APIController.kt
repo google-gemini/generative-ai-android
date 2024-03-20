@@ -45,8 +45,6 @@ import kotlinx.coroutines.flow.timeout
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
-const val DOMAIN = "https://generativelanguage.googleapis.com"
-
 val JSON = Json {
   ignoreUnknownKeys = true
   prettyPrint = false
@@ -90,7 +88,7 @@ internal constructor(
   suspend fun generateContent(request: GenerateContentRequest): GenerateContentResponse =
     try {
       client
-        .post("$DOMAIN/${requestOptions.apiVersion}/$model:generateContent") {
+        .post("${requestOptions.endpoint}/${requestOptions.apiVersion}/$model:generateContent") {
           applyCommonConfiguration(request)
         }
         .also { validateResponse(it) }
@@ -103,7 +101,7 @@ internal constructor(
   fun generateContentStream(request: GenerateContentRequest): Flow<GenerateContentResponse> =
     client
       .postStream<GenerateContentResponse>(
-        "$DOMAIN/${requestOptions.apiVersion}/$model:streamGenerateContent?alt=sse"
+        "${requestOptions.endpoint}/${requestOptions.apiVersion}/$model:streamGenerateContent?alt=sse"
       ) {
         applyCommonConfiguration(request)
       }
@@ -113,7 +111,7 @@ internal constructor(
   suspend fun countTokens(request: CountTokensRequest): CountTokensResponse =
     try {
       client
-        .post("$DOMAIN/${requestOptions.apiVersion}/$model:countTokens") {
+        .post("${requestOptions.endpoint}/${requestOptions.apiVersion}/$model:countTokens") {
           applyCommonConfiguration(request)
         }
         .also { validateResponse(it) }
