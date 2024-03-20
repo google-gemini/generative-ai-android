@@ -61,8 +61,6 @@ val JSON = Json {
  *   Exposed primarily for DI in tests.
  * @property key The API key used for authentication.
  * @property model The model to use for generation.
- * @property apiVersion the endpoint version to communicate with.
- * @property timeout the maximum amount of time for a request to take in the initial exchange.
  */
 class APIController
 internal constructor(
