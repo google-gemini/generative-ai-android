@@ -47,10 +47,10 @@ import kotlinx.coroutines.flow.transform
  */
 class Chat(private val model: GenerativeModel, val history: MutableList<Content> = ArrayList()) {
   private var lock = Semaphore(1)
-  companion object{
+
+  companion object {
     private val VALID_ROLES = listOf("user", "function")
   }
-
 
   /**
    * Generates a response from the backend with the provided [Content], and any previous ones

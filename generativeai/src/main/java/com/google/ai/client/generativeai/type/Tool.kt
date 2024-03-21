@@ -24,5 +24,5 @@ package com.google.ai.client.generativeai.type
  */
 @OptIn(GenerativeBeta::class)
 class Tool(
-    val functionDeclarations: List<FunctionDeclaration>,
+  val functionDeclarations: List<FunctionDeclaration>,
 )

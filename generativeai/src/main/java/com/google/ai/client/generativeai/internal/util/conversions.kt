@@ -34,9 +34,7 @@ import com.google.ai.client.generativeai.common.server.SafetyRating
 import com.google.ai.client.generativeai.common.shared.Blob
 import com.google.ai.client.generativeai.common.shared.BlobPart
 import com.google.ai.client.generativeai.common.shared.Content
-import com.google.ai.client.generativeai.common.shared.FunctionCall
 import com.google.ai.client.generativeai.common.shared.FunctionCallPart
-import com.google.ai.client.generativeai.common.shared.FunctionResponse
 import com.google.ai.client.generativeai.common.shared.FunctionResponsePart
 import com.google.ai.client.generativeai.common.shared.HarmBlockThreshold
 import com.google.ai.client.generativeai.common.shared.HarmCategory
@@ -114,9 +112,7 @@ internal fun BlockThreshold.toInternal() =
 
 @GenerativeBeta
 internal fun Tool.toInternal() =
-  com.google.ai.client.generativeai.common.client.Tool(
-    functionDeclarations.map { it.toInternal() }
-  )
+  com.google.ai.client.generativeai.common.client.Tool(functionDeclarations.map { it.toInternal() })
 
 @GenerativeBeta
 internal fun FunctionDeclaration.toInternal() =
