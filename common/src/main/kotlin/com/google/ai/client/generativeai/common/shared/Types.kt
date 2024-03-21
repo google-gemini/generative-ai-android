@@ -55,14 +55,9 @@ data class Content(@EncodeDefault val role: String? = "user", val parts: List<Pa
 
 @Serializable data class FunctionCallPart(val functionCall: FunctionCall) : Part
 
-@Serializable
-data class FunctionResponsePart(val functionResponse: FunctionResponse) : Part
+@Serializable data class FunctionResponsePart(val functionResponse: FunctionResponse) : Part
 
-@Serializable
-data class Blob(
-  @SerialName("mime_type") val mimeType: String,
-  val data: Base64,
-)
+@Serializable data class Blob(@SerialName("mime_type") val mimeType: String, val data: Base64)
 
 @Serializable data class FunctionResponse(val name: String, val response: JsonObject)
 
