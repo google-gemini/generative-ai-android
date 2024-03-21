@@ -19,6 +19,8 @@ package com.google.ai.client.generativeai
 import android.graphics.Bitmap
 import com.google.ai.client.generativeai.type.BlobPart
 import com.google.ai.client.generativeai.type.Content
+import com.google.ai.client.generativeai.type.FunctionCallPart
+import com.google.ai.client.generativeai.type.FunctionResponsePart
 import com.google.ai.client.generativeai.type.GenerateContentResponse
 import com.google.ai.client.generativeai.type.ImagePart
 import com.google.ai.client.generativeai.type.InvalidStateException
@@ -27,8 +29,9 @@ import com.google.ai.client.generativeai.type.content
 import java.util.LinkedList
 import java.util.concurrent.Semaphore
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.transform
 
 /**
  * Representation of a back and forth interaction with a model.
@@ -44,6 +47,10 @@ import kotlinx.coroutines.flow.onEach
  */
 class Chat(private val model: GenerativeModel, val history: MutableList<Content> = ArrayList()) {
   private var lock = Semaphore(1)
+  companion object{
+    private val VALID_ROLES = listOf("user", "function")
+  }
+
 
   /**
    * Generates a response from the backend with the provided [Content], and any previous ones
@@ -53,13 +60,27 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
    * @throws InvalidStateException if the prompt is not coming from the 'user' role
    * @throws InvalidStateException if the [Chat] instance has an active request.
    */
-  suspend fun sendMessage(prompt: Content): GenerateContentResponse {
-    prompt.assertComesFromUser()
+  suspend fun sendMessage(inputPrompt: Content): GenerateContentResponse {
+    inputPrompt.assertComesFromUser()
     attemptLock()
+    var response: GenerateContentResponse
+    var prompt = inputPrompt
+    val tempHistory = LinkedList<Content>()
     try {
-      val response = model.generateContent(*history.toTypedArray(), prompt)
-      history.add(prompt)
-      history.add(response.candidates.first().content)
+      while (true) {
+        response =
+          model.generateContent(*history.toTypedArray(), *tempHistory.toTypedArray(), prompt)
+        val responsePart = response.candidates.first().content.parts.first()
+
+        tempHistory.add(prompt)
+        tempHistory.add(response.candidates.first().content)
+        if (responsePart !is FunctionCallPart) break
+        if (model.requestOptions.disableAutoFunction) break
+
+        val output = model.executeFunction(responsePart)
+        prompt = Content("function", listOf(FunctionResponsePart(responsePart.name, output)))
+      }
+      history.addAll(tempHistory)
       return response
     } finally {
       lock.release()
@@ -101,43 +122,19 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
     attemptLock()
 
     val flow = model.generateContentStream(*history.toTypedArray(), prompt)
-    val bitmaps = LinkedList<Bitmap>()
-    val blobs = LinkedList<BlobPart>()
-    val text = StringBuilder()
-
+    val tempHistory = mutableListOf<Content>()
+    tempHistory.add(prompt)
     /**
      * TODO: revisit when images and blobs are returned. This will cause issues with how things are
      *   structured in the response. eg; a text/image/text response will be (incorrectly)
      *   represented as image/text
      */
     return flow
-      .onEach {
-        for (part in it.candidates.first().content.parts) {
-          when (part) {
-            is TextPart -> text.append(part.text)
-            is ImagePart -> bitmaps.add(part.image)
-            is BlobPart -> blobs.add(part)
-          }
-        }
-      }
+      .transform { response -> automaticFunctionExecutingTransform(this, tempHistory, response) }
       .onCompletion {
         lock.release()
         if (it == null) {
-          val content =
-            content("model") {
-              for (bitmap in bitmaps) {
-                image(bitmap)
-              }
-              for (blob in blobs) {
-                blob(blob.mimeType, blob.blob)
-              }
-              if (text.isNotBlank()) {
-                text(text.toString())
-              }
-            }
-
-          history.add(prompt)
-          history.add(content)
+          history.addAll(tempHistory)
         }
       }
   }
@@ -167,9 +164,73 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
   }
 
   private fun Content.assertComesFromUser() {
-    if (role != "user") {
-      throw InvalidStateException("Chat prompts should come from the 'user' role.")
+    if (!VALID_ROLES.contains(role)) {
+      throw InvalidStateException("Chat prompts should come from the 'user' or 'function' role.")
     }
+  }
+
+  private suspend fun automaticFunctionExecutingTransform(
+    transformer: FlowCollector<GenerateContentResponse>,
+    tempHistory: MutableList<Content>,
+    response: GenerateContentResponse,
+  ) {
+    for (part in response.candidates.first().content.parts) {
+      when (part) {
+        is TextPart -> {
+          transformer.emit(response)
+          addTextToHistory(tempHistory, part)
+        }
+        is ImagePart -> {
+          transformer.emit(response)
+          tempHistory.add(Content("model", listOf(part)))
+        }
+        is BlobPart -> {
+          transformer.emit(response)
+          tempHistory.add(Content("model", listOf(part)))
+        }
+        is FunctionCallPart -> {
+          if (model.requestOptions.disableAutoFunction) {
+            tempHistory.add(response.candidates.first().content)
+            continue
+          }
+          val functionCall =
+            response.candidates.first().content.parts.first { it is FunctionCallPart }
+              as FunctionCallPart
+          val output = model.executeFunction(functionCall)
+          val functionResponse =
+            Content("function", listOf(FunctionResponsePart(functionCall.name, output)))
+          tempHistory.add(response.candidates.first().content)
+          tempHistory.add(functionResponse)
+          model
+            .generateContentStream(*history.toTypedArray(), *tempHistory.toTypedArray())
+            .collect { automaticFunctionExecutingTransform(transformer, tempHistory, it) }
+        }
+      }
+    }
+  }
+
+  private fun addTextToHistory(tempHistory: MutableList<Content>, textPart: TextPart) {
+    val lastContent = tempHistory.lastOrNull()
+    if (lastContent?.role == "model" && lastContent.parts.any { it is TextPart }) {
+      tempHistory.removeLast()
+      val editedContent =
+        Content(
+          "model",
+          lastContent.parts.map {
+            when (it) {
+              is TextPart -> {
+                TextPart(it.text + textPart.text)
+              }
+              else -> {
+                it
+              }
+            }
+          },
+        )
+      tempHistory.add(editedContent)
+      return
+    }
+    tempHistory.add(Content("model", listOf(textPart)))
   }
 
   private fun attemptLock() {

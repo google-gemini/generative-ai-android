@@ -28,3 +28,23 @@ data class GenerationConfig(
   @SerialName("max_output_tokens") val maxOutputTokens: Int?,
   @SerialName("stop_sequences") val stopSequences: List<String>?
 )
+
+@Serializable data class Tool(val functionDeclarations: List<FunctionDeclaration>)
+
+@Serializable
+data class FunctionDeclaration(
+  val name: String,
+  val description: String,
+  val parameters: FunctionParameterProperties,
+)
+
+@Serializable
+data class FunctionParameterProperties(
+  val type: String,
+  val description: String? = null,
+  val format: String? = null,
+  val enum: List<String>? = null,
+  val properties: Map<String, FunctionParameterProperties>? = null,
+  val required: List<String>? = null,
+  val items: FunctionParameterProperties? = null
+)
