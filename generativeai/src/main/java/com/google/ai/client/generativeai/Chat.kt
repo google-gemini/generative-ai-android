@@ -26,7 +26,6 @@ import com.google.ai.client.generativeai.type.ImagePart
 import com.google.ai.client.generativeai.type.InvalidStateException
 import com.google.ai.client.generativeai.type.TextPart
 import com.google.ai.client.generativeai.type.content
-import java.util.LinkedList
 import java.util.concurrent.Semaphore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
@@ -48,10 +47,6 @@ import kotlinx.coroutines.flow.transform
 class Chat(private val model: GenerativeModel, val history: MutableList<Content> = ArrayList()) {
   private var lock = Semaphore(1)
 
-  companion object {
-    private val VALID_ROLES = listOf("user", "function")
-  }
-
   /**
    * Generates a response from the backend with the provided [Content], and any previous ones
    * sent/returned from this chat.
@@ -65,7 +60,7 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
     attemptLock()
     var response: GenerateContentResponse
     var prompt = inputPrompt
-    val tempHistory = LinkedList<Content>()
+    val tempHistory = mutableListOf<Content>()
     try {
       while (true) {
         response =
@@ -164,7 +159,7 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
   }
 
   private fun Content.assertComesFromUser() {
-    if (!VALID_ROLES.contains(role)) {
+    if (role !in VALID_ROLES) {
       throw InvalidStateException("Chat prompts should come from the 'user' or 'function' role.")
     }
   }
@@ -240,5 +235,9 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
           "before sending more messages"
       )
     }
+  }
+
+  companion object {
+    private val VALID_ROLES = listOf("user", "function")
   }
 }

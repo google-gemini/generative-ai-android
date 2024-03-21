@@ -31,6 +31,7 @@ import com.google.ai.client.generativeai.type.GenerateContentResponse
 import com.google.ai.client.generativeai.type.GenerationConfig
 import com.google.ai.client.generativeai.type.GenerativeBeta
 import com.google.ai.client.generativeai.type.GoogleGenerativeAIException
+import com.google.ai.client.generativeai.type.InvalidStateException
 import com.google.ai.client.generativeai.type.NoParameterFunction
 import com.google.ai.client.generativeai.type.OneParameterFunction
 import com.google.ai.client.generativeai.type.PromptBlockedException
@@ -58,7 +59,7 @@ import org.json.JSONObject
  *   generation
  * @property requestOptions configuration options to utilize during backend communication
  */
-@OptIn(GenerativeBeta::class, ExperimentalSerializationApi::class)
+@OptIn(ExperimentalSerializationApi::class)
 class GenerativeModel
 internal constructor(
   val modelName: String,
@@ -186,20 +187,20 @@ internal constructor(
   }
 
   /**
-   * Executes a function request by the model.
+   * Executes a function requested by the model.
    *
    * @param functionCallPart A [FunctionCallPart] from the model, containing a function call and
    *   parameters
    * @return The output of the requested function call
    */
+  @OptIn(GenerativeBeta::class)
   suspend fun executeFunction(functionCallPart: FunctionCallPart): JSONObject {
     if (tools == null) {
-      throw RuntimeException("No registered tools")
+      throw InvalidStateException("No registered tools")
     }
-    val tool = tools.first { it.functionDeclarations.any { it.name == functionCallPart.name } }
     val callable =
-      tool.functionDeclarations.firstOrNull() { it.name == functionCallPart.name }
-        ?: throw RuntimeException("No registered function named ${functionCallPart.name}")
+      tools.flatMap { it.functionDeclarations }.firstOrNull { it.name == functionCallPart.name }
+        ?: throw InvalidStateException("No registered function named ${functionCallPart.name}")
     return when (callable) {
       is NoParameterFunction -> callable.execute()
       is OneParameterFunction<*> ->
@@ -216,6 +217,7 @@ internal constructor(
     }
   }
 
+  @OptIn(GenerativeBeta::class)
   private fun constructRequest(vararg prompt: Content) =
     GenerateContentRequest(
       modelName,

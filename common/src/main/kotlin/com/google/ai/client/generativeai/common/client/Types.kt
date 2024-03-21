@@ -35,16 +35,16 @@ data class GenerationConfig(
 data class FunctionDeclaration(
   val name: String,
   val description: String,
-  val parameters: FunctionParameterProperties,
+  val parameters: Schema,
 )
 
 @Serializable
-data class FunctionParameterProperties(
+data class Schema(
   val type: String,
   val description: String? = null,
   val format: String? = null,
   val enum: List<String>? = null,
-  val properties: Map<String, FunctionParameterProperties>? = null,
+  val properties: Map<String, Schema>? = null,
   val required: List<String>? = null,
-  val items: FunctionParameterProperties? = null,
+  val items: Schema? = null,
 )

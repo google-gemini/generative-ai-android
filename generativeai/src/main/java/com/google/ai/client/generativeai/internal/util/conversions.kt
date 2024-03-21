@@ -22,8 +22,8 @@ import android.util.Base64
 import com.google.ai.client.generativeai.common.CountTokensResponse
 import com.google.ai.client.generativeai.common.GenerateContentResponse
 import com.google.ai.client.generativeai.common.RequestOptions
-import com.google.ai.client.generativeai.common.client.FunctionParameterProperties
 import com.google.ai.client.generativeai.common.client.GenerationConfig
+import com.google.ai.client.generativeai.common.client.Schema
 import com.google.ai.client.generativeai.common.server.BlockReason
 import com.google.ai.client.generativeai.common.server.Candidate
 import com.google.ai.client.generativeai.common.server.CitationSources
@@ -46,12 +46,10 @@ import com.google.ai.client.generativeai.type.CitationMetadata
 import com.google.ai.client.generativeai.type.FunctionDeclaration
 import com.google.ai.client.generativeai.type.GenerativeBeta
 import com.google.ai.client.generativeai.type.ImagePart
-import com.google.ai.client.generativeai.type.ParameterDeclaration
 import com.google.ai.client.generativeai.type.SerializationException
 import com.google.ai.client.generativeai.type.Tool
 import com.google.ai.client.generativeai.type.content
 import java.io.ByteArrayOutputStream
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import org.json.JSONObject
@@ -59,7 +57,7 @@ import org.json.JSONObject
 private const val BASE_64_FLAGS = Base64.NO_WRAP
 
 internal fun com.google.ai.client.generativeai.type.RequestOptions.toInternal() =
-  RequestOptions(timeout, apiVersion, disableAutoFunction)
+  RequestOptions(timeout, apiVersion)
 
 internal fun com.google.ai.client.generativeai.type.Content.toInternal() =
   Content(this.role, this.parts.map { it.toInternal() })
@@ -119,15 +117,15 @@ internal fun FunctionDeclaration.toInternal() =
   com.google.ai.client.generativeai.common.client.FunctionDeclaration(
     name,
     description,
-    FunctionParameterProperties(
+    Schema(
       properties = getParameters().associate { it.name to it.toInternal() },
       required = getParameters().map { it.name },
       type = "OBJECT",
     ),
   )
 
-internal fun <T> ParameterDeclaration<T>.toInternal(): FunctionParameterProperties =
-  FunctionParameterProperties(
+internal fun <T> com.google.ai.client.generativeai.type.Schema<T>.toInternal(): Schema =
+  Schema(
     type.name,
     description,
     format,

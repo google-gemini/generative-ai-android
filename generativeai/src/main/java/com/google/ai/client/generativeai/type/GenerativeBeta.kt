@@ -16,7 +16,7 @@
 
 package com.google.ai.client.generativeai.type
 
-@RequiresOptIn(message = "This API is only available on the v1beta endpoint")
+@RequiresOptIn(message = "This API is only available on the v1beta version")
 @Retention(AnnotationRetention.BINARY)
 @Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
 annotation class GenerativeBeta
