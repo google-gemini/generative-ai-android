@@ -197,7 +197,6 @@ internal class UnarySnapshotTests {
       }
     }
 
-
   @Test
   fun `image rejected`() =
     goldenUnaryFile("failure-image-rejected.json", HttpStatusCode.BadRequest) {
