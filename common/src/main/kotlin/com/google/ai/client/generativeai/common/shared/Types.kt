@@ -85,6 +85,7 @@ object PartSerializer : JsonContentPolymorphicSerializer<Part>(Part::class) {
     return when {
       "text" in jsonObject -> TextPart.serializer()
       "inlineData" in jsonObject -> BlobPart.serializer()
+      "file_data" in jsonObject -> FileDataPart.serializer()
       else -> throw SerializationException("Unknown Part type")
     }
   }
