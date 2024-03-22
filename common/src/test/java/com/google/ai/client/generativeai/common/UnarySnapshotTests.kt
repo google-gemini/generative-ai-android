@@ -23,6 +23,7 @@ import com.google.ai.client.generativeai.common.util.goldenUnaryFile
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import io.ktor.http.HttpStatusCode
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.withTimeout
@@ -129,6 +130,19 @@ internal class UnarySnapshotTests {
 
         response.candidates?.isEmpty() shouldBe false
         response.candidates?.first()?.citationMetadata?.citationSources?.isNotEmpty() shouldBe true
+      }
+    }
+
+  @Test
+  fun `response includes usage metadata`() =
+    goldenUnaryFile("success-usage-metadata.json") {
+      withTimeout(testTimeout) {
+        val response = apiController.generateContent(textGenerateContentRequest("prompt"))
+
+        response.candidates?.isEmpty() shouldBe false
+        response.candidates?.first()?.finishReason shouldBe FinishReason.STOP
+        response.usageMetadata shouldNotBe null
+        response.usageMetadata?.totalTokenCount shouldBe 363
       }
     }
 

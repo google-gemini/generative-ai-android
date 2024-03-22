@@ -27,8 +27,16 @@ sealed interface Response
 data class GenerateContentResponse(
   val candidates: List<Candidate>? = null,
   val promptFeedback: PromptFeedback? = null,
+  val usageMetadata: UsageMetadata? = null
 ) : Response
 
 @Serializable data class CountTokensResponse(val totalTokens: Int) : Response
 
 @Serializable data class GRpcErrorResponse(val error: GRpcError) : Response
+
+@Serializable
+data class UsageMetadata(
+  val promptTokenCount: Int,
+  val candidatesTokenCount: Int,
+  val totalTokenCount: Int
+)
