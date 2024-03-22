@@ -54,11 +54,10 @@ data class Content(@EncodeDefault val role: String? = "user", val parts: List<Pa
 
 @Serializable data class FileDataPart(@SerialName("file_data") val fileData: FileData) : Part
 
-@Serializable data class FileData(
-  @SerialName("mime_type")
-  val mimeType: String,
-  @SerialName("file_uri")
-  val fileUri: String
+@Serializable
+data class FileData(
+  @SerialName("mime_type") val mimeType: String,
+  @SerialName("file_uri") val fileUri: String
 )
 
 @Serializable
@@ -84,7 +83,7 @@ object PartSerializer : JsonContentPolymorphicSerializer<Part>(Part::class) {
     val jsonObject = element.jsonObject
     return when {
       "text" in jsonObject -> TextPart.serializer()
-      "inlineData" in jsonObject -> BlobPart.serializer()
+      "inline_data" in jsonObject -> BlobPart.serializer()
       "file_data" in jsonObject -> FileDataPart.serializer()
       else -> throw SerializationException("Unknown Part type")
     }
