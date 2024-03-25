@@ -198,6 +198,9 @@ private suspend fun validateResponse(response: HttpResponse) {
   if (message == "User location is not supported for the API use.") {
     throw UnsupportedUserLocationException()
   }
+  if (message.contains("quota")) {
+    throw QuotaExceededException(message)
+  }
   throw ServerException(message)
 }
 

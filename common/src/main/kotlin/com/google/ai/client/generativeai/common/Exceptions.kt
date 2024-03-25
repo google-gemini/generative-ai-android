@@ -37,7 +37,7 @@ sealed class GoogleGenerativeAIException(message: String, cause: Throwable? = nu
         is kotlinx.serialization.SerializationException ->
           SerializationException(
             "Something went wrong while trying to deserialize a response from the server.",
-            cause
+            cause,
           )
         is TimeoutCancellationException ->
           RequestTimeoutException("The request failed to complete in the allotted time.")
@@ -68,7 +68,7 @@ class InvalidAPIKeyException(message: String, cause: Throwable? = null) :
 class PromptBlockedException(val response: GenerateContentResponse, cause: Throwable? = null) :
   GoogleGenerativeAIException(
     "Prompt was blocked: ${response.promptFeedback?.blockReason?.name}",
-    cause
+    cause,
   )
 
 /**
@@ -97,7 +97,7 @@ class InvalidStateException(message: String, cause: Throwable? = null) :
 class ResponseStoppedException(val response: GenerateContentResponse, cause: Throwable? = null) :
   GoogleGenerativeAIException(
     "Content generation stopped. Reason: ${response.candidates?.first()?.finishReason?.name}",
-    cause
+    cause,
   )
 
 /**
@@ -106,6 +106,10 @@ class ResponseStoppedException(val response: GenerateContentResponse, cause: Thr
  * Usually occurs due to a user specified [timeout][RequestOptions.timeout].
  */
 class RequestTimeoutException(message: String, cause: Throwable? = null) :
+  GoogleGenerativeAIException(message, cause)
+
+/** The quota for this API key is depleted, retry this request at a later time. */
+class QuotaExceededException(message: String, cause: Throwable? = null) :
   GoogleGenerativeAIException(message, cause)
 
 /** Catch all case for exceptions not explicitly expected. */
