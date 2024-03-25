@@ -188,6 +188,16 @@ internal class UnarySnapshotTests {
     }
 
   @Test
+  fun `quota exceeded`() =
+    goldenUnaryFile("failure-quota-exceeded.json", HttpStatusCode.BadRequest) {
+      withTimeout(testTimeout) {
+        shouldThrow<QuotaExceededException> {
+          apiController.generateContent(textGenerateContentRequest("prompt"))
+        }
+      }
+    }
+
+  @Test
   fun `image rejected`() =
     goldenUnaryFile("failure-image-rejected.json", HttpStatusCode.BadRequest) {
       withTimeout(testTimeout) {

@@ -42,9 +42,7 @@ sealed class GoogleGenerativeAIException(message: String, cause: Throwable? = nu
             is com.google.ai.client.generativeai.common.ServerException ->
               ServerException(cause.message ?: "", cause.cause)
             is com.google.ai.client.generativeai.common.InvalidAPIKeyException ->
-              InvalidAPIKeyException(
-                cause.message ?: "",
-              )
+              InvalidAPIKeyException(cause.message ?: "")
             is com.google.ai.client.generativeai.common.PromptBlockedException ->
               PromptBlockedException(cause.response.toPublic(), cause.cause)
             is com.google.ai.client.generativeai.common.UnsupportedUserLocationException ->
@@ -57,6 +55,8 @@ sealed class GoogleGenerativeAIException(message: String, cause: Throwable? = nu
               RequestTimeoutException(cause.message ?: "", cause.cause)
             is com.google.ai.client.generativeai.common.UnknownException ->
               UnknownException(cause.message ?: "", cause.cause)
+            is com.google.ai.client.generativeai.common.QuotaExceededException ->
+              QuotaExceededException(cause.message ?: "", cause.cause)
             else -> UnknownException(cause.message ?: "", cause)
           }
         is TimeoutCancellationException ->
@@ -89,7 +89,7 @@ class InvalidAPIKeyException(message: String, cause: Throwable? = null) :
 class PromptBlockedException(val response: GenerateContentResponse, cause: Throwable? = null) :
   GoogleGenerativeAIException(
     "Prompt was blocked: ${response.promptFeedback?.blockReason?.name}",
-    cause
+    cause,
   )
 
 /**
@@ -119,7 +119,7 @@ class InvalidStateException(message: String, cause: Throwable? = null) :
 class ResponseStoppedException(val response: GenerateContentResponse, cause: Throwable? = null) :
   GoogleGenerativeAIException(
     "Content generation stopped. Reason: ${response.candidates.first().finishReason?.name}",
-    cause
+    cause,
   )
 
 /**
@@ -128,6 +128,10 @@ class ResponseStoppedException(val response: GenerateContentResponse, cause: Thr
  * Usually occurs due to a user specified [timeout][RequestOptions.timeout].
  */
 class RequestTimeoutException(message: String, cause: Throwable? = null) :
+  GoogleGenerativeAIException(message, cause)
+
+/** The quota for this API key is depleted, retry this request at a later time. */
+class QuotaExceededException(message: String, cause: Throwable? = null) :
   GoogleGenerativeAIException(message, cause)
 
 /** Catch all case for exceptions not explicitly expected. */
