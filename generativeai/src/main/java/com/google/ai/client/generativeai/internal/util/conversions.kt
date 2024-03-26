@@ -85,7 +85,7 @@ internal fun com.google.ai.client.generativeai.type.GenerationConfig.toInternal(
     topK = topK,
     candidateCount = candidateCount,
     maxOutputTokens = maxOutputTokens,
-    stopSequences = stopSequences
+    stopSequences = stopSequences,
   )
 
 internal fun com.google.ai.client.generativeai.type.HarmCategory.toInternal() =
@@ -132,7 +132,7 @@ internal fun <T> com.google.ai.client.generativeai.type.Schema<T>.toInternal(): 
     enum,
     properties?.mapValues { it.value.toInternal() },
     required,
-    items?.toInternal()
+    items?.toInternal(),
   )
 
 internal fun JSONObject.toInternal() = Json.decodeFromString<JsonObject>(toString())
@@ -146,7 +146,7 @@ internal fun Candidate.toPublic(): com.google.ai.client.generativeai.type.Candid
     this.content?.toPublic() ?: content("model") {},
     safetyRatings,
     citations,
-    finishReason
+    finishReason,
   )
 }
 
@@ -173,6 +173,7 @@ internal fun Part.toPublic(): com.google.ai.client.generativeai.type.Part {
       com.google.ai.client.generativeai.type.FunctionResponsePart(
         functionResponse.name,
         functionResponse.response.toPublic(),
+      )
     else ->
       throw SerializationException(
         "Unsupported part type \"${javaClass.simpleName}\" provided. This model may not be supported by this SDK."
@@ -239,7 +240,7 @@ internal fun BlockReason.toPublic() =
 internal fun GenerateContentResponse.toPublic() =
   com.google.ai.client.generativeai.type.GenerateContentResponse(
     candidates?.map { it.toPublic() }.orEmpty(),
-    promptFeedback?.toPublic()
+    promptFeedback?.toPublic(),
   )
 
 internal fun CountTokensResponse.toPublic() =
