@@ -26,6 +26,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.JsonContentPolymorphicSerializer
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonObject
 
 object HarmCategorySerializer :
@@ -51,6 +52,14 @@ data class Content(@EncodeDefault val role: String? = "user", val parts: List<Pa
 @Serializable data class TextPart(val text: String) : Part
 
 @Serializable data class BlobPart(@SerialName("inline_data") val inlineData: Blob) : Part
+
+@Serializable data class FunctionCallPart(val functionCall: FunctionCall) : Part
+
+@Serializable data class FunctionResponsePart(val functionResponse: FunctionResponse) : Part
+
+@Serializable data class FunctionResponse(val name: String, val response: JsonObject)
+
+@Serializable data class FunctionCall(val name: String, val args: Map<String, String>)
 
 @Serializable data class FileDataPart(@SerialName("file_data") val fileData: FileData) : Part
 
@@ -83,6 +92,8 @@ object PartSerializer : JsonContentPolymorphicSerializer<Part>(Part::class) {
     val jsonObject = element.jsonObject
     return when {
       "text" in jsonObject -> TextPart.serializer()
+      "functionCall" in jsonObject -> FunctionCallPart.serializer()
+      "functionResponse" in jsonObject -> FunctionResponsePart.serializer()
       "inline_data" in jsonObject -> BlobPart.serializer()
       "file_data" in jsonObject -> FileDataPart.serializer()
       else -> throw SerializationException("Unknown Part type")

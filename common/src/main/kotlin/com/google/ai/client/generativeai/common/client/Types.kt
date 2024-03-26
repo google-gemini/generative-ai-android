@@ -26,5 +26,25 @@ data class GenerationConfig(
   @SerialName("top_k") val topK: Int?,
   @SerialName("candidate_count") val candidateCount: Int?,
   @SerialName("max_output_tokens") val maxOutputTokens: Int?,
-  @SerialName("stop_sequences") val stopSequences: List<String>?
+  @SerialName("stop_sequences") val stopSequences: List<String>?,
+)
+
+@Serializable data class Tool(val functionDeclarations: List<FunctionDeclaration>)
+
+@Serializable
+data class FunctionDeclaration(
+  val name: String,
+  val description: String,
+  val parameters: Schema,
+)
+
+@Serializable
+data class Schema(
+  val type: String,
+  val description: String? = null,
+  val format: String? = null,
+  val enum: List<String>? = null,
+  val properties: Map<String, Schema>? = null,
+  val required: List<String>? = null,
+  val items: Schema? = null,
 )
