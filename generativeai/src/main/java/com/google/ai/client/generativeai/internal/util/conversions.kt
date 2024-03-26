@@ -173,6 +173,9 @@ internal fun Part.toPublic(): com.google.ai.client.generativeai.type.Part {
       com.google.ai.client.generativeai.type.FunctionResponsePart(
         functionResponse.name,
         functionResponse.response.toPublic(),
+    else ->
+      throw SerializationException(
+        "Unsupported part type \"${javaClass.simpleName}\" provided. This model may not be supported by this SDK."
       )
   }
 }
