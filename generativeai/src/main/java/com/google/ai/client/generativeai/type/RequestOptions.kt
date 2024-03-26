@@ -26,21 +26,11 @@ import kotlin.time.toDuration
  * @property timeout the maximum amount of time for a request to take, from the first request to
  *   first response.
  * @property apiVersion the api endpoint to call.
- * @property disableAutoFunction if true, auto functions will not be automatically executed
  */
-class RequestOptions(
-  val timeout: Duration,
-  val apiVersion: String = "v1",
-  val disableAutoFunction: Boolean = false,
-) {
+class RequestOptions(val timeout: Duration, val apiVersion: String = "v1") {
   @JvmOverloads
   constructor(
     timeout: Long? = Long.MAX_VALUE,
-    apiVersion: String = "v1",
-    disableAutoFunction: Boolean = false,
-  ) : this(
-    (timeout ?: Long.MAX_VALUE).toDuration(DurationUnit.MILLISECONDS),
-    apiVersion,
-    disableAutoFunction,
-  )
+    apiVersion: String = "v1"
+  ) : this((timeout ?: Long.MAX_VALUE).toDuration(DurationUnit.MILLISECONDS), apiVersion)
 }
