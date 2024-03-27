@@ -40,6 +40,7 @@ import com.google.ai.client.generativeai.type.SafetySetting
 import com.google.ai.client.generativeai.type.SerializationException
 import com.google.ai.client.generativeai.type.ThreeParameterFunction
 import com.google.ai.client.generativeai.type.Tool
+import com.google.ai.client.generativeai.type.ToolConfig
 import com.google.ai.client.generativeai.type.TwoParameterFunction
 import com.google.ai.client.generativeai.type.content
 import kotlinx.coroutines.flow.Flow
@@ -66,6 +67,7 @@ internal constructor(
   val generationConfig: GenerationConfig? = null,
   val safetySettings: List<SafetySetting>? = null,
   val tools: List<Tool>? = null,
+  val toolConfig: ToolConfig? = null,
   val requestOptions: RequestOptions = RequestOptions(),
   private val controller: APIController,
 ) {
@@ -77,6 +79,7 @@ internal constructor(
     generationConfig: GenerationConfig? = null,
     safetySettings: List<SafetySetting>? = null,
     tools: List<Tool>? = null,
+    toolConfig: ToolConfig? = null,
     requestOptions: RequestOptions = RequestOptions(),
   ) : this(
     modelName,
@@ -84,6 +87,7 @@ internal constructor(
     generationConfig,
     safetySettings,
     tools,
+    toolConfig,
     requestOptions,
     APIController(apiKey, modelName, requestOptions.toInternal()),
   )
@@ -223,6 +227,7 @@ internal constructor(
       safetySettings?.map { it.toInternal() },
       generationConfig?.toInternal(),
       tools?.map { it.toInternal() },
+      toolConfig?.toInternal(),
     )
 
   private fun constructCountTokensRequest(vararg prompt: Content) =
