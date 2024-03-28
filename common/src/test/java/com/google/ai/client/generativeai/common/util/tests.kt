@@ -47,7 +47,7 @@ internal fun prepareResponse(response: GenerateContentResponse) =
 internal fun createRequest(vararg text: String): GenerateContentRequest {
   val contents = text.map { Content(parts = listOf(TextPart(it))) }
 
-  return GenerateContentRequest("gemini", contents)
+  return GenerateContentRequest(contents, "gemini")
 }
 
 internal fun createResponse(text: String) = createResponses(text).single()

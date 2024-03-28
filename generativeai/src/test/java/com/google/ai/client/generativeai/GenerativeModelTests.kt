@@ -52,7 +52,6 @@ internal class GenerativeModelTests {
     coEvery {
       mockApiController.generateContent(
         GenerateContentRequest_Common(
-          "gemini-pro-1.0",
           contents = listOf(Content_Common(parts = listOf(TextPart_Common("Why's the sky blue?"))))
         )
       )
@@ -102,7 +101,6 @@ internal class GenerativeModelTests {
     coEvery {
       mockApiController.generateContent(
         GenerateContentRequest_Common(
-          "gemini-pro-1.0",
           contents = listOf(Content_Common(parts = listOf(TextPart_Common("Why's the sky blue?"))))
         )
       )
@@ -117,7 +115,6 @@ internal class GenerativeModelTests {
     coEvery {
       mockApiController.generateContentStream(
         GenerateContentRequest_Common(
-          "gemini-pro-1.0",
           contents = listOf(Content_Common(parts = listOf(TextPart_Common("Why's the sky blue?"))))
         )
       )

@@ -173,14 +173,13 @@ internal constructor(
 
   private fun constructRequest(vararg prompt: Content) =
     GenerateContentRequest(
-      modelName,
-      prompt.map { it.toInternal() },
-      safetySettings?.map { it.toInternal() },
-      generationConfig?.toInternal()
+      contents = prompt.map { it.toInternal() },
+      safetySettings = safetySettings?.map { it.toInternal() },
+      generationConfig = generationConfig?.toInternal()
     )
 
   private fun constructCountTokensRequest(vararg prompt: Content) =
-    CountTokensRequest(modelName, prompt.map { it.toInternal() })
+    CountTokensRequest(prompt.map { it.toInternal() })
 
   private fun GenerateContentResponse.validate() = apply {
     if (candidates.isEmpty() && promptFeedback == null) {
