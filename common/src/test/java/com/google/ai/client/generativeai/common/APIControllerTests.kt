@@ -38,6 +38,7 @@ import io.ktor.utils.io.close
 import io.ktor.utils.io.writeFully
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.withTimeout
+import kotlinx.serialization.encodeToString
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -119,7 +120,7 @@ internal class RequestFormatTests {
   }
 
   @Test
-  fun `request doesn't include the model name`() = doBlocking {
+  fun `generateContentRequest doesn't include the model name`() = doBlocking {
     val channel = ByteChannel(autoFlush = true)
     val mockEngine = MockEngine {
       respond(channel, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
@@ -134,6 +135,23 @@ internal class RequestFormatTests {
         channel.close()
       }
     }
+
+    val requestBodyAsText = (mockEngine.requestHistory.first().body as TextContent).text
+    requestBodyAsText shouldContainJsonKey "contents"
+    requestBodyAsText shouldNotContainJsonKey "model"
+  }
+
+  @Test
+  fun `countTokenRequest doesn't include the model name`() = doBlocking {
+    val response = JSON.encodeToString(CountTokensResponse(totalTokens = 10))
+    val mockEngine = MockEngine {
+      respond(response, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
+    }
+
+    val controller =
+      APIController("super_cool_test_key", "gemini-pro-1.0", RequestOptions(), mockEngine)
+
+    withTimeout(5.seconds) { controller.countTokens(textCountTokenRequest("cats")) }
 
     val requestBodyAsText = (mockEngine.requestHistory.first().body as TextContent).text
     requestBodyAsText shouldContainJsonKey "contents"
@@ -182,3 +200,6 @@ fun textGenerateContentRequest(prompt: String) =
     model = "unused",
     contents = listOf(Content(parts = listOf(TextPart(prompt))))
   )
+
+fun textCountTokenRequest(prompt: String) =
+  CountTokensRequest(model = "unused", contents = listOf(Content(parts = listOf(TextPart(prompt)))))

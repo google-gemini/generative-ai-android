@@ -36,4 +36,5 @@ data class GenerateContentRequest(
 ) : Request
 
 @Serializable
-data class CountTokensRequest(val model: String, val contents: List<Content>) : Request
+data class CountTokensRequest(@Transient val model: String? = null, val contents: List<Content>) :
+  Request
