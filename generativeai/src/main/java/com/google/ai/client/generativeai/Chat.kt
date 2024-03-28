@@ -24,11 +24,11 @@ import com.google.ai.client.generativeai.type.ImagePart
 import com.google.ai.client.generativeai.type.InvalidStateException
 import com.google.ai.client.generativeai.type.TextPart
 import com.google.ai.client.generativeai.type.content
+import java.util.LinkedList
+import java.util.concurrent.Semaphore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
-import java.util.LinkedList
-import java.util.concurrent.Semaphore
 
 /**
  * Representation of a back and forth interaction with a model.

@@ -71,17 +71,9 @@ internal fun com.google.ai.client.generativeai.type.Part.toInternal(): Part {
     is com.google.ai.client.generativeai.type.BlobPart ->
       BlobPart(Blob(mimeType, Base64.encodeToString(blob, BASE_64_FLAGS)))
     is com.google.ai.client.generativeai.type.FunctionCallPart ->
-      FunctionCallPart(
-        FunctionCall(
-          name,
-          args.orEmpty()
-        )
-      )
-
+      FunctionCallPart(FunctionCall(name, args.orEmpty()))
     is com.google.ai.client.generativeai.type.FunctionResponsePart ->
-      FunctionResponsePart(
-        FunctionResponse(name, response.toInternal())
-      )
+      FunctionResponsePart(FunctionResponse(name, response.toInternal()))
     else ->
       throw SerializationException(
         "The given subclass of Part (${javaClass.simpleName}) is not supported in the serialization yet."
