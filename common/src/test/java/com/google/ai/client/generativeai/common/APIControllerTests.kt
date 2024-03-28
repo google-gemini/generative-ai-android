@@ -22,11 +22,14 @@ import com.google.ai.client.generativeai.common.util.commonTest
 import com.google.ai.client.generativeai.common.util.createResponses
 import com.google.ai.client.generativeai.common.util.doBlocking
 import com.google.ai.client.generativeai.common.util.prepareStreamingResponse
+import io.kotest.assertions.json.shouldContainJsonKey
+import io.kotest.assertions.json.shouldNotContainJsonKey
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
+import io.ktor.content.TextContent
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
@@ -69,7 +72,7 @@ internal class APIControllerTests {
     }
 }
 
-internal class EndpointTests {
+internal class RequestFormatTests {
   @Test
   fun `using default endpoint`() = doBlocking {
     val channel = ByteChannel(autoFlush = true)
@@ -113,6 +116,28 @@ internal class EndpointTests {
     }
 
     mockEngine.requestHistory.first().url.host shouldBe "my.custom.endpoint"
+  }
+
+  @Test
+  fun `request doesn't include the model name`() = doBlocking {
+    val channel = ByteChannel(autoFlush = true)
+    val mockEngine = MockEngine {
+      respond(channel, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
+    }
+    prepareStreamingResponse(createResponses("Random")).forEach { channel.writeFully(it) }
+    val controller =
+      APIController("super_cool_test_key", "gemini-pro-1.0", RequestOptions(), mockEngine)
+
+    withTimeout(5.seconds) {
+      controller.generateContentStream(textGenerateContentRequest("cats")).collect {
+        it.candidates?.isEmpty() shouldBe false
+        channel.close()
+      }
+    }
+
+    val requestBodyAsText = (mockEngine.requestHistory.first().body as TextContent).text
+    requestBodyAsText shouldContainJsonKey "contents"
+    requestBodyAsText shouldNotContainJsonKey "model"
   }
 }
 
