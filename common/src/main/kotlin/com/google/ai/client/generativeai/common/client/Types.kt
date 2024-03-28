@@ -46,6 +46,7 @@ data class FunctionCallingConfig(val mode: Mode) {
     NONE
   }
 }
+
 @Serializable
 data class FunctionDeclaration(
   val name: String,
