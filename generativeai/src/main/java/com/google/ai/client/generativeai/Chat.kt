@@ -24,11 +24,11 @@ import com.google.ai.client.generativeai.type.ImagePart
 import com.google.ai.client.generativeai.type.InvalidStateException
 import com.google.ai.client.generativeai.type.TextPart
 import com.google.ai.client.generativeai.type.content
-import java.util.LinkedList
-import java.util.concurrent.Semaphore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
+import java.util.LinkedList
+import java.util.concurrent.Semaphore
 
 /**
  * Representation of a back and forth interaction with a model.
@@ -167,8 +167,8 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
   }
 
   private fun Content.assertComesFromUser() {
-    if (role != "user") {
-      throw InvalidStateException("Chat prompts should come from the 'user' role.")
+    if (role !in listOf("user", "function")) {
+      throw InvalidStateException("Chat prompts should come from the 'user' or 'function' role.")
     }
   }
 
