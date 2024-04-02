@@ -16,27 +16,13 @@
 
 package com.google.ai.client.generativeai.type
 
-import kotlin.time.Duration
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
-
 /**
- * Configurable options unique to how requests to the backend are performed.
+ * Contains a set of function declarations that the model has access to. These can be used to gather
+ * information, or complete tasks
  *
- * @property timeout the maximum amount of time for a request to take, from the first request to
- *   first response.
- * @property apiVersion the api endpoint to call.
+ * @param functionDeclarations The set of functions that this tool allows the model access to
  */
-class RequestOptions(
-  val timeout: Duration,
-  val apiVersion: String = "v1",
-) {
-  @JvmOverloads
-  constructor(
-    timeout: Long? = Long.MAX_VALUE,
-    apiVersion: String = "v1",
-  ) : this(
-    (timeout ?: Long.MAX_VALUE).toDuration(DurationUnit.MILLISECONDS),
-    apiVersion,
-  )
-}
+@OptIn(GenerativeBeta::class)
+class Tool(
+  val functionDeclarations: List<FunctionDeclaration>,
+)

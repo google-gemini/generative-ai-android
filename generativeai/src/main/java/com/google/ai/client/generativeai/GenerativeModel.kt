@@ -25,18 +25,29 @@ import com.google.ai.client.generativeai.internal.util.toPublic
 import com.google.ai.client.generativeai.type.Content
 import com.google.ai.client.generativeai.type.CountTokensResponse
 import com.google.ai.client.generativeai.type.FinishReason
+import com.google.ai.client.generativeai.type.FourParameterFunction
+import com.google.ai.client.generativeai.type.FunctionCallPart
 import com.google.ai.client.generativeai.type.GenerateContentResponse
 import com.google.ai.client.generativeai.type.GenerationConfig
+import com.google.ai.client.generativeai.type.GenerativeBeta
 import com.google.ai.client.generativeai.type.GoogleGenerativeAIException
+import com.google.ai.client.generativeai.type.InvalidStateException
+import com.google.ai.client.generativeai.type.NoParameterFunction
+import com.google.ai.client.generativeai.type.OneParameterFunction
 import com.google.ai.client.generativeai.type.PromptBlockedException
 import com.google.ai.client.generativeai.type.RequestOptions
 import com.google.ai.client.generativeai.type.ResponseStoppedException
 import com.google.ai.client.generativeai.type.SafetySetting
 import com.google.ai.client.generativeai.type.SerializationException
+import com.google.ai.client.generativeai.type.ThreeParameterFunction
+import com.google.ai.client.generativeai.type.Tool
+import com.google.ai.client.generativeai.type.TwoParameterFunction
 import com.google.ai.client.generativeai.type.content
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.ExperimentalSerializationApi
+import org.json.JSONObject
 
 /**
  * A facilitator for a given multimodal model (eg; Gemini).
@@ -48,14 +59,16 @@ import kotlinx.coroutines.flow.map
  *   generation
  * @property requestOptions configuration options to utilize during backend communication
  */
+@OptIn(ExperimentalSerializationApi::class)
 class GenerativeModel
 internal constructor(
   val modelName: String,
   val apiKey: String,
   val generationConfig: GenerationConfig? = null,
   val safetySettings: List<SafetySetting>? = null,
+  val tools: List<Tool>? = null,
   val requestOptions: RequestOptions = RequestOptions(),
-  private val controller: APIController
+  private val controller: APIController,
 ) {
 
   @JvmOverloads
@@ -64,14 +77,16 @@ internal constructor(
     apiKey: String,
     generationConfig: GenerationConfig? = null,
     safetySettings: List<SafetySetting>? = null,
+    tools: List<Tool>? = null,
     requestOptions: RequestOptions = RequestOptions(),
   ) : this(
     modelName,
     apiKey,
     generationConfig,
     safetySettings,
+    tools,
     requestOptions,
-    APIController(apiKey, modelName, requestOptions.toInternal())
+    APIController(apiKey, modelName, requestOptions.toInternal()),
   )
 
   /**
@@ -171,12 +186,45 @@ internal constructor(
     return countTokens(content { image(prompt) })
   }
 
+  /**
+   * Executes a function requested by the model.
+   *
+   * @param functionCallPart A [FunctionCallPart] from the model, containing a function call and
+   *   parameters
+   * @return The output of the requested function call
+   */
+  @OptIn(GenerativeBeta::class)
+  suspend fun executeFunction(functionCallPart: FunctionCallPart): JSONObject {
+    if (tools == null) {
+      throw InvalidStateException("No registered tools")
+    }
+    val callable =
+      tools.flatMap { it.functionDeclarations }.firstOrNull { it.name == functionCallPart.name }
+        ?: throw InvalidStateException("No registered function named ${functionCallPart.name}")
+    return when (callable) {
+      is NoParameterFunction -> callable.execute()
+      is OneParameterFunction<*> ->
+        (callable as OneParameterFunction<Any?>).execute(functionCallPart)
+      is TwoParameterFunction<*, *> ->
+        (callable as TwoParameterFunction<Any?, Any?>).execute(functionCallPart)
+      is ThreeParameterFunction<*, *, *> ->
+        (callable as ThreeParameterFunction<Any?, Any?, Any?>).execute(functionCallPart)
+      is FourParameterFunction<*, *, *, *> ->
+        (callable as FourParameterFunction<Any?, Any?, Any?, Any?>).execute(functionCallPart)
+      else -> {
+        throw RuntimeException("UNREACHABLE")
+      }
+    }
+  }
+
+  @OptIn(GenerativeBeta::class)
   private fun constructRequest(vararg prompt: Content) =
     GenerateContentRequest(
       modelName,
       prompt.map { it.toInternal() },
       safetySettings?.map { it.toInternal() },
-      generationConfig?.toInternal()
+      generationConfig?.toInternal(),
+      tools?.map { it.toInternal() },
     )
 
   private fun constructCountTokensRequest(vararg prompt: Content) =

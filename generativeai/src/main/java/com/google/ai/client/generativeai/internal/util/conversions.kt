@@ -23,6 +23,7 @@ import com.google.ai.client.generativeai.common.CountTokensResponse
 import com.google.ai.client.generativeai.common.GenerateContentResponse
 import com.google.ai.client.generativeai.common.RequestOptions
 import com.google.ai.client.generativeai.common.client.GenerationConfig
+import com.google.ai.client.generativeai.common.client.Schema
 import com.google.ai.client.generativeai.common.server.BlockReason
 import com.google.ai.client.generativeai.common.server.Candidate
 import com.google.ai.client.generativeai.common.server.CitationSources
@@ -33,6 +34,10 @@ import com.google.ai.client.generativeai.common.server.SafetyRating
 import com.google.ai.client.generativeai.common.shared.Blob
 import com.google.ai.client.generativeai.common.shared.BlobPart
 import com.google.ai.client.generativeai.common.shared.Content
+import com.google.ai.client.generativeai.common.shared.FunctionCall
+import com.google.ai.client.generativeai.common.shared.FunctionCallPart
+import com.google.ai.client.generativeai.common.shared.FunctionResponse
+import com.google.ai.client.generativeai.common.shared.FunctionResponsePart
 import com.google.ai.client.generativeai.common.shared.HarmBlockThreshold
 import com.google.ai.client.generativeai.common.shared.HarmCategory
 import com.google.ai.client.generativeai.common.shared.Part
@@ -40,10 +45,16 @@ import com.google.ai.client.generativeai.common.shared.SafetySetting
 import com.google.ai.client.generativeai.common.shared.TextPart
 import com.google.ai.client.generativeai.type.BlockThreshold
 import com.google.ai.client.generativeai.type.CitationMetadata
+import com.google.ai.client.generativeai.type.FunctionDeclaration
+import com.google.ai.client.generativeai.type.GenerativeBeta
 import com.google.ai.client.generativeai.type.ImagePart
 import com.google.ai.client.generativeai.type.SerializationException
+import com.google.ai.client.generativeai.type.Tool
 import com.google.ai.client.generativeai.type.content
 import java.io.ByteArrayOutputStream
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
+import org.json.JSONObject
 
 private const val BASE_64_FLAGS = Base64.NO_WRAP
 
@@ -59,6 +70,10 @@ internal fun com.google.ai.client.generativeai.type.Part.toInternal(): Part {
     is ImagePart -> BlobPart(Blob("image/jpeg", encodeBitmapToBase64Png(image)))
     is com.google.ai.client.generativeai.type.BlobPart ->
       BlobPart(Blob(mimeType, Base64.encodeToString(blob, BASE_64_FLAGS)))
+    is com.google.ai.client.generativeai.type.FunctionCallPart ->
+      FunctionCallPart(FunctionCall(name, args.orEmpty()))
+    is com.google.ai.client.generativeai.type.FunctionResponsePart ->
+      FunctionResponsePart(FunctionResponse(name, response.toInternal()))
     else ->
       throw SerializationException(
         "The given subclass of Part (${javaClass.simpleName}) is not supported in the serialization yet."
@@ -76,7 +91,7 @@ internal fun com.google.ai.client.generativeai.type.GenerationConfig.toInternal(
     topK = topK,
     candidateCount = candidateCount,
     maxOutputTokens = maxOutputTokens,
-    stopSequences = stopSequences
+    stopSequences = stopSequences,
   )
 
 internal fun com.google.ai.client.generativeai.type.HarmCategory.toInternal() =
@@ -99,6 +114,35 @@ internal fun BlockThreshold.toInternal() =
     BlockThreshold.UNSPECIFIED -> HarmBlockThreshold.UNSPECIFIED
   }
 
+@GenerativeBeta
+internal fun Tool.toInternal() =
+  com.google.ai.client.generativeai.common.client.Tool(functionDeclarations.map { it.toInternal() })
+
+@GenerativeBeta
+internal fun FunctionDeclaration.toInternal() =
+  com.google.ai.client.generativeai.common.client.FunctionDeclaration(
+    name,
+    description,
+    Schema(
+      properties = getParameters().associate { it.name to it.toInternal() },
+      required = getParameters().map { it.name },
+      type = "OBJECT",
+    ),
+  )
+
+internal fun <T> com.google.ai.client.generativeai.type.Schema<T>.toInternal(): Schema =
+  Schema(
+    type.name,
+    description,
+    format,
+    enum,
+    properties?.mapValues { it.value.toInternal() },
+    required,
+    items?.toInternal(),
+  )
+
+internal fun JSONObject.toInternal() = Json.decodeFromString<JsonObject>(toString())
+
 internal fun Candidate.toPublic(): com.google.ai.client.generativeai.type.Candidate {
   val safetyRatings = safetyRatings?.map { it.toPublic() }.orEmpty()
   val citations = citationMetadata?.citationSources?.map { it.toPublic() }.orEmpty()
@@ -108,7 +152,7 @@ internal fun Candidate.toPublic(): com.google.ai.client.generativeai.type.Candid
     this.content?.toPublic() ?: content("model") {},
     safetyRatings,
     citations,
-    finishReason
+    finishReason,
   )
 }
 
@@ -126,6 +170,16 @@ internal fun Part.toPublic(): com.google.ai.client.generativeai.type.Part {
         com.google.ai.client.generativeai.type.BlobPart(inlineData.mimeType, data)
       }
     }
+    is FunctionCallPart ->
+      com.google.ai.client.generativeai.type.FunctionCallPart(
+        functionCall.name,
+        functionCall.args.orEmpty(),
+      )
+    is FunctionResponsePart ->
+      com.google.ai.client.generativeai.type.FunctionResponsePart(
+        functionResponse.name,
+        functionResponse.response.toPublic(),
+      )
     else ->
       throw SerializationException(
         "Unsupported part type \"${javaClass.simpleName}\" provided. This model may not be supported by this SDK."
@@ -192,11 +246,13 @@ internal fun BlockReason.toPublic() =
 internal fun GenerateContentResponse.toPublic() =
   com.google.ai.client.generativeai.type.GenerateContentResponse(
     candidates?.map { it.toPublic() }.orEmpty(),
-    promptFeedback?.toPublic()
+    promptFeedback?.toPublic(),
   )
 
 internal fun CountTokensResponse.toPublic() =
   com.google.ai.client.generativeai.type.CountTokensResponse(totalTokens)
+
+internal fun JsonObject.toPublic() = JSONObject(toString())
 
 private fun encodeBitmapToBase64Png(input: Bitmap): String {
   ByteArrayOutputStream().let {
