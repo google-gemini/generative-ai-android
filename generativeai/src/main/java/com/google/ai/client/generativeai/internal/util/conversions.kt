@@ -45,11 +45,13 @@ import com.google.ai.client.generativeai.common.shared.SafetySetting
 import com.google.ai.client.generativeai.common.shared.TextPart
 import com.google.ai.client.generativeai.type.BlockThreshold
 import com.google.ai.client.generativeai.type.CitationMetadata
+import com.google.ai.client.generativeai.type.FunctionCallingConfig
 import com.google.ai.client.generativeai.type.FunctionDeclaration
 import com.google.ai.client.generativeai.type.GenerativeBeta
 import com.google.ai.client.generativeai.type.ImagePart
 import com.google.ai.client.generativeai.type.SerializationException
 import com.google.ai.client.generativeai.type.Tool
+import com.google.ai.client.generativeai.type.ToolConfig
 import com.google.ai.client.generativeai.type.content
 import java.io.ByteArrayOutputStream
 import kotlinx.serialization.json.Json
@@ -117,6 +119,21 @@ internal fun BlockThreshold.toInternal() =
 @GenerativeBeta
 internal fun Tool.toInternal() =
   com.google.ai.client.generativeai.common.client.Tool(functionDeclarations.map { it.toInternal() })
+
+@GenerativeBeta
+internal fun ToolConfig.toInternal() =
+  com.google.ai.client.generativeai.common.client.ToolConfig(
+    com.google.ai.client.generativeai.common.client.FunctionCallingConfig(
+      when (functionCallingConfig.mode) {
+        FunctionCallingConfig.Mode.ANY ->
+          com.google.ai.client.generativeai.common.client.FunctionCallingConfig.Mode.ANY
+        FunctionCallingConfig.Mode.AUTO ->
+          com.google.ai.client.generativeai.common.client.FunctionCallingConfig.Mode.AUTO
+        FunctionCallingConfig.Mode.NONE ->
+          com.google.ai.client.generativeai.common.client.FunctionCallingConfig.Mode.NONE
+      }
+    )
+  )
 
 @GenerativeBeta
 internal fun FunctionDeclaration.toInternal() =
