@@ -41,7 +41,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.timeout
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 
@@ -59,7 +58,7 @@ val JSON = Json {
  *   Exposed primarily for DI in tests.
  * @property key The API key used for authentication.
  * @property model The model to use for generation.
- * @property clientId The value to pass in the `x-goog-api-client` header.
+ * @property apiClient The value to pass in the `x-goog-api-client` header.
  */
 class APIController
 internal constructor(
@@ -67,15 +66,15 @@ internal constructor(
   model: String,
   private val requestOptions: RequestOptions,
   httpEngine: HttpClientEngine,
-  private val clientId: String
+  private val apiClient: String
 ) {
 
   constructor(
     key: String,
     model: String,
     requestOptions: RequestOptions,
-    clientId: String
-  ) : this(key, model, requestOptions, OkHttp.create(), clientId)
+    apiClient: String
+  ) : this(key, model, requestOptions, OkHttp.create(), apiClient)
 
   private val model = fullModelName(model)
 
@@ -130,7 +129,7 @@ internal constructor(
     }
     contentType(ContentType.Application.Json)
     header("x-goog-api-key", key)
-    header("x-goog-api-client", clientId)
+    header("x-goog-api-client", apiClient)
   }
 }
 
