@@ -30,7 +30,9 @@ data class GenerateContentResponse(
   val usageMetadata: UsageMetadata? = null
 ) : Response
 
-@Serializable data class CountTokensResponse(val totalTokens: Int) : Response
+@Serializable
+data class CountTokensResponse(val totalTokens: Int, val totalBillableCharacters: Int? = null) :
+  Response
 
 @Serializable data class GRpcErrorResponse(val error: GRpcError) : Response
 
