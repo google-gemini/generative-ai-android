@@ -123,7 +123,7 @@ abstract class ChangelogPlugin : Plugin<Project> {
 
   context(Project)
   private fun ChangelogPluginExtension.commonConfiguration() {
-    outputDirectory.convention(rootProject.file(".changes"))
+    outputDirectory.convention(rootProject.file(".changes/${project.name}"))
   }
 }
 
