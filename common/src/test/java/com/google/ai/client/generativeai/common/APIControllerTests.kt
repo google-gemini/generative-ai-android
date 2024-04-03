@@ -143,7 +143,8 @@ internal class RequestFormatTests {
 
   @Test
   fun `countTokenRequest doesn't include the model name`() = doBlocking {
-    val response = JSON.encodeToString(CountTokensResponse(totalTokens = 10))
+    val response =
+      JSON.encodeToString(CountTokensResponse(totalTokens = 10, totalBillableCharacters = 10))
     val mockEngine = MockEngine {
       respond(response, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
     }
