@@ -69,7 +69,7 @@ abstract class ApiPlugin : Plugin<Project> {
 
   context(Project)
   private fun ApiPluginExtension.commonConfiguration() {
-    val latestApiFile = rootProject.file("api/${project.version}.api")
+    val latestApiFile = rootProject.file("api/${project.name}/${project.version}.api")
 
     apiFile.convention(latestApiFile)
   }
