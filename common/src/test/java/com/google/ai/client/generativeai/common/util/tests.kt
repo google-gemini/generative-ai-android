@@ -38,6 +38,8 @@ import java.io.File
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 
+private val TEST_CLIENT_ID = "genai-android/test"
+
 internal fun prepareStreamingResponse(response: List<GenerateContentResponse>): List<ByteArray> =
   response.map { "data: ${JSON.encodeToString(it)}$SSE_SEPARATOR".toByteArray() }
 
@@ -104,7 +106,8 @@ internal fun commonTest(
   val mockEngine = MockEngine {
     respond(channel, status, headersOf(HttpHeaders.ContentType, "application/json"))
   }
-  val apiController = APIController("super_cool_test_key", "gemini-pro", requestOptions, mockEngine)
+  val apiController =
+    APIController("super_cool_test_key", "gemini-pro", requestOptions, mockEngine, TEST_CLIENT_ID)
   CommonTestScope(channel, apiController).block()
 }
 

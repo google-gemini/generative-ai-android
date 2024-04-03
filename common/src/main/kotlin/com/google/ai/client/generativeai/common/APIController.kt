@@ -59,20 +59,23 @@ val JSON = Json {
  *   Exposed primarily for DI in tests.
  * @property key The API key used for authentication.
  * @property model The model to use for generation.
+ * @property clientId The value to pass in the `x-goog-api-client` header.
  */
 class APIController
 internal constructor(
   private val key: String,
   model: String,
   private val requestOptions: RequestOptions,
-  httpEngine: HttpClientEngine
+  httpEngine: HttpClientEngine,
+  private val clientId: String
 ) {
 
   constructor(
     key: String,
     model: String,
-    requestOptions: RequestOptions
-  ) : this(key, model, requestOptions, OkHttp.create())
+    requestOptions: RequestOptions,
+    clientId: String
+  ) : this(key, model, requestOptions, OkHttp.create(), clientId)
 
   private val model = fullModelName(model)
 
@@ -127,7 +130,7 @@ internal constructor(
     }
     contentType(ContentType.Application.Json)
     header("x-goog-api-key", key)
-    header("x-goog-api-client", "genai-android/${BuildConfig.VERSION_NAME}")
+    header("x-goog-api-client", clientId)
   }
 }
 

@@ -45,6 +45,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
+private val TEST_CLIENT_ID = "genai-android/test"
+
 internal class APIControllerTests {
   private val testTimeout = 5.seconds
 
@@ -84,7 +86,13 @@ internal class RequestFormatTests {
     }
     prepareStreamingResponse(createResponses("Random")).forEach { channel.writeFully(it) }
     val controller =
-      APIController("super_cool_test_key", "gemini-pro-1.0", RequestOptions(), mockEngine)
+      APIController(
+        "super_cool_test_key",
+        "gemini-pro-1.0",
+        RequestOptions(),
+        mockEngine,
+        "genai-android/${BuildConfig.VERSION_NAME}"
+      )
 
     withTimeout(5.seconds) {
       controller.generateContentStream(textGenerateContentRequest("cats")).collect {
@@ -108,7 +116,8 @@ internal class RequestFormatTests {
         "super_cool_test_key",
         "gemini-pro-1.0",
         RequestOptions(endpoint = "https://my.custom.endpoint"),
-        mockEngine
+        mockEngine,
+        TEST_CLIENT_ID
       )
 
     withTimeout(5.seconds) {
@@ -129,7 +138,13 @@ internal class RequestFormatTests {
     }
     prepareStreamingResponse(createResponses("Random")).forEach { channel.writeFully(it) }
     val controller =
-      APIController("super_cool_test_key", "gemini-pro-1.0", RequestOptions(), mockEngine)
+      APIController(
+        "super_cool_test_key",
+        "gemini-pro-1.0",
+        RequestOptions(),
+        mockEngine,
+        TEST_CLIENT_ID
+      )
 
     withTimeout(5.seconds) {
       controller.generateContentStream(textGenerateContentRequest("cats")).collect {
@@ -151,13 +166,40 @@ internal class RequestFormatTests {
     }
 
     val controller =
-      APIController("super_cool_test_key", "gemini-pro-1.0", RequestOptions(), mockEngine)
+      APIController(
+        "super_cool_test_key",
+        "gemini-pro-1.0",
+        RequestOptions(),
+        mockEngine,
+        TEST_CLIENT_ID
+      )
 
     withTimeout(5.seconds) { controller.countTokens(textCountTokenRequest("cats")) }
 
     val requestBodyAsText = (mockEngine.requestHistory.first().body as TextContent).text
     requestBodyAsText shouldContainJsonKey "contents"
     requestBodyAsText shouldNotContainJsonKey "model"
+  }
+
+  @Test
+  fun `client id header is set correctly in the request`() = doBlocking {
+    val response = JSON.encodeToString(CountTokensResponse(totalTokens = 10))
+    val mockEngine = MockEngine {
+      respond(response, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
+    }
+
+    val controller =
+      APIController(
+        "super_cool_test_key",
+        "gemini-pro-1.0",
+        RequestOptions(),
+        mockEngine,
+        TEST_CLIENT_ID
+      )
+
+    withTimeout(5.seconds) { controller.countTokens(textCountTokenRequest("cats")) }
+
+    mockEngine.requestHistory.first().headers["x-goog-api-client"] shouldBe TEST_CLIENT_ID
   }
 
   @Test
@@ -169,7 +211,13 @@ internal class RequestFormatTests {
     prepareStreamingResponse(createResponses("Random")).forEach { channel.writeFully(it) }
 
     val controller =
-      APIController("super_cool_test_key", "gemini-pro-1.0", RequestOptions(), mockEngine)
+      APIController(
+        "super_cool_test_key",
+        "gemini-pro-1.0",
+        RequestOptions(),
+        mockEngine,
+        TEST_CLIENT_ID
+      )
 
     withTimeout(5.seconds) {
       controller
@@ -203,7 +251,8 @@ internal class ModelNamingTests(private val modelName: String, private val actua
       respond(channel, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
     }
     prepareStreamingResponse(createResponses("Random")).forEach { channel.writeFully(it) }
-    val controller = APIController("super_cool_test_key", modelName, RequestOptions(), mockEngine)
+    val controller =
+      APIController("super_cool_test_key", modelName, RequestOptions(), mockEngine, TEST_CLIENT_ID)
 
     withTimeout(5.seconds) {
       controller.generateContentStream(textGenerateContentRequest("cats")).collect {
