@@ -16,91 +16,119 @@
 
 package com.google.ai.client.generativeai
 
-import com.google.ai.client.generativeai.type.RequestOptions
-import com.google.ai.client.generativeai.type.RequestTimeoutException
-import com.google.ai.client.generativeai.util.commonTest
-import com.google.ai.client.generativeai.util.createGenerativeModel
-import com.google.ai.client.generativeai.util.createResponses
-import com.google.ai.client.generativeai.util.doBlocking
-import com.google.ai.client.generativeai.util.prepareStreamingResponse
+import com.google.ai.client.generativeai.common.APIController
+import com.google.ai.client.generativeai.common.GenerateContentRequest as GenerateContentRequest_Common
+import com.google.ai.client.generativeai.common.GenerateContentResponse as GenerateContentResponse_Common
+import com.google.ai.client.generativeai.common.InvalidAPIKeyException as InvalidAPIKeyException_Common
+import com.google.ai.client.generativeai.common.UnsupportedUserLocationException as UnsupportedUserLocationException_Common
+import com.google.ai.client.generativeai.common.server.Candidate as Candidate_Common
+import com.google.ai.client.generativeai.common.shared.Content as Content_Common
+import com.google.ai.client.generativeai.common.shared.TextPart as TextPart_Common
+import com.google.ai.client.generativeai.type.Candidate
+import com.google.ai.client.generativeai.type.Content
+import com.google.ai.client.generativeai.type.GenerateContentResponse
+import com.google.ai.client.generativeai.type.InvalidAPIKeyException
+import com.google.ai.client.generativeai.type.PromptFeedback
+import com.google.ai.client.generativeai.type.TextPart
+import com.google.ai.client.generativeai.type.UnsupportedUserLocationException
 import io.kotest.assertions.throwables.shouldThrow
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldContain
-import io.ktor.client.engine.mock.MockEngine
-import io.ktor.client.engine.mock.respond
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.headersOf
-import io.ktor.utils.io.ByteChannel
-import io.ktor.utils.io.close
-import io.ktor.utils.io.writeFully
-import kotlin.time.Duration.Companion.seconds
-import kotlinx.coroutines.withTimeout
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.equality.shouldBeEqualToUsingFields
+import io.mockk.coEvery
+import io.mockk.mockk
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
 
 internal class GenerativeModelTests {
-  private val testTimeout = 5.seconds
+
+  private val apiKey: String = "api_key"
+  private val mockApiController = mockk<APIController>()
 
   @Test
-  fun `(generateContentStream) emits responses as they come in`() = commonTest {
-    val response = createResponses("The", " world", " is", " a", " beautiful", " place!")
-    val bytes = prepareStreamingResponse(response)
+  fun `generateContent request succeeds`() = doBlocking {
+    val model = GenerativeModel("gemini-pro-1.0", apiKey, controller = mockApiController)
+    coEvery {
+      mockApiController.generateContent(
+        GenerateContentRequest_Common(
+          "gemini-pro-1.0",
+          contents = listOf(Content_Common(parts = listOf(TextPart_Common("Why's the sky blue?"))))
+        )
+      )
+    } returns
+      GenerateContentResponse_Common(
+        listOf(
+          Candidate_Common(
+            content =
+              Content_Common(
+                parts = listOf(TextPart_Common("I'm still learning how to answer this question"))
+              ),
+            finishReason = null,
+            safetyRatings = listOf(),
+            citationMetadata = null
+          )
+        )
+      )
 
-    bytes.forEach { channel.writeFully(it) }
-    val responses = model.generateContentStream()
+    val expectedResponse =
+      GenerateContentResponse(
+        listOf(
+          Candidate(
+            Content(parts = listOf(TextPart("I'm still learning how to answer this question"))),
+            safetyRatings = listOf(),
+            citationMetadata = listOf(),
+            finishReason = null
+          )
+        ),
+        PromptFeedback(null, listOf())
+      )
 
-    withTimeout(testTimeout) {
-      responses.collect {
-        it.candidates.isEmpty() shouldBe false
-        channel.close()
-      }
-    }
+    val response = model.generateContent("Why's the sky blue?")
+
+    response.shouldBeEqualToUsingFields(expectedResponse, GenerateContentResponse::text)
+    response.candidates shouldHaveSize expectedResponse.candidates.size
+    response.candidates[0].shouldBeEqualToUsingFields(
+      expectedResponse.candidates[0],
+      Candidate::finishReason,
+      Candidate::citationMetadata,
+      Candidate::safetyRatings
+    )
   }
 
   @Test
-  fun `(generateContent) respects a custom timeout`() =
-    commonTest(requestOptions = RequestOptions(2.seconds)) {
-      shouldThrow<RequestTimeoutException> {
-        withTimeout(testTimeout) { model.generateContent("d") }
-      }
+  fun `generateContent throws exception`() = doBlocking {
+    val model = GenerativeModel("gemini-pro-1.0", apiKey, controller = mockApiController)
+    coEvery {
+      mockApiController.generateContent(
+        GenerateContentRequest_Common(
+          "gemini-pro-1.0",
+          contents = listOf(Content_Common(parts = listOf(TextPart_Common("Why's the sky blue?"))))
+        )
+      )
+    } throws InvalidAPIKeyException_Common("exception message")
+
+    shouldThrow<InvalidAPIKeyException> { model.generateContent("Why's the sky blue?") }
+  }
+
+  @Test
+  fun `generateContentStream throws exception`() = doBlocking {
+    val model = GenerativeModel("gemini-pro-1.0", apiKey, controller = mockApiController)
+    coEvery {
+      mockApiController.generateContentStream(
+        GenerateContentRequest_Common(
+          "gemini-pro-1.0",
+          contents = listOf(Content_Common(parts = listOf(TextPart_Common("Why's the sky blue?"))))
+        )
+      )
+    } returns flow { throw UnsupportedUserLocationException_Common() }
+
+    shouldThrow<UnsupportedUserLocationException> {
+      model.generateContentStream("Why's the sky blue?").collect {}
     }
+  }
 }
 
-@RunWith(Parameterized::class)
-internal class ModelNamingTests(private val modelName: String, private val actualName: String) {
-
-  @Test
-  fun `request should include right model name`() = doBlocking {
-    val channel = ByteChannel(autoFlush = true)
-    val mockEngine = MockEngine {
-      respond(channel, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
-    }
-    prepareStreamingResponse(createResponses("Random")).forEach { channel.writeFully(it) }
-    val model =
-      createGenerativeModel(modelName, "super_cool_test_key", RequestOptions(), mockEngine)
-
-    withTimeout(5.seconds) {
-      model.generateContentStream().collect {
-        it.candidates.isEmpty() shouldBe false
-        channel.close()
-      }
-    }
-
-    mockEngine.requestHistory.first().url.encodedPath shouldContain actualName
-  }
-
-  companion object {
-    @JvmStatic
-    @Parameterized.Parameters
-    fun data() =
-      listOf(
-        arrayOf("gemini-pro", "models/gemini-pro"),
-        arrayOf("x/gemini-pro", "x/gemini-pro"),
-        arrayOf("models/gemini-pro", "models/gemini-pro"),
-        arrayOf("/modelname", "/modelname"),
-        arrayOf("modifiedNaming/mymodel", "modifiedNaming/mymodel"),
-      )
-  }
+internal fun doBlocking(block: suspend CoroutineScope.() -> Unit) {
+  runBlocking(block = block)
 }

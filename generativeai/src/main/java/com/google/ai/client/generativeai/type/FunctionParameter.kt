@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,6 @@
  * limitations under the License.
  */
 
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
+package com.google.ai.client.generativeai.type
 
-rootProject.name = "generativeai"
-include(":generativeai")
-include(":common")
-includeBuild("./plugins")
+class FunctionParameter<T>(val name: String, val description: String, val type: FunctionType<T>) {}
