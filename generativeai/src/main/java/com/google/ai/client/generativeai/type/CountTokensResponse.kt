@@ -21,6 +21,6 @@ package com.google.ai.client.generativeai.type
  *
  * @property totalTokens A count of the number of tokens in the input
  */
-class CountTokensResponse(val totalTokens: Int?) {
+class CountTokensResponse(val totalTokens: Int) {
   operator fun component1() = totalTokens
 }

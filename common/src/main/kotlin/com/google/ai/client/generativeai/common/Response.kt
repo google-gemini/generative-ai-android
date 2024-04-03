@@ -32,7 +32,7 @@ data class GenerateContentResponse(
 
 @Serializable
 data class CountTokensResponse(
-  val totalTokens: Int? = null,
+  val totalTokens: Int,
   val totalBillableCharacters: Int? = null
 ) : Response
 
