@@ -53,18 +53,18 @@ abstract class ReleasePlugin : Plugin<Project> {
   override fun apply(project: Project) {
     with(project) {
       val buildApi = tasks.named<BuildApiTask>("buildApi")
-      val makeReleaseNotes = tasks.named<MakeReleaseNotesTask>("makeReleaseNotes")
+      val makeReleaseNotes = tasks.named<MakeReleaseNotesTask>("generateReleaseNotes")
 
-      val releaseNotes = makeReleaseNotes.outputFile
+      val releaseNotes = makeReleaseNotes.flatMap { it.outputFile }
       val releasingVersion =
-        releaseNotes.map { parseReleaseVersion(it) }.orElse(project.moduleVersion)
+        releaseNotes.map { parseReleaseVersion(it.asFile) }.orElse(moduleVersion)
 
       val updateVersion =
         tasks.register<VersionBumpTask>("updateVersion") { newVersion.set(releasingVersion) }
 
       val createNewApiFile =
         tasks.register<CopyFileTask>("createNewApiFile") {
-          val newApiFile = releasingVersion.map { rootProject.file("api/$it.api") }
+          val newApiFile = releasingVersion.map { rootProject.file("api/${project.name}/$it.api") }
 
           source.set(buildApi.outputFile)
           dest.set(newApiFile)

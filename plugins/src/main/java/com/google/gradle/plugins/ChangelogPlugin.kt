@@ -96,7 +96,8 @@ abstract class ChangelogPlugin : Plugin<Project> {
 
       tasks.register<WarnAboutApiChangesTask>("warnAboutApiChanges") {
         changesFile.set(fileChanges)
-        outputFile.set(rootProject.buildDir("api_changes.md"))
+        // TODO() make temp
+        outputFile.set(rootProject.buildDir("api_changes/${project.name}.md"))
       }
 
       val changelogFiles =
@@ -109,12 +110,19 @@ abstract class ChangelogPlugin : Plugin<Project> {
           delete(changelogFiles)
         }
 
-      tasks.register<MakeReleaseNotesTask>("makeReleaseNotes") {
-        onlyIf("No changelog files found") { changelogFiles.get().isNotEmpty() }
+      val generateReleaseNotesTask =
+        tasks.register<MakeReleaseNotesTask>("generateReleaseNotes") {
+          onlyIf("No changelog files found") { changelogFiles.get().isNotEmpty() }
 
-        changeFiles.set(changelogFiles)
-        version.set(project.moduleVersion)
-        outputFile.set(rootProject.buildDir("release_notes.md"))
+          changeFiles.set(changelogFiles)
+          version.set(project.moduleVersion)
+          // TODO() move to extension config with convention (like .changes)
+          outputFile.set(rootProject.layout.buildDirectory.file("release_notes/${project.name}.md"))
+        }
+
+      tasks.register("makeReleaseNotes") {
+        dependsOn(generateReleaseNotesTask)
+        outputs.files(generateReleaseNotesTask)
 
         finalizedBy(deleteChangeFiles)
       }

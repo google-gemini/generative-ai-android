@@ -21,6 +21,7 @@ import java.io.File
 import org.gradle.api.DefaultTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.file.FileCollection
 import org.gradle.api.plugins.PluginContainer
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.StopActionException
@@ -107,7 +108,20 @@ typealias SkipTask = StopActionException
  * outputs.
  */
 val TaskProvider<*>.outputFile: Provider<File>
-  get() = map { it.outputs.files.asFileTree.first { !it.isDirectory } }
+  get() = map { it.outputs.files.allChildren().first { !it.isDirectory } }
+
+/** TODO() */
+fun FileCollection.allChildren(): Sequence<File> =
+  asSequence().flatMap { if (it.isDirectory) it.walk().asSequence() else sequenceOf(it) }
+
+/** TODO() */
+fun <T : Any> List<Provider<T>>.asSingleProvider(): Provider<List<T>> {
+  val providerOfLists = map { it.map { listOf(it) } }
+
+  return providerOfLists.reduce { finalProvider, currentProvider ->
+    finalProvider.zip(currentProvider) { finalList, currentList -> finalList + currentList }
+  }
+}
 
 /** The Android extension specific for Kotlin projects within Gradle. */
 val Project.android: KotlinAndroidProjectExtension

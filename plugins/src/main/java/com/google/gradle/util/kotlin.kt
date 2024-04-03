@@ -45,3 +45,17 @@ fun readResourceFile(path: String): List<String> {
 
 /** Reads the text from a file if it exists, otherwise returns null. */
 fun File.readTextOrNull(): String? = takeIf { exists() }?.readText()
+
+/** TODO() */
+fun spoiler(title: String, content: String) =
+  """
+        |<details>
+        |<summary> $title </summary>
+        |   
+        |```
+        |$content
+        |```
+        |   
+        |</details>
+    """
+    .trimMargin()
