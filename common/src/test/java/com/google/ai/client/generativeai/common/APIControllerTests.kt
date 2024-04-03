@@ -201,7 +201,7 @@ internal class RequestFormatTests {
 
     mockEngine.requestHistory.first().headers["x-goog-api-client"] shouldBe TEST_CLIENT_ID
   }
-  
+
   @Test
   fun `ToolConfig serialization contains correct keys`() = doBlocking {
     val channel = ByteChannel(autoFlush = true)
@@ -211,7 +211,13 @@ internal class RequestFormatTests {
     prepareStreamingResponse(createResponses("Random")).forEach { channel.writeFully(it) }
 
     val controller =
-      APIController("super_cool_test_key", "gemini-pro-1.0", RequestOptions(), mockEngine)
+      APIController(
+        "super_cool_test_key",
+        "gemini-pro-1.0",
+        RequestOptions(),
+        mockEngine,
+        TEST_CLIENT_ID
+      )
 
     withTimeout(5.seconds) {
       controller
