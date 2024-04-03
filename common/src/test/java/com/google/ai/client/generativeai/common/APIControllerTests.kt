@@ -16,6 +16,8 @@
 
 package com.google.ai.client.generativeai.common
 
+import com.google.ai.client.generativeai.common.client.FunctionCallingConfig
+import com.google.ai.client.generativeai.common.client.ToolConfig
 import com.google.ai.client.generativeai.common.shared.Content
 import com.google.ai.client.generativeai.common.shared.TextPart
 import com.google.ai.client.generativeai.common.util.commonTest
@@ -156,6 +158,38 @@ internal class RequestFormatTests {
     val requestBodyAsText = (mockEngine.requestHistory.first().body as TextContent).text
     requestBodyAsText shouldContainJsonKey "contents"
     requestBodyAsText shouldNotContainJsonKey "model"
+  }
+
+  @Test
+  fun `ToolConfig serialization contains correct keys`() = doBlocking {
+    val channel = ByteChannel(autoFlush = true)
+    val mockEngine = MockEngine {
+      respond(channel, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
+    }
+    prepareStreamingResponse(createResponses("Random")).forEach { channel.writeFully(it) }
+
+    val controller =
+      APIController("super_cool_test_key", "gemini-pro-1.0", RequestOptions(), mockEngine)
+
+    withTimeout(5.seconds) {
+      controller
+        .generateContentStream(
+          GenerateContentRequest(
+            model = "unused",
+            contents = listOf(Content(parts = listOf(TextPart("Arbitrary")))),
+            toolConfig =
+              ToolConfig(
+                functionCallingConfig =
+                  FunctionCallingConfig(mode = FunctionCallingConfig.Mode.AUTO)
+              )
+          )
+        )
+        .collect { channel.close() }
+    }
+
+    val requestBodyAsText = (mockEngine.requestHistory.first().body as TextContent).text
+
+    requestBodyAsText shouldContainJsonKey "tool_config.function_calling_config.mode"
   }
 }
 
