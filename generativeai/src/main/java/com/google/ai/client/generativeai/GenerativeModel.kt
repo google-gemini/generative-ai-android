@@ -86,7 +86,12 @@ internal constructor(
     safetySettings,
     tools,
     requestOptions,
-    APIController(apiKey, modelName, requestOptions.toInternal(),  "genai-android/${BuildConfig.VERSION_NAME}"),
+    APIController(
+      apiKey,
+      modelName,
+      requestOptions.toInternal(),
+      "genai-android/${BuildConfig.VERSION_NAME}"
+    ),
   )
 
   /**
