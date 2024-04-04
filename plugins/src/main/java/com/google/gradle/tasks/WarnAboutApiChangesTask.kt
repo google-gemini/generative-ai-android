@@ -19,6 +19,7 @@ package com.google.gradle.tasks
 import com.google.gradle.types.LinesChanged
 import com.google.gradle.types.VersionType.*
 import com.google.gradle.util.SkipTask
+import com.google.gradle.util.spoiler
 import java.io.File
 import org.gradle.api.DefaultTask
 import org.gradle.api.provider.Property
@@ -84,17 +85,4 @@ abstract class WarnAboutApiChangesTask : DefaultTask() {
 
     outputFile.get().writeText(message)
   }
-
-  private fun spoiler(title: String, content: String) =
-    """
-        |<details>
-        |<summary> $title </summary>
-        |   
-        |```
-        |$content
-        |```
-        |   
-        |</details>
-    """
-      .trimMargin()
 }
