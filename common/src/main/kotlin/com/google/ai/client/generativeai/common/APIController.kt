@@ -63,6 +63,7 @@ val JSON = Json {
  * @property key The API key used for authentication.
  * @property model The model to use for generation.
  * @property apiClient The value to pass in the `x-goog-api-client` header.
+ * @property headerProvider A provider that generates extra headers to include in all HTTP requests.
  */
 class APIController
 internal constructor(
