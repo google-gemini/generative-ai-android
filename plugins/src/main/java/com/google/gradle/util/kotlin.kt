@@ -46,7 +46,12 @@ fun readResourceFile(path: String): List<String> {
 /** Reads the text from a file if it exists, otherwise returns null. */
 fun File.readTextOrNull(): String? = takeIf { exists() }?.readText()
 
-/** TODO() */
+/**
+ * Generates a GFM spoiler.
+ *
+ * @param title maps to the `<summary>` block
+ * @param content content to put inside code blocks.
+ */
 fun spoiler(title: String, content: String) =
   """
         |<details>
