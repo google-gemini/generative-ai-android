@@ -15,15 +15,15 @@ hooks, run the following command at the root of your repo directory:
 
 To locally publish the m2 repo:
 
-`./gradlew generativeai:publishToMavenLocal`
+`./gradlew publishToMavenLocal`
 
 To generate a releasable m2 repo:
 
-`./gradlew generativeai:publishAllPublicationsToMavenRepository`
+`./gradlew publishAllPublicationsToMavenRepository`
 
-The m2 repo will be in `generativeai/m2`.
+The m2 repo will be in `/m2`.
 
-To generate Dokka:
+To generate Dokka for the generativeai project:
 
 `./gradlew generativeai:dokkaHtml`
 
@@ -60,6 +60,20 @@ change
 Both of these commands should generate a new file under the `.changes` directory with your message
 and impact.
 
+Note though, that this will naturally create release notes for *all* projects. If you only want
+to generate a change for the `generativeai` project, then prefix your message with the project name:
+
+```bash
+change generativeai "hello world!"
+```
+
+You can also do it for other projects as well, just supply the project name:
+
+```bash
+change common "hello world!"
+```
+
+Although, this does *not* support creating empty changes. You'll have to make that change manually,
+if that's what you want.
 
 To learn more, read the section on our changelog plugin in our [plugin readme](./plugins/README.md).
-
