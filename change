@@ -17,6 +17,10 @@ if [ $# -eq 0 ]; then
     ./gradlew makeChange
 elif [ "$1" == "release" ] || [ "$1" == "compile" ]; then
     ./gradlew makeReleaseNotes
+elif [ $# -eq 2 ]; then
+    PROJECT="$1"
+    MESSAGE="$2"
+    ./gradlew ${PROJECT}:makeChange -PchangeMessage="${MESSAGE}"
 else
     MESSAGE="$1"
     ./gradlew makeChange -PchangeMessage="${MESSAGE}"

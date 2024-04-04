@@ -21,6 +21,9 @@ import java.io.File
 import org.gradle.api.DefaultTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.file.FileCollection
+import org.gradle.api.file.ProjectLayout
+import org.gradle.api.file.RegularFile
 import org.gradle.api.plugins.PluginContainer
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.StopActionException
@@ -34,8 +37,14 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmAndroidCompilation
 import org.jetbrains.kotlin.gradle.utils.provider
 
-/** Creates a file [Provider] mapped for the build directory. */
-fun Project.buildDir(path: String) = layout.buildDirectory.asFile.childFile(path)
+/** Creates a [RegularFile] [Provider] mapped for the build directory. */
+fun Project.buildDir(path: String): Provider<RegularFile> = layout.buildDirectory.file(path)
+
+/** Creates a [RegularFile] [Provider] mapped to the project directory. */
+context(Project)
+fun ProjectLayout.file(path: String): Provider<RegularFile> = provider {
+  projectDirectory.file(path)
+}
 
 /**
  * Submits a piece of work to be executed asynchronously.
@@ -107,7 +116,32 @@ typealias SkipTask = StopActionException
  * outputs.
  */
 val TaskProvider<*>.outputFile: Provider<File>
-  get() = map { it.outputs.files.asFileTree.first { !it.isDirectory } }
+  get() = map { it.outputs.files.allChildren().first { !it.isDirectory } }
+
+/**
+ * Generates a sequence of [File]s under this collection.
+ *
+ * Allows you to lazily compute against a generator of *non directory* children.
+ *
+ * In the case that this [FileCollection] is only a single [File] (as in, not a directory), the
+ * sequence returned will just contain said [File].
+ */
+fun FileCollection.allChildren(): Sequence<File> =
+  asSequence().flatMap { if (it.isDirectory) it.walk().asSequence() else sequenceOf(it) }
+
+/**
+ * Zips a list of providers into a provider of lists.
+ *
+ * This action is task avoidance friendly- meaning the underlying [Provider] will be a result of
+ * mapping each [Provider] in the original list against one another.
+ */
+fun <T : Any> List<Provider<T>>.asSingleProvider(): Provider<List<T>> {
+  val providerOfLists = map { it.map { listOf(it) } }
+
+  return providerOfLists.reduce { finalProvider, currentProvider ->
+    finalProvider.zip(currentProvider) { finalList, currentList -> finalList + currentList }
+  }
+}
 
 /** The Android extension specific for Kotlin projects within Gradle. */
 val Project.android: KotlinAndroidProjectExtension

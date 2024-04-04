@@ -27,7 +27,6 @@ import java.io.File
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.named
-import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.register
 
 /**
@@ -55,16 +54,16 @@ abstract class ReleasePlugin : Plugin<Project> {
       val buildApi = tasks.named<BuildApiTask>("buildApi")
       val makeReleaseNotes = tasks.named<MakeReleaseNotesTask>("makeReleaseNotes")
 
-      val releaseNotes = makeReleaseNotes.outputFile
+      val releaseNotes = makeReleaseNotes.flatMap { it.outputFile }
       val releasingVersion =
-        releaseNotes.map { parseReleaseVersion(it) }.orElse(project.moduleVersion)
+        releaseNotes.map { parseReleaseVersion(it.asFile) }.orElse(moduleVersion)
 
       val updateVersion =
         tasks.register<VersionBumpTask>("updateVersion") { newVersion.set(releasingVersion) }
 
       val createNewApiFile =
         tasks.register<CopyFileTask>("createNewApiFile") {
-          val newApiFile = releasingVersion.map { rootProject.file("api/$it.api") }
+          val newApiFile = releasingVersion.map { rootProject.file("api/${project.name}/$it.api") }
 
           source.set(buildApi.outputFile)
           dest.set(newApiFile)

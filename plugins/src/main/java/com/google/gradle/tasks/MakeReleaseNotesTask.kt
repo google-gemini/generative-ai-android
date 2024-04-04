@@ -21,6 +21,7 @@ import com.google.gradle.types.ModuleVersion
 import com.google.gradle.types.VersionType
 import java.io.File
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
@@ -47,7 +48,7 @@ abstract class MakeReleaseNotesTask : DefaultTask() {
 
   @get:Input abstract val version: Property<ModuleVersion>
 
-  @get:OutputFile abstract val outputFile: Property<File>
+  @get:OutputFile abstract val outputFile: RegularFileProperty
 
   @TaskAction
   fun add() {
@@ -59,6 +60,7 @@ abstract class MakeReleaseNotesTask : DefaultTask() {
 
     outputFile
       .get()
+      .asFile
       .writeText(
         """
             |# ${version.get().bump(bump)}

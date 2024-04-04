@@ -49,6 +49,10 @@ gradlePlugin {
             id = "release-plugin"
             implementationClass = "com.google.gradle.plugins.ReleasePlugin"
         }
+        register("multi-project-plugin") {
+            id = "multi-project-plugin"
+            implementationClass = "com.google.gradle.plugins.MultiProjectPlugin"
+        }
     }
 }
 

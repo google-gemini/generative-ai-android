@@ -26,7 +26,6 @@ import kotlinx.validation.KotlinApiBuildTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.provider.Property
-import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.Optional
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.register
@@ -69,7 +68,7 @@ abstract class ApiPlugin : Plugin<Project> {
 
   context(Project)
   private fun ApiPluginExtension.commonConfiguration() {
-    val latestApiFile = rootProject.file("api/${project.version}.api")
+    val latestApiFile = rootProject.file("api/${project.name}/${project.version}.api")
 
     apiFile.convention(latestApiFile)
   }
