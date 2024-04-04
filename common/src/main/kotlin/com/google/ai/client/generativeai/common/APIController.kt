@@ -37,18 +37,16 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import kotlin.time.Duration
 import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.json.Json
-import kotlin.time.Duration
 
 val JSON = Json {
   ignoreUnknownKeys = true
@@ -100,6 +98,7 @@ internal constructor(
       client
         .post("${requestOptions.endpoint}/${requestOptions.apiVersion}/$model:generateContent") {
           applyCommonConfiguration(request)
+          applyHeaderProvider()
         }
         .also { validateResponse(it) }
         .body<GenerateContentResponse>()
@@ -123,6 +122,7 @@ internal constructor(
       client
         .post("${requestOptions.endpoint}/${requestOptions.apiVersion}/$model:countTokens") {
           applyCommonConfiguration(request)
+          applyHeaderProvider()
         }
         .also { validateResponse(it) }
         .body()
@@ -138,20 +138,66 @@ internal constructor(
     contentType(ContentType.Application.Json)
     header("x-goog-api-key", key)
     header("x-goog-api-client", apiClient)
+  }
 
-    // Obtain additional headers from provider
+  private suspend fun HttpRequestBuilder.applyHeaderProvider() {
     if (headerProvider != null) {
-      runBlocking(Dispatchers.IO) {
-        try {
-          withTimeout(headerProvider.timeout) {
-            for ((tag, value) in headerProvider.generateHeaders()) {
-              header(tag, value)
-            }
+      try {
+        withTimeout(headerProvider.timeout) {
+          for ((tag, value) in headerProvider.generateHeaders()) {
+            header(tag, value)
           }
-        } catch (e: TimeoutCancellationException) {
-            Log.w(TAG,"HeaderProvided timed out without generating headers, ignoring")
         }
+      } catch (e: TimeoutCancellationException) {
+        Log.w(TAG, "HeaderProvided timed out without generating headers, ignoring")
       }
+    }
+  }
+
+  /**
+   * Makes a POST request to the specified [url] and returns a [Flow] of deserialized response
+   * objects of type [R]. The response is expected to be a stream of JSON objects that are parsed in
+   * real-time as they are received from the server.
+   *
+   * This function is intended for internal use within the client that handles streaming responses.
+   *
+   * Example usage:
+   * ```
+   * val client: HttpClient = HttpClient(CIO)
+   * val request: Request = GenerateContentRequest(...)
+   * val url: String = "http://example.com/stream"
+   *
+   * val responses: GenerateContentResponse = client.postStream(url) {
+   *   setBody(request)
+   *   contentType(ContentType.Application.Json)
+   * }
+   * responses.collect {
+   *   println("Got a response: $it")
+   * }
+   * ```
+   *
+   * @param R The type of the response object.
+   * @param url The URL to which the POST request will be made.
+   * @param config An optional [HttpRequestBuilder] callback for request configuration.
+   * @return A [Flow] of response objects of type [R].
+   */
+  private inline fun <reified R : Response> HttpClient.postStream(
+    url: String,
+    crossinline config: HttpRequestBuilder.() -> Unit = {},
+  ): Flow<R> = channelFlow {
+    launch(CoroutineName("postStream")) {
+      preparePost(url) {
+          applyHeaderProvider()
+          config()
+        }
+        .execute {
+          validateResponse(it)
+
+          val channel = it.bodyAsChannel()
+          val flow = JSON.decodeToFlow<R>(channel)
+
+          flow.collect { send(it) }
+        }
     }
   }
 
@@ -162,6 +208,7 @@ internal constructor(
 
 interface HeaderProvider {
   val timeout: Duration
+
   suspend fun generateHeaders(): Map<String, String>
 }
 
@@ -171,50 +218,6 @@ interface HeaderProvider {
  * Models must be prepended with the `models/` prefix when communicating with the backend.
  */
 private fun fullModelName(name: String): String = name.takeIf { it.contains("/") } ?: "models/$name"
-
-/**
- * Makes a POST request to the specified [url] and returns a [Flow] of deserialized response objects
- * of type [R]. The response is expected to be a stream of JSON objects that are parsed in real-time
- * as they are received from the server.
- *
- * This function is intended for internal use within the client that handles streaming responses.
- *
- * Example usage:
- * ```
- * val client: HttpClient = HttpClient(CIO)
- * val request: Request = GenerateContentRequest(...)
- * val url: String = "http://example.com/stream"
- *
- * val responses: GenerateContentResponse = client.postStream(url) {
- *   setBody(request)
- *   contentType(ContentType.Application.Json)
- * }
- * responses.collect {
- *   println("Got a response: $it")
- * }
- * ```
- *
- * @param R The type of the response object.
- * @param url The URL to which the POST request will be made.
- * @param config An optional [HttpRequestBuilder] callback for request configuration.
- * @return A [Flow] of response objects of type [R].
- */
-private inline fun <reified R : Response> HttpClient.postStream(
-  url: String,
-  crossinline config: HttpRequestBuilder.() -> Unit = {}
-): Flow<R> = channelFlow {
-  launch(CoroutineName("postStream")) {
-    preparePost(url) { config() }
-      .execute {
-        validateResponse(it)
-
-        val channel = it.bodyAsChannel()
-        val flow = JSON.decodeToFlow<R>(channel)
-
-        flow.collect { send(it) }
-      }
-  }
-}
 
 private suspend fun validateResponse(response: HttpResponse) {
   if (response.status == HttpStatusCode.OK) return

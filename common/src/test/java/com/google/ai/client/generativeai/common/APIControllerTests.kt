@@ -38,15 +38,15 @@ import io.ktor.http.headersOf
 import io.ktor.utils.io.ByteChannel
 import io.ktor.utils.io.close
 import io.ktor.utils.io.writeFully
-import kotlinx.coroutines.delay
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.encodeToString
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.milliseconds
 
 private val TEST_CLIENT_ID = "genai-android/test"
 
@@ -78,7 +78,6 @@ internal class APIControllerTests {
         }
       }
     }
-
 }
 
 internal class RequestFormatTests {
@@ -258,15 +257,14 @@ internal class RequestFormatTests {
       respond(response, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
     }
 
-    val testHeaderProvider = object : HeaderProvider {
-      override val timeout: Duration
-        get() = 5.seconds
+    val testHeaderProvider =
+      object : HeaderProvider {
+        override val timeout: Duration
+          get() = 5.seconds
 
-      override suspend fun generateHeaders(): Map<String, String> = mapOf(
-        "header1" to "value1",
-        "header2" to "value2"
-      )
-    }
+        override suspend fun generateHeaders(): Map<String, String> =
+          mapOf("header1" to "value1", "header2" to "value2")
+      }
 
     val controller =
       APIController(
@@ -291,17 +289,16 @@ internal class RequestFormatTests {
       respond(response, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
     }
 
-    val testHeaderProvider = object : HeaderProvider {
-      override val timeout: Duration
-        get() = 5.milliseconds
+    val testHeaderProvider =
+      object : HeaderProvider {
+        override val timeout: Duration
+          get() = 5.milliseconds
 
-      override suspend fun generateHeaders(): Map<String, String> {
-        delay(10.milliseconds)
-        return mapOf(
-          "header1" to "value1"
-        )
+        override suspend fun generateHeaders(): Map<String, String> {
+          delay(10.milliseconds)
+          return mapOf("header1" to "value1")
+        }
       }
-    }
 
     val controller =
       APIController(
@@ -330,7 +327,14 @@ internal class ModelNamingTests(private val modelName: String, private val actua
     }
     prepareStreamingResponse(createResponses("Random")).forEach { channel.writeFully(it) }
     val controller =
-      APIController("super_cool_test_key", modelName, RequestOptions(), mockEngine, TEST_CLIENT_ID, null)
+      APIController(
+        "super_cool_test_key",
+        modelName,
+        RequestOptions(),
+        mockEngine,
+        TEST_CLIENT_ID,
+        null
+      )
 
     withTimeout(5.seconds) {
       controller.generateContentStream(textGenerateContentRequest("cats")).collect {
