@@ -16,6 +16,7 @@
 
 package com.google.ai.client.generativeai.common
 
+import android.util.Log
 import com.google.ai.client.generativeai.common.server.FinishReason
 import com.google.ai.client.generativeai.common.util.decodeToFlow
 import io.ktor.client.HttpClient
@@ -37,12 +38,17 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.json.Json
+import kotlin.time.Duration
 
 val JSON = Json {
   ignoreUnknownKeys = true
@@ -66,15 +72,17 @@ internal constructor(
   model: String,
   private val requestOptions: RequestOptions,
   httpEngine: HttpClientEngine,
-  private val apiClient: String
+  private val apiClient: String,
+  private val headerProvider: HeaderProvider?
 ) {
 
   constructor(
     key: String,
     model: String,
     requestOptions: RequestOptions,
-    apiClient: String
-  ) : this(key, model, requestOptions, OkHttp.create(), apiClient)
+    apiClient: String,
+    headerProvider: HeaderProvider? = null
+  ) : this(key, model, requestOptions, OkHttp.create(), apiClient, headerProvider)
 
   private val model = fullModelName(model)
 
@@ -130,7 +138,31 @@ internal constructor(
     contentType(ContentType.Application.Json)
     header("x-goog-api-key", key)
     header("x-goog-api-client", apiClient)
+
+    // Obtain additional headers from provider
+    if (headerProvider != null) {
+      runBlocking(Dispatchers.IO) {
+        try {
+          withTimeout(headerProvider.timeout) {
+            for ((tag, value) in headerProvider.generateHeaders()) {
+              header(tag, value)
+            }
+          }
+        } catch (e: TimeoutCancellationException) {
+            Log.w(TAG,"HeaderProvided timed out without generating headers, ignoring")
+        }
+      }
+    }
   }
+
+  companion object {
+    private val TAG = APIController::class.java.simpleName
+  }
+}
+
+interface HeaderProvider {
+  val timeout: Duration
+  suspend fun generateHeaders(): Map<String, String>
 }
 
 /**
