@@ -20,10 +20,12 @@ jobs:
 
       - name: Generate the api file
         run: |
-          ./gradlew generativeai:exportApi --no-daemon
+          ./gradlew exportApi --no-daemon
 
       - name: Save public.api from master
-        run: mv generativeai/public.api ~/public.api
+        run: |
+          mv generativeai/public.api ~/generativeai/public.api && \
+          mv common/public.api ~/common/public.api
 
       - name: Checkout branch
         uses: actions/checkout@v3.5.3
@@ -36,11 +38,13 @@ jobs:
           cache: gradle
 
       - name: Copy saved api to branch
-        run: mv ~/public.api generativeai/public.api
+        run: |
+          mv ~/generativeai/public.api generativeai/public.api && \
+          mv ~/common/public.api common/public.api
 
       - name: Run api warning task
         run: |
-          ./gradlew generativeai:warnAboutApiChanges --no-daemon
+          ./gradlew warnAboutApiChanges --no-daemon
 
       - name: Add PR Comment
         if: ${{ hashFiles('api_changes.md') != '' }}
