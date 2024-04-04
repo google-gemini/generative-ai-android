@@ -107,7 +107,14 @@ internal fun commonTest(
     respond(channel, status, headersOf(HttpHeaders.ContentType, "application/json"))
   }
   val apiController =
-    APIController("super_cool_test_key", "gemini-pro", requestOptions, mockEngine, TEST_CLIENT_ID)
+    APIController(
+      "super_cool_test_key",
+      "gemini-pro",
+      requestOptions,
+      mockEngine,
+      TEST_CLIENT_ID,
+      null
+    )
   CommonTestScope(channel, apiController).block()
 }
 

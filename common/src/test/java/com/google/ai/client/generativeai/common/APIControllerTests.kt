@@ -38,7 +38,10 @@ import io.ktor.http.headersOf
 import io.ktor.utils.io.ByteChannel
 import io.ktor.utils.io.close
 import io.ktor.utils.io.writeFully
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.encodeToString
 import org.junit.Test
@@ -91,7 +94,8 @@ internal class RequestFormatTests {
         "gemini-pro-1.0",
         RequestOptions(),
         mockEngine,
-        "genai-android/${BuildConfig.VERSION_NAME}"
+        "genai-android/${BuildConfig.VERSION_NAME}",
+        null
       )
 
     withTimeout(5.seconds) {
@@ -117,7 +121,8 @@ internal class RequestFormatTests {
         "gemini-pro-1.0",
         RequestOptions(endpoint = "https://my.custom.endpoint"),
         mockEngine,
-        TEST_CLIENT_ID
+        TEST_CLIENT_ID,
+        null
       )
 
     withTimeout(5.seconds) {
@@ -143,7 +148,8 @@ internal class RequestFormatTests {
         "gemini-pro-1.0",
         RequestOptions(),
         mockEngine,
-        TEST_CLIENT_ID
+        TEST_CLIENT_ID,
+        null
       )
 
     withTimeout(5.seconds) {
@@ -172,7 +178,8 @@ internal class RequestFormatTests {
         "gemini-pro-1.0",
         RequestOptions(),
         mockEngine,
-        TEST_CLIENT_ID
+        TEST_CLIENT_ID,
+        null
       )
 
     withTimeout(5.seconds) { controller.countTokens(textCountTokenRequest("cats")) }
@@ -195,7 +202,8 @@ internal class RequestFormatTests {
         "gemini-pro-1.0",
         RequestOptions(),
         mockEngine,
-        TEST_CLIENT_ID
+        TEST_CLIENT_ID,
+        null
       )
 
     withTimeout(5.seconds) { controller.countTokens(textCountTokenRequest("cats")) }
@@ -217,7 +225,8 @@ internal class RequestFormatTests {
         "gemini-pro-1.0",
         RequestOptions(),
         mockEngine,
-        TEST_CLIENT_ID
+        TEST_CLIENT_ID,
+        null
       )
 
     withTimeout(5.seconds) {
@@ -240,6 +249,71 @@ internal class RequestFormatTests {
 
     requestBodyAsText shouldContainJsonKey "tool_config.function_calling_config.mode"
   }
+
+  @Test
+  fun `headers from HeaderProvider are added to the request`() = doBlocking {
+    val response = JSON.encodeToString(CountTokensResponse(totalTokens = 10))
+    val mockEngine = MockEngine {
+      respond(response, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
+    }
+
+    val testHeaderProvider =
+      object : HeaderProvider {
+        override val timeout: Duration
+          get() = 5.seconds
+
+        override suspend fun generateHeaders(): Map<String, String> =
+          mapOf("header1" to "value1", "header2" to "value2")
+      }
+
+    val controller =
+      APIController(
+        "super_cool_test_key",
+        "gemini-pro-1.0",
+        RequestOptions(),
+        mockEngine,
+        TEST_CLIENT_ID,
+        testHeaderProvider
+      )
+
+    withTimeout(5.seconds) { controller.countTokens(textCountTokenRequest("cats")) }
+
+    mockEngine.requestHistory.first().headers["header1"] shouldBe "value1"
+    mockEngine.requestHistory.first().headers["header2"] shouldBe "value2"
+  }
+
+  @Test
+  fun `headers from HeaderProvider are ignored if timeout`() = doBlocking {
+    val response = JSON.encodeToString(CountTokensResponse(totalTokens = 10))
+    val mockEngine = MockEngine {
+      respond(response, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
+    }
+
+    val testHeaderProvider =
+      object : HeaderProvider {
+        override val timeout: Duration
+          get() = 5.milliseconds
+
+        override suspend fun generateHeaders(): Map<String, String> {
+          delay(10.milliseconds)
+          return mapOf("header1" to "value1")
+        }
+      }
+
+    val controller =
+      APIController(
+        "super_cool_test_key",
+        "gemini-pro-1.0",
+        RequestOptions(),
+        mockEngine,
+        TEST_CLIENT_ID,
+        testHeaderProvider
+      )
+
+    withTimeout(5.seconds) { controller.countTokens(textCountTokenRequest("cats")) }
+
+    mockEngine.requestHistory.first().headers.contains("header1") shouldBe false
+  }
 }
 
 @RunWith(Parameterized::class)
@@ -253,7 +327,14 @@ internal class ModelNamingTests(private val modelName: String, private val actua
     }
     prepareStreamingResponse(createResponses("Random")).forEach { channel.writeFully(it) }
     val controller =
-      APIController("super_cool_test_key", modelName, RequestOptions(), mockEngine, TEST_CLIENT_ID)
+      APIController(
+        "super_cool_test_key",
+        modelName,
+        RequestOptions(),
+        mockEngine,
+        TEST_CLIENT_ID,
+        null
+      )
 
     withTimeout(5.seconds) {
       controller.generateContentStream(textGenerateContentRequest("cats")).collect {
