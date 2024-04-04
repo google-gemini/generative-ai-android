@@ -27,7 +27,6 @@ import java.io.File
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.named
-import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.register
 
 /**
@@ -53,7 +52,7 @@ abstract class ReleasePlugin : Plugin<Project> {
   override fun apply(project: Project) {
     with(project) {
       val buildApi = tasks.named<BuildApiTask>("buildApi")
-      val makeReleaseNotes = tasks.named<MakeReleaseNotesTask>("generateReleaseNotes")
+      val makeReleaseNotes = tasks.named<MakeReleaseNotesTask>("makeReleaseNotes")
 
       val releaseNotes = makeReleaseNotes.flatMap { it.outputFile }
       val releasingVersion =
