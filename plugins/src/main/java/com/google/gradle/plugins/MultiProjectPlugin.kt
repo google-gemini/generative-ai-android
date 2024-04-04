@@ -26,33 +26,6 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.register
 
 /**
- * TODO() Write docs
- *
- * Need to create bugs to track all of the changes that need to be made to support multiple sdks:
- * - warnAboutApiChanges needs a collective means to show changes across sdks and differentiate
- *   between them
- *     - the github workflow will need updating too
- * - changelogs need a way to be generated in a way that maps to either multiple or individual sdks
- * - individual sdks should be able to be released in isolation of one another
- * - changelog files should remain for sdks that did not release
- * - release notes should only be generated for sdks that want them
- * - release notes should be collective
- * - changelogs need to be able to differentiate between change impact
- *     - if I want the same changelog for both sdks, but for one its a minor and the other its a
- *       patch bump, there should be a way to allow that to be conveyed- so that they don't get
- *       minor bumped (or patch bumped, worse case scenario)
- * - each sdk needs a way to track its own api changes (done with the api dir changes for subdirs
- *   for each sdk)
- * - updateVersion needs a way to differentiate between its own version and others (tbh, I think it
- *   gens its own release notes, so this might not be a problem)
- * - a new task may need to be made on top of prepareRelease to account for all the changes
- *     - the github release workflow will need updating too
- * - the release docs (and the readme) need to be updated according to any release changes we make
- * - possible a new tag will need to be created to signify specific sdks (generativeai versus common
- *   rn)
- */
-
-/**
  * Root plugin for facilitating multi-project tasks.
  *
  * Registers three tasks:
