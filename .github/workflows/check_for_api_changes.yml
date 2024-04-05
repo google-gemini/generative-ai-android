@@ -24,6 +24,8 @@ jobs:
 
       - name: Save public.api from master
         run: |
+          mkdir ~/common/ && \
+          mkdir ~/generativeai/ && \
           mv generativeai/public.api ~/generativeai/public.api && \
           mv common/public.api ~/common/public.api
 
