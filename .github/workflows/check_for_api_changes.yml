@@ -24,8 +24,8 @@ jobs:
 
       - name: Save public.api from master
         run: |
-          mv generativeai/public.api ~/generativeai/public.api && \
-          mv common/public.api ~/common/public.api
+          mv api/generativeai/public.api ~/generativeai/public.api && \
+          mv api/common/public.api ~/common/public.api
 
       - name: Checkout branch
         uses: actions/checkout@v3.5.3
