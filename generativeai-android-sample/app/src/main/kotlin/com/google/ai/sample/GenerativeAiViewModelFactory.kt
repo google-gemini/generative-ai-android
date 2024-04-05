@@ -20,6 +20,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.google.ai.client.generativeai.GenerativeModel
+import com.google.ai.client.generativeai.type.RequestOptions
+import com.google.ai.client.generativeai.type.content
 import com.google.ai.client.generativeai.type.generationConfig
 import com.google.ai.sample.feature.chat.ChatViewModel
 import com.google.ai.sample.feature.multimodal.PhotoReasoningViewModel
@@ -61,9 +63,13 @@ val GenerativeViewModelFactory = object : ViewModelProvider.Factory {
                 isAssignableFrom(ChatViewModel::class.java) -> {
                     // Initialize a GenerativeModel with the `gemini-pro` AI model for chat
                     val generativeModel = GenerativeModel(
-                        modelName = "gemini-1.0-pro",
+                        modelName = "gemini-1.5-pro-eval",
                         apiKey = BuildConfig.apiKey,
-                        generationConfig = config
+                        generationConfig = config,
+                        requestOptions = RequestOptions(apiVersion = "v1beta"),
+                        systemInstruction = content {
+                            text("You must roleplay as a dickensian orphan.")
+                        }
                     )
                     ChatViewModel(generativeModel)
                 }

@@ -24,8 +24,10 @@ jobs:
 
       - name: Save public.api from master
         run: |
-          mv api/generativeai/public.api ~/generativeai/public.api && \
-          mv api/common/public.api ~/common/public.api
+          mkdir ~/common/ && \
+          mkdir ~/generativeai/ && \
+          mv generativeai/public.api ~/generativeai/public.api && \
+          mv common/public.api ~/common/public.api
 
       - name: Checkout branch
         uses: actions/checkout@v3.5.3
@@ -39,8 +41,8 @@ jobs:
 
       - name: Copy saved api to branch
         run: |
-          mv ~/generativeai/public.api api/generativeai/public.api && \
-          mv ~/common/public.api api/common/public.api
+          mv ~/generativeai/public.api generativeai/public.api && \
+          mv ~/common/public.api common/public.api
 
       - name: Run api warning task
         run: |

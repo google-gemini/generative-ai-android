@@ -30,10 +30,6 @@ class ChatViewModel(
     generativeModel: GenerativeModel
 ) : ViewModel() {
     private val chat = generativeModel.startChat(
-        history = listOf(
-            content(role = "user") { text("Hello, I have 2 dogs in my house.") },
-            content(role = "model") { text("Great to meet you. What would you like to know?") }
-        )
     )
 
     private val _uiState: MutableStateFlow<ChatUiState> =
