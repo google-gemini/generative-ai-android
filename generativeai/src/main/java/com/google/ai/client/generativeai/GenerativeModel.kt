@@ -118,7 +118,10 @@ internal constructor(
    * @param prompt A group of [Content]s to send to the model.
    * @return A [Flow] which will emit responses as they are returned from the model.
    */
-  fun generateContentStream(prompt: Content, vararg prompts: Content): Flow<GenerateContentResponse> =
+  fun generateContentStream(
+    prompt: Content,
+    vararg prompts: Content
+  ): Flow<GenerateContentResponse> =
     controller
       .generateContentStream(constructRequest(prompt, *prompts))
       .catch { throw GoogleGenerativeAIException.from(it) }
