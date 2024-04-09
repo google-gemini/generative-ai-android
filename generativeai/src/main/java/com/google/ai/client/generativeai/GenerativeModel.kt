@@ -81,10 +81,10 @@ internal constructor(
     apiKey: String,
     generationConfig: GenerationConfig? = null,
     safetySettings: List<SafetySetting>? = null,
+    requestOptions: RequestOptions = RequestOptions(),
     tools: List<Tool>? = null,
     toolConfig: ToolConfig? = null,
     systemInstruction: Content? = null,
-    requestOptions: RequestOptions = RequestOptions(),
   ) : this(
     modelName,
     apiKey,
