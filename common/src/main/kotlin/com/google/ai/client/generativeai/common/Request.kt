@@ -35,6 +35,7 @@ data class GenerateContentRequest(
   @SerialName("generation_config") val generationConfig: GenerationConfig? = null,
   val tools: List<Tool>? = null,
   @SerialName("tool_config") var toolConfig: ToolConfig? = null,
+  @SerialName("system_instruction") val systemInstruction: Content? = null,
 ) : Request
 
 @Serializable
