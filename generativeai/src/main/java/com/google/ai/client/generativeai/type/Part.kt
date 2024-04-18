@@ -26,6 +26,7 @@ import org.json.JSONObject
  * * [TextPart] representing text or string based data.
  * * [ImagePart] representing image data.
  * * [BlobPart] representing MIME typed binary data.
+ * * [FileDataPart] representing MIME typed binary data.
  */
 interface Part
 
@@ -40,6 +41,9 @@ class ImagePart(val image: Bitmap) : Part
 
 /** Represents binary data with an associated MIME type sent to and received from requests. */
 class BlobPart(val mimeType: String, val blob: ByteArray) : Part
+
+/** Represents an URI-based data with a specified media type. */
+class FileDataPart(val uri: String, val mimeType: String) : Part
 
 /** Represents function call name and params received from requests. */
 class FunctionCallPart(val name: String, val args: Map<String, String>) : Part
