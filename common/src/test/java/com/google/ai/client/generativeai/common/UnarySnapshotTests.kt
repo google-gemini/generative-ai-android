@@ -134,6 +134,22 @@ internal class UnarySnapshotTests {
     }
 
   @Test
+  fun `citation returns correctly with missing license and startIndex`() =
+    goldenUnaryFile("success-citations-nolicense.json") {
+      withTimeout(testTimeout) {
+        val response = apiController.generateContent(textGenerateContentRequest("prompt"))
+
+        response.candidates?.isEmpty() shouldBe false
+        response.candidates?.first()?.citationMetadata?.citationSources?.isNotEmpty() shouldBe true
+        // Verify the values in the citation source
+        with(response.candidates?.first()?.citationMetadata?.citationSources?.first()!!) {
+          license shouldBe null
+          startIndex shouldBe 0
+        }
+      }
+    }
+
+  @Test
   fun `response includes usage metadata`() =
     goldenUnaryFile("success-usage-metadata.json") {
       withTimeout(testTimeout) {

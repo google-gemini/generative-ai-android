@@ -22,9 +22,12 @@ import com.google.ai.client.generativeai.common.GenerateContentResponse as Gener
 import com.google.ai.client.generativeai.common.InvalidAPIKeyException as InvalidAPIKeyException_Common
 import com.google.ai.client.generativeai.common.UnsupportedUserLocationException as UnsupportedUserLocationException_Common
 import com.google.ai.client.generativeai.common.server.Candidate as Candidate_Common
+import com.google.ai.client.generativeai.common.server.CitationMetadata as CitationMetadata_Common
+import com.google.ai.client.generativeai.common.server.CitationSources
 import com.google.ai.client.generativeai.common.shared.Content as Content_Common
 import com.google.ai.client.generativeai.common.shared.TextPart as TextPart_Common
 import com.google.ai.client.generativeai.type.Candidate
+import com.google.ai.client.generativeai.type.CitationMetadata
 import com.google.ai.client.generativeai.type.Content
 import com.google.ai.client.generativeai.type.GenerateContentResponse
 import com.google.ai.client.generativeai.type.InvalidAPIKeyException
@@ -66,7 +69,15 @@ internal class GenerativeModelTests {
               ),
             finishReason = null,
             safetyRatings = listOf(),
-            citationMetadata = null
+            citationMetadata =
+              CitationMetadata_Common(
+                listOf(
+                  CitationSources(
+                    endIndex = 100,
+                    uri = "http://www.example.com",
+                  )
+                )
+              )
           )
         )
       )
@@ -77,7 +88,15 @@ internal class GenerativeModelTests {
           Candidate(
             Content(parts = listOf(TextPart("I'm still learning how to answer this question"))),
             safetyRatings = listOf(),
-            citationMetadata = listOf(),
+            citationMetadata =
+              listOf(
+                CitationMetadata(
+                  startIndex = 0,
+                  endIndex = 100,
+                  uri = "http://www.example.com",
+                  license = null
+                )
+              ),
             finishReason = null
           )
         ),
@@ -91,9 +110,17 @@ internal class GenerativeModelTests {
     response.candidates[0].shouldBeEqualToUsingFields(
       expectedResponse.candidates[0],
       Candidate::finishReason,
-      Candidate::citationMetadata,
       Candidate::safetyRatings
     )
+    response.candidates[0]
+      .citationMetadata[0]
+      .shouldBeEqualToUsingFields(
+        expectedResponse.candidates[0].citationMetadata[0],
+        CitationMetadata::startIndex,
+        CitationMetadata::endIndex,
+        CitationMetadata::uri,
+        CitationMetadata::license,
+      )
   }
 
   @Test
