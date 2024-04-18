@@ -18,6 +18,7 @@ package com.google.ai.client.generativeai.common
 
 import com.google.ai.client.generativeai.common.server.BlockReason
 import com.google.ai.client.generativeai.common.server.FinishReason
+import com.google.ai.client.generativeai.common.server.HarmSeverity
 import com.google.ai.client.generativeai.common.shared.HarmCategory
 import com.google.ai.client.generativeai.common.util.goldenUnaryFile
 import io.kotest.assertions.throwables.shouldThrow
@@ -67,6 +68,21 @@ internal class UnarySnapshotTests {
         response.candidates?.first {
           it.safetyRatings?.any { it.category == HarmCategory.UNKNOWN } ?: false
         }
+      }
+    }
+
+  @Test
+  fun `safetyRatings including severity`() =
+    goldenUnaryFile("success-including-severity.json") {
+      withTimeout(testTimeout) {
+        val response = apiController.generateContent(textGenerateContentRequest("prompt"))
+
+        response.candidates?.isEmpty() shouldBe false
+        response.candidates?.first()?.safetyRatings?.isEmpty() shouldBe false
+        response.candidates?.first()?.safetyRatings?.all {
+          it.severity == HarmSeverity.NEGLIGIBLE
+        } shouldBe true
+        response.candidates?.first()?.safetyRatings?.all { it.severityScore != null } shouldBe true
       }
     }
 
