@@ -18,6 +18,7 @@ package com.google.ai.client.generativeai.common
 
 import com.google.ai.client.generativeai.common.server.BlockReason
 import com.google.ai.client.generativeai.common.server.FinishReason
+import com.google.ai.client.generativeai.common.server.HarmProbability
 import com.google.ai.client.generativeai.common.server.HarmSeverity
 import com.google.ai.client.generativeai.common.shared.HarmCategory
 import com.google.ai.client.generativeai.common.util.goldenUnaryFile
@@ -79,6 +80,11 @@ internal class UnarySnapshotTests {
 
         response.candidates?.isEmpty() shouldBe false
         response.candidates?.first()?.safetyRatings?.isEmpty() shouldBe false
+        response.candidates?.first()?.safetyRatings?.all {
+          it.probability == HarmProbability.NEGLIGIBLE
+        } shouldBe true
+        response.candidates?.first()?.safetyRatings?.all { it.probabilityScore != null } shouldBe
+          true
         response.candidates?.first()?.safetyRatings?.all {
           it.severity == HarmSeverity.NEGLIGIBLE
         } shouldBe true

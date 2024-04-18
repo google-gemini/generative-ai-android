@@ -74,6 +74,7 @@ data class SafetyRating(
   val category: HarmCategory,
   val probability: HarmProbability,
   val blocked: Boolean? = null, // TODO(): any reason not to default to false?
+  val probabilityScore: Float? = null,
   val severity: HarmSeverity? = null,
   val severityScore: Float? = null,
 )
