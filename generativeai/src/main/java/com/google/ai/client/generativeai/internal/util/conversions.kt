@@ -34,6 +34,8 @@ import com.google.ai.client.generativeai.common.server.SafetyRating
 import com.google.ai.client.generativeai.common.shared.Blob
 import com.google.ai.client.generativeai.common.shared.BlobPart
 import com.google.ai.client.generativeai.common.shared.Content
+import com.google.ai.client.generativeai.common.shared.FileData
+import com.google.ai.client.generativeai.common.shared.FileDataPart
 import com.google.ai.client.generativeai.common.shared.FunctionCall
 import com.google.ai.client.generativeai.common.shared.FunctionCallPart
 import com.google.ai.client.generativeai.common.shared.FunctionResponse
@@ -76,6 +78,8 @@ internal fun com.google.ai.client.generativeai.type.Part.toInternal(): Part {
       FunctionCallPart(FunctionCall(name, args.orEmpty()))
     is com.google.ai.client.generativeai.type.FunctionResponsePart ->
       FunctionResponsePart(FunctionResponse(name, response.toInternal()))
+    is com.google.ai.client.generativeai.type.FileDataPart ->
+      FileDataPart(FileData(fileUri = uri, mimeType = mimeType))
     else ->
       throw SerializationException(
         "The given subclass of Part (${javaClass.simpleName}) is not supported in the serialization yet."
@@ -196,6 +200,11 @@ internal fun Part.toPublic(): com.google.ai.client.generativeai.type.Part {
       com.google.ai.client.generativeai.type.FunctionResponsePart(
         functionResponse.name,
         functionResponse.response.toPublic(),
+      )
+    is FileDataPart ->
+      com.google.ai.client.generativeai.type.FileDataPart(
+        fileData.fileUri,
+        fileData.mimeType,
       )
     else ->
       throw SerializationException(
