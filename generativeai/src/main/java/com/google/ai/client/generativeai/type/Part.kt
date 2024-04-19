@@ -45,6 +45,9 @@ class BlobPart(val mimeType: String, val blob: ByteArray) : Part
 /** Represents an URI-based data with a specified media type. */
 class FileDataPart(val uri: String, val mimeType: String) : Part
 
+/** @return The part as a [BlobPart] if it represents a blob, and null otherwise */
+fun Part.asFileDataPartOrNull(): FileDataPart? = this as? FileDataPart
+
 /** Represents function call name and params received from requests. */
 class FunctionCallPart(val name: String, val args: Map<String, String>) : Part
 
