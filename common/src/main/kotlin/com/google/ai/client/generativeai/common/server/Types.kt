@@ -63,10 +63,10 @@ constructor(@JsonNames("citations") val citationSources: List<CitationSources>)
 
 @Serializable
 data class CitationSources(
-  val startIndex: Int,
+  val startIndex: Int = 0,
   val endIndex: Int,
   val uri: String,
-  val license: String
+  val license: String? = null
 )
 
 @Serializable
