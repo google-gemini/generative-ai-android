@@ -29,12 +29,12 @@ import kotlin.time.toDuration
  */
 class RequestOptions(
   val timeout: Duration,
-  val apiVersion: String = "v1",
+  val apiVersion: String = "v1beta",
 ) {
   @JvmOverloads
   constructor(
     timeout: Long? = Long.MAX_VALUE,
-    apiVersion: String = "v1",
+    apiVersion: String = "v1beta",
   ) : this(
     (timeout ?: Long.MAX_VALUE).toDuration(DurationUnit.MILLISECONDS),
     apiVersion,

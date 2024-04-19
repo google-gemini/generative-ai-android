@@ -30,13 +30,13 @@ import kotlin.time.toDuration
  */
 class RequestOptions(
   val timeout: Duration,
-  val apiVersion: String = "v1",
+  val apiVersion: String = "v1beta",
   val endpoint: String = "https://generativelanguage.googleapis.com",
 ) {
   @JvmOverloads
   constructor(
     timeout: Long? = HttpTimeout.INFINITE_TIMEOUT_MS,
-    apiVersion: String = "v1",
+    apiVersion: String = "v1beta",
     endpoint: String = "https://generativelanguage.googleapis.com",
   ) : this(
     (timeout ?: HttpTimeout.INFINITE_TIMEOUT_MS).toDuration(DurationUnit.MILLISECONDS),
