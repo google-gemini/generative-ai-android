@@ -9,7 +9,7 @@ For example, with just a few lines of code, you can access Gemini's multimodal c
 
 ```kotlin
 val generativeModel = GenerativeModel(
-    modelName = "gemini-1.0-pro-vision-latest",
+    modelName = "gemini-1.5-pro-latest",
     apiKey = BuildConfig.apiKey
 )
 
@@ -30,7 +30,7 @@ print(response.text)
 
 This repository contains a sample app demonstrating how the SDK can access and utilize the Gemini model for various use cases.
 
-To try out the sample app you can directly import the project from Android Studio 
+To try out the sample app you can directly import the project from Android Studio
 via **File > New > Import Sample** and searching for *Generative AI Sample* or follow these steps below:
 
 1.  Check out this repository.\
@@ -38,7 +38,7 @@ via **File > New > Import Sample** and searching for *Generative AI Sample* or f
 
 1.  [Obtain an API key](https://makersuite.google.com/app/apikey) to use with the Google AI SDKs.
 
-1.  Open and build the sample app in the `generativeai-android-sample` folder of this repo. 
+1.  Open and build the sample app in the `generativeai-android-sample` folder of this repo.
 
 1.  Paste your API key into the `apiKey` property in the `local.properties` file.
 
