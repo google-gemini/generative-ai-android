@@ -1,5 +1,11 @@
 # Google AI SDK for Android
 
+
+> [!CAUTION]
+> **The Google AI SDK for Android is recommended for prototyping only.** If you plan to enable billing, we strongly recommend that you use a backend SDK to access the Google AI Gemini API. You risk
+> potentially exposing your API key to malicious actors if you embed your API key directly in your Android app or fetch it remotely at runtime.
+
+
 The Google AI client SDK for Android enables developers to use Google's state-of-the-art generative AI models (like Gemini) to build AI-powered features and applications. This SDK supports use cases like:
 - Generate text from text-only input
 - Generate text from text-and-images input (multimodal)
