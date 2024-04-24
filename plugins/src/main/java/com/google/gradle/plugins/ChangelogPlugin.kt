@@ -30,6 +30,7 @@ import com.google.gradle.util.moduleVersion
 import com.google.gradle.util.orElseIfNotExists
 import com.google.gradle.util.outputFile
 import com.google.gradle.util.provideProperty
+import com.google.gradle.util.regularOutputFile
 import com.google.gradle.util.tempFile
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -37,7 +38,6 @@ import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.Optional
 import org.gradle.kotlin.dsl.create
-import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.support.listFilesOrdered
 
@@ -71,9 +71,8 @@ abstract class ChangelogPlugin : Plugin<Project> {
       val extension =
         extensions.create<ChangelogPluginExtension>("changelog").apply { commonConfiguration() }
 
-      val exportedApiFile = provider { file("public.api") }
-      val releasedApiFile = exportedApiFile.orElseIfNotExists(apiPlugin.apiFile)
-      val newApiFile = tasks.named("buildApi").outputFile
+      val releasedApiFile = apiPlugin.exportFile.orElseIfNotExists(apiPlugin.apiFile)
+      val newApiFile = tasks.named("buildApi").regularOutputFile
 
       val findChanges =
         tasks.register<FindChangesTask>("findChanges") {
@@ -82,12 +81,12 @@ abstract class ChangelogPlugin : Plugin<Project> {
           outputFile.set(tempFile("changes"))
         }
 
-      val fileChanges = findChanges.outputFile
+      val fileChanges = findChanges.regularOutputFile
 
       tasks.register<MakeChangeTask>("makeChange") {
         val changeMessage = provideProperty<String>("changeMessage")
         val changeName = RandomWordsGenerator.generateString()
-        val changeOutput = extension.outputDirectory.asFile.childFile("$changeName.json")
+        val changeOutput = extension.outputDirectory.childFile("$changeName.json")
 
         changesFile.set(fileChanges)
         message.set(changeMessage)
@@ -96,28 +95,24 @@ abstract class ChangelogPlugin : Plugin<Project> {
 
       tasks.register<WarnAboutApiChangesTask>("warnAboutApiChanges") {
         changesFile.set(fileChanges)
-        outputFile.set(extension.apiChangesDirectory.asFile)
+        outputFile.set(extension.apiChangesFile)
       }
 
       val changelogFiles =
         extension.outputDirectory.map { it.asFile.listFilesOrdered { it.extension == "json" } }
 
-      val deleteChangeFiles =
-        tasks.register<Delete>("deleteChangeFiles") {
-          group = "cleanup"
+      tasks.register<Delete>("deleteChangeFiles") {
+        group = "cleanup"
 
-          delete(changelogFiles)
-        }
+        delete(changelogFiles)
+      }
 
       tasks.register<MakeReleaseNotesTask>("makeReleaseNotes") {
         onlyIf("No changelog files found") { changelogFiles.get().isNotEmpty() }
 
         changeFiles.set(changelogFiles)
         version.set(project.moduleVersion)
-        // TODO() move to extension config with convention (like .changes)
-        outputFile.set(extension.releaseNotesDirectory)
-
-        finalizedBy(deleteChangeFiles)
+        outputFile.set(extension.releaseNotesFile)
       }
     }
   }
@@ -125,8 +120,8 @@ abstract class ChangelogPlugin : Plugin<Project> {
   context(Project)
   private fun ChangelogPluginExtension.commonConfiguration() {
     outputDirectory.convention(rootProject.layout.file(".changes/${project.name}"))
-    releaseNotesDirectory.convention(rootProject.buildDir("release_notes/${project.name}.md"))
-    apiChangesDirectory.convention(rootProject.buildDir("api_changes/${project.name}.md"))
+    releaseNotesFile.convention(rootProject.buildDir("release_notes/${project.name}.md"))
+    apiChangesFile.convention(rootProject.buildDir("api_changes/${project.name}.md"))
   }
 }
 
@@ -134,22 +129,11 @@ abstract class ChangelogPlugin : Plugin<Project> {
  * Extension properties for the [ChangelogPlugin].
  *
  * @property outputDirectory The directory into which to store the [Changelog] files
- * @property releaseNotesDirectory The directory into which to store the release notes file
- * @property apiChangesDirectory The directory into which to store the api changes warning file
+ * @property releaseNotesFile The file into which to save the release notes to
+ * @property apiChangesFile The file into which to save the api changes warning to
  */
 abstract class ChangelogPluginExtension {
   @get:Optional abstract val outputDirectory: RegularFileProperty
-  @get:Optional abstract val releaseNotesDirectory: RegularFileProperty
-  @get:Optional abstract val apiChangesDirectory: RegularFileProperty
+  @get:Optional abstract val releaseNotesFile: RegularFileProperty
+  @get:Optional abstract val apiChangesFile: RegularFileProperty
 }
-
-/**
- * Helper mapping to the [ApiPluginExtension].
- *
- * Automatically applies the [ApiPlugin] if not already present.
- */
-private val Project.apiPlugin: ApiPluginExtension
-  get() {
-    plugins.apply<ApiPlugin>()
-    return extensions.getByType()
-  }

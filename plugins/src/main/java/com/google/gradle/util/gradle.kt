@@ -72,6 +72,11 @@ inline fun <reified T : WorkAction<C>, C : WorkParameters> WorkQueue.submit(
  */
 fun Provider<File>.childFile(path: String): Provider<File> = map { File("${it.path}/$path") }
 
+/** Variant of [childFile] that works with [RegularFile]. */
+context(Project)
+fun Provider<RegularFile>.childFile(path: String): Provider<RegularFile> =
+  project.layout.file(map { it.asFile.childFile(path) })
+
 /**
  * Returns a new [File] under the given sub directory.
  *
@@ -89,8 +94,8 @@ fun File.childFile(childPath: String) = File("$path/$childPath")
  * preferred to defining an explicit [File]. This will allow Gradle to make better optimizations on
  * our part, and helps us avoid edge-case scenarios like conflicting file names.
  */
-fun DefaultTask.tempFile(path: String): Provider<File> =
-  project.provider { temporaryDir.childFile(path) }
+fun DefaultTask.tempFile(path: String): Provider<RegularFile> =
+  with(project) { layout.file("$temporaryDir/$path") }
 
 /**
  * Syntax sugar for:
@@ -117,6 +122,11 @@ typealias SkipTask = StopActionException
  */
 val TaskProvider<*>.outputFile: Provider<File>
   get() = map { it.outputs.files.allChildren().first { !it.isDirectory } }
+
+/** Variant of [outputFile] that provides the output as a [RegularFile] */
+context(Project)
+val TaskProvider<*>.regularOutputFile: Provider<RegularFile>
+  get() = layout.file(outputFile)
 
 /**
  * Generates a sequence of [File]s under this collection.
@@ -216,7 +226,8 @@ val Project.moduleVersion: ModuleVersion
     ModuleVersion.fromStringOrNull(project.version.toString())
       ?: throw RuntimeException("Invalid project version found.")
 
-/** Maps a file provider to an alternative provider if the original file does not exist. */
-fun Provider<File>.orElseIfNotExists(file: Provider<File>): Provider<File> = map {
-  it.takeIf { it.exists() } ?: file.get()
-}
+/** Maps a [RegularFile] provider to an alternative provider if the original file does not exist. */
+fun Provider<RegularFile>.orElseIfNotExists(file: Provider<RegularFile>): Provider<RegularFile> =
+  map {
+    it.takeIf { it.asFile.exists() } ?: file.get()
+  }

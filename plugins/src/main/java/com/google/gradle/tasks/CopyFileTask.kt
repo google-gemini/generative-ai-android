@@ -16,9 +16,8 @@
 
 package com.google.gradle.tasks
 
-import java.io.File
 import org.gradle.api.DefaultTask
-import org.gradle.api.provider.Property
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputFile
@@ -39,12 +38,12 @@ import org.gradle.api.tasks.TaskAction
  * @property dest where to copy the file or directory to
  */
 abstract class CopyFileTask : DefaultTask() {
-  @get:InputFile abstract val source: Property<File>
+  @get:InputFile abstract val source: RegularFileProperty
 
-  @get:OutputFile abstract val dest: Property<File>
+  @get:OutputFile abstract val dest: RegularFileProperty
 
   @TaskAction
   fun create() {
-    source.get().copyRecursively(dest.get(), overwrite = true)
+    source.get().asFile.copyRecursively(dest.asFile.get(), overwrite = true)
   }
 }
