@@ -20,27 +20,30 @@ import com.google.gradle.tasks.CopyFileTask
 import com.google.gradle.tasks.MakeReleaseNotesTask
 import com.google.gradle.tasks.VersionBumpTask
 import com.google.gradle.types.ModuleVersion
+import com.google.gradle.util.file
 import com.google.gradle.util.moduleVersion
 import com.google.gradle.util.outputFile
 import com.google.gradle.util.readFirstLine
+import com.google.gradle.util.regularOutputFile
 import java.io.File
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.tasks.Delete
 import org.gradle.kotlin.dsl.named
 import org.gradle.kotlin.dsl.register
 
 /**
- * A Gradle plugin for preparing a release.
+ * A Gradle plugin for releasing projects.
  *
- * Intended to be ran before running `publishAllPublicationsToMavenRepository`.
- *
- * Registers three tasks:
+ * Registers four tasks:
  * - `updateVersion` -> updates the project version declared in `gradle.properties` file, according
  *   to the release notes.
  * - `createNewApiFile` -> creates a new `.api` file in the `api` directory for the release,
  *   aligning with the current state of the public api; for future auditing.
- * - `prepareRelease` -> does everything needed to prepare a release; creates the release notes and
- *   runs the above tasks.
+ * - `prepareRelease` -> does everything needed to prepare a release; creates the release notes,
+ *   runs the above tasks, and deletes the left over change files.
+ * - `release` -> publishes the *current* artifacts to maven local and the configured maven
+ *   repository
  *
  * If any of these tasks are ran without changelog files present, the current version declared in
  * the `gradle.properties` file will be used instead.
@@ -53,26 +56,42 @@ abstract class ReleasePlugin : Plugin<Project> {
     with(project) {
       val buildApi = tasks.named<BuildApiTask>("buildApi")
       val makeReleaseNotes = tasks.named<MakeReleaseNotesTask>("makeReleaseNotes")
+      val deleteChangeFiles = tasks.named<Delete>("deleteChangeFiles")
 
       val releaseNotes = makeReleaseNotes.flatMap { it.outputFile }
       val releasingVersion =
         releaseNotes.map { parseReleaseVersion(it.asFile) }.orElse(moduleVersion)
 
       val updateVersion =
-        tasks.register<VersionBumpTask>("updateVersion") { newVersion.set(releasingVersion) }
+        tasks.register<VersionBumpTask>("updateVersion") {
+          dependsOn(makeReleaseNotes)
+
+          newVersion.set(releasingVersion)
+        }
 
       val createNewApiFile =
         tasks.register<CopyFileTask>("createNewApiFile") {
-          val newApiFile = releasingVersion.map { rootProject.file("api/${project.name}/$it.api") }
+          dependsOn(makeReleaseNotes)
 
-          source.set(buildApi.outputFile)
-          dest.set(newApiFile)
+          val releasingFile =
+            releasingVersion.flatMap { rootProject.layout.file("api/${project.name}/$it.api") }
+
+          source.set(buildApi.regularOutputFile)
+          dest.set(releasingFile)
         }
 
       tasks.register("prepareRelease") {
         group = "publishing"
 
         dependsOn(makeReleaseNotes, updateVersion, createNewApiFile)
+        finalizedBy(deleteChangeFiles)
+      }
+
+      tasks.register("release") {
+        group = "publishing"
+
+        dependsOn("publishReleasePublicationToMavenRepository")
+        dependsOn("publishReleasePublicationToMavenLocal")
       }
     }
   }

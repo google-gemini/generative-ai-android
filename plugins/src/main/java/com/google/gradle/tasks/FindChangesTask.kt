@@ -18,9 +18,8 @@ package com.google.gradle.tasks
 
 import com.google.gradle.types.LinesChanged
 import com.google.gradle.types.changedFrom
-import java.io.File
 import org.gradle.api.DefaultTask
-import org.gradle.api.provider.Property
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
@@ -36,16 +35,16 @@ import org.gradle.api.tasks.TaskAction
  * @property outputFile where to save the diff to
  */
 abstract class FindChangesTask : DefaultTask() {
-  @get:InputFile abstract val old: Property<File>
+  @get:InputFile abstract val old: RegularFileProperty
 
-  @get:InputFile abstract val new: Property<File>
+  @get:InputFile abstract val new: RegularFileProperty
 
-  @get:OutputFile abstract val outputFile: Property<File>
+  @get:OutputFile abstract val outputFile: RegularFileProperty
 
   @TaskAction
   fun add() {
-    val diff = old.get().changedFrom(new.get())
+    val diff = old.asFile.get().changedFrom(new.asFile.get())
 
-    diff.toFile(outputFile.get())
+    diff.toFile(outputFile.asFile.get())
   }
 }
