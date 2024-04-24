@@ -110,4 +110,7 @@ the `makeReleaseNotes` task from the `ChangelogPlugin` on each SDK, and then com
 release notes into a single file under the root project's build directory called `release_notes.md`.
 - [prepareRelease](./src/main/java/com/google/gradle/plugins/MultiProjectPlugin.kt) -> Does 
 everything needed to prepare a release for all SDKs; creates the combined release notes and runs the 
-above tasks.
+above tasks (and also deletes the excess change files).
+- [release](./src/main/java/com/google/gradle/plugins/ReleasePlugin.kt) Publishes the *current* 
+artifacts to maven local and the configured maven repository. Should be ran *after* 
+`prepareRelease`.
