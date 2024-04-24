@@ -2,7 +2,7 @@
 
 
 > [!CAUTION]
-> The Google AI SDK for Android is recommended for prototyping only. If you plan to enable billing, we strongly recommend that you use a backend SDK to access the Google AI Gemini API. You risk
+> **The Google AI SDK for Android is recommended for prototyping only.** If you plan to enable billing, we strongly recommend that you use a backend SDK to access the Google AI Gemini API. You risk
 > potentially exposing your API key to malicious actors if you embed your API key directly in your Android app or fetch it remotely at runtime.
 
 
