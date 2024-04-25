@@ -29,7 +29,6 @@ import com.google.ai.client.generativeai.type.FourParameterFunction
 import com.google.ai.client.generativeai.type.FunctionCallPart
 import com.google.ai.client.generativeai.type.GenerateContentResponse
 import com.google.ai.client.generativeai.type.GenerationConfig
-import com.google.ai.client.generativeai.type.GenerativeBeta
 import com.google.ai.client.generativeai.type.GoogleGenerativeAIException
 import com.google.ai.client.generativeai.type.InvalidStateException
 import com.google.ai.client.generativeai.type.NoParameterFunction
@@ -206,7 +205,6 @@ internal constructor(
    *   parameters
    * @return The output of the requested function call
    */
-  @OptIn(GenerativeBeta::class)
   suspend fun executeFunction(functionCallPart: FunctionCallPart): JSONObject {
     if (tools == null) {
       throw InvalidStateException("No registered tools")
@@ -230,7 +228,6 @@ internal constructor(
     }
   }
 
-  @OptIn(GenerativeBeta::class)
   private fun constructRequest(vararg prompt: Content) =
     GenerateContentRequest(
       modelName,

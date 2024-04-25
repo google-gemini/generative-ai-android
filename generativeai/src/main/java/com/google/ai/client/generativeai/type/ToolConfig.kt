@@ -22,7 +22,6 @@ package com.google.ai.client.generativeai.type
  *
  * @param functionCallingConfig The config for function calling
  */
-@OptIn(GenerativeBeta::class)
 class ToolConfig(val functionCallingConfig: FunctionCallingConfig) {
 
   companion object {

@@ -26,7 +26,6 @@ import org.json.JSONObject
  * @property description A description of what the function does and its output.
  * @property function the function implementation
  */
-@GenerativeBeta
 class NoParameterFunction(
   name: String,
   description: String,
@@ -48,7 +47,6 @@ class NoParameterFunction(
  * @property param A description of the first function parameter
  * @property function the function implementation
  */
-@GenerativeBeta
 class OneParameterFunction<T>(
   name: String,
   description: String,
@@ -73,7 +71,6 @@ class OneParameterFunction<T>(
  * @property param2 A description of the second function parameter
  * @property function the function implementation
  */
-@GenerativeBeta
 class TwoParameterFunction<T, U>(
   name: String,
   description: String,
@@ -101,7 +98,6 @@ class TwoParameterFunction<T, U>(
  * @property param3 A description of the third function parameter
  * @property function the function implementation
  */
-@GenerativeBeta
 class ThreeParameterFunction<T, U, V>(
   name: String,
   description: String,
@@ -132,7 +128,6 @@ class ThreeParameterFunction<T, U, V>(
  * @property param4 A description of the fourth function parameter
  * @property function the function implementation
  */
-@GenerativeBeta
 class FourParameterFunction<T, U, V, W>(
   name: String,
   description: String,
@@ -153,7 +148,6 @@ class FourParameterFunction<T, U, V, W>(
   }
 }
 
-@GenerativeBeta
 abstract class FunctionDeclaration(val name: String, val description: String) {
   abstract fun getParameters(): List<Schema<out Any?>>
 
@@ -226,11 +220,9 @@ class Schema<T>(
   }
 }
 
-@GenerativeBeta
 fun defineFunction(name: String, description: String, function: suspend () -> JSONObject) =
   NoParameterFunction(name, description, function)
 
-@GenerativeBeta
 fun <T> defineFunction(
   name: String,
   description: String,
@@ -238,7 +230,6 @@ fun <T> defineFunction(
   function: suspend (T) -> JSONObject,
 ) = OneParameterFunction(name, description, arg1, function)
 
-@GenerativeBeta
 fun <T, U> defineFunction(
   name: String,
   description: String,
@@ -247,7 +238,6 @@ fun <T, U> defineFunction(
   function: suspend (T, U) -> JSONObject,
 ) = TwoParameterFunction(name, description, arg1, arg2, function)
 
-@GenerativeBeta
 fun <T, U, W> defineFunction(
   name: String,
   description: String,
@@ -257,7 +247,6 @@ fun <T, U, W> defineFunction(
   function: suspend (T, U, W) -> JSONObject,
 ) = ThreeParameterFunction(name, description, arg1, arg2, arg3, function)
 
-@GenerativeBeta
 fun <T, U, W, Z> defineFunction(
   name: String,
   description: String,
