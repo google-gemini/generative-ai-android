@@ -22,7 +22,6 @@ package com.google.ai.client.generativeai.type
  *
  * @param mode The function calling mode of the model
  */
-@GenerativeBeta
 class FunctionCallingConfig(val mode: Mode) {
   enum class Mode {
     /**

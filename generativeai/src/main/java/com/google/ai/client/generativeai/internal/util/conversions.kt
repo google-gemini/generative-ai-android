@@ -49,7 +49,6 @@ import com.google.ai.client.generativeai.type.BlockThreshold
 import com.google.ai.client.generativeai.type.CitationMetadata
 import com.google.ai.client.generativeai.type.FunctionCallingConfig
 import com.google.ai.client.generativeai.type.FunctionDeclaration
-import com.google.ai.client.generativeai.type.GenerativeBeta
 import com.google.ai.client.generativeai.type.ImagePart
 import com.google.ai.client.generativeai.type.SerializationException
 import com.google.ai.client.generativeai.type.Tool
@@ -120,11 +119,9 @@ internal fun BlockThreshold.toInternal() =
     BlockThreshold.UNSPECIFIED -> HarmBlockThreshold.UNSPECIFIED
   }
 
-@GenerativeBeta
 internal fun Tool.toInternal() =
   com.google.ai.client.generativeai.common.client.Tool(functionDeclarations.map { it.toInternal() })
 
-@GenerativeBeta
 internal fun ToolConfig.toInternal() =
   com.google.ai.client.generativeai.common.client.ToolConfig(
     com.google.ai.client.generativeai.common.client.FunctionCallingConfig(
@@ -139,7 +136,6 @@ internal fun ToolConfig.toInternal() =
     )
   )
 
-@GenerativeBeta
 internal fun FunctionDeclaration.toInternal() =
   com.google.ai.client.generativeai.common.client.FunctionDeclaration(
     name,
