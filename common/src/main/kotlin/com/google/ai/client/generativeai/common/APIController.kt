@@ -48,7 +48,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.json.Json
 
-private val JSON = Json {
+internal val JSON = Json {
   ignoreUnknownKeys = true
   prettyPrint = false
 }
