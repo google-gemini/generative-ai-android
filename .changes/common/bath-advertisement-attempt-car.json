@@ -1,0 +1,1 @@
+{"type":"MAJOR","changes":["Replace GenerateContentResponse#functionCall with GenerateContentResponse#functionCalls which returns a list"]}
