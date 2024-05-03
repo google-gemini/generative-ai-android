@@ -185,6 +185,20 @@ internal class UnarySnapshotTests {
     }
 
   @Test
+  fun `response includes partial usage metadata`() =
+    goldenUnaryFile("success-partial-usage-metadata.json") {
+      withTimeout(testTimeout) {
+        val response = apiController.generateContent(textGenerateContentRequest("prompt"))
+
+        response.candidates?.isEmpty() shouldBe false
+        response.candidates?.first()?.finishReason shouldBe FinishReason.STOP
+        response.usageMetadata shouldNotBe null
+        response.usageMetadata?.promptTokenCount shouldBe 6
+        response.usageMetadata?.totalTokenCount shouldBe null
+      }
+    }
+
+  @Test
   fun `citation returns correctly when using alternative name`() =
     goldenUnaryFile("success-citations-altname.json") {
       withTimeout(testTimeout) {

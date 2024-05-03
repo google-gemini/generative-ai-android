@@ -53,6 +53,7 @@ import com.google.ai.client.generativeai.type.ImagePart
 import com.google.ai.client.generativeai.type.SerializationException
 import com.google.ai.client.generativeai.type.Tool
 import com.google.ai.client.generativeai.type.ToolConfig
+import com.google.ai.client.generativeai.type.UsageMetadata
 import com.google.ai.client.generativeai.type.content
 import java.io.ByteArrayOutputStream
 import kotlinx.serialization.json.Json
@@ -135,6 +136,9 @@ internal fun ToolConfig.toInternal() =
       }
     )
   )
+
+internal fun com.google.ai.client.generativeai.common.UsageMetadata.toPublic(): UsageMetadata =
+  UsageMetadata(promptTokenCount ?: 0, candidatesTokenCount ?: 0, totalTokenCount ?: 0)
 
 internal fun FunctionDeclaration.toInternal() =
   com.google.ai.client.generativeai.common.client.FunctionDeclaration(
@@ -269,6 +273,7 @@ internal fun GenerateContentResponse.toPublic() =
   com.google.ai.client.generativeai.type.GenerateContentResponse(
     candidates?.map { it.toPublic() }.orEmpty(),
     promptFeedback?.toPublic(),
+    usageMetadata?.toPublic()
   )
 
 internal fun CountTokensResponse.toPublic() =
