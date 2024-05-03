@@ -1,1 +1,1 @@
-{"type":"MAJOR","changes":["Replace GenerateContentResponse#functionCall with GenerateContentResponse#functionCalls which returns a list"]}
+{"type":"MINOR","changes":["Add GenerateContentResponse#functionCalls and mark GenerateContentResponse#functionCall deprecated"]}
