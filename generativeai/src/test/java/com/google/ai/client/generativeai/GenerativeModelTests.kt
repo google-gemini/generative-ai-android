@@ -21,6 +21,7 @@ import com.google.ai.client.generativeai.common.GenerateContentRequest as Genera
 import com.google.ai.client.generativeai.common.GenerateContentResponse as GenerateContentResponse_Common
 import com.google.ai.client.generativeai.common.InvalidAPIKeyException as InvalidAPIKeyException_Common
 import com.google.ai.client.generativeai.common.UnsupportedUserLocationException as UnsupportedUserLocationException_Common
+import com.google.ai.client.generativeai.common.UsageMetadata as UsageMetadata_Common
 import com.google.ai.client.generativeai.common.server.Candidate as Candidate_Common
 import com.google.ai.client.generativeai.common.server.CitationMetadata as CitationMetadata_Common
 import com.google.ai.client.generativeai.common.server.CitationSources
@@ -34,6 +35,7 @@ import com.google.ai.client.generativeai.type.InvalidAPIKeyException
 import com.google.ai.client.generativeai.type.PromptFeedback
 import com.google.ai.client.generativeai.type.TextPart
 import com.google.ai.client.generativeai.type.UnsupportedUserLocationException
+import com.google.ai.client.generativeai.type.UsageMetadata
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.equality.shouldBeEqualToUsingFields
@@ -79,7 +81,8 @@ internal class GenerativeModelTests {
                 )
               )
           )
-        )
+        ),
+        usageMetadata = UsageMetadata_Common(promptTokenCount = 10)
       )
 
     val expectedResponse =
@@ -100,7 +103,8 @@ internal class GenerativeModelTests {
             finishReason = null
           )
         ),
-        PromptFeedback(null, listOf())
+        PromptFeedback(null, listOf()),
+        UsageMetadata(10, 0, 0 /* default to 0*/)
       )
 
     val response = model.generateContent("Why's the sky blue?")
