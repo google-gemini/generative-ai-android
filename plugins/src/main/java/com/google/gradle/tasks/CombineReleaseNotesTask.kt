@@ -48,7 +48,7 @@ abstract class CombineReleaseNotesTask : DefaultTask() {
   @TaskAction
   fun add() {
     val projectNameToReleaseNotes =
-      releaseNoteFiles.get().map { it.nameWithoutExtension to it.readText() }
+      releaseNoteFiles.get().filter { it.exists() }.map { it.nameWithoutExtension to it.readText() }
 
     val texts =
       projectNameToReleaseNotes.map {
