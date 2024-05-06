@@ -59,8 +59,7 @@ abstract class ReleasePlugin : Plugin<Project> {
       val deleteChangeFiles = tasks.named<Delete>("deleteChangeFiles")
 
       val releaseNotes = makeReleaseNotes.flatMap { it.outputFile }
-      val releasingVersion =
-        releaseNotes.map { parseReleaseVersion(it.asFile) }.orElse(moduleVersion)
+      val releasingVersion = releaseNotes.map { parseReleaseVersion(it.asFile, moduleVersion) }
 
       val updateVersion =
         tasks.register<VersionBumpTask>("updateVersion") {
@@ -96,7 +95,8 @@ abstract class ReleasePlugin : Plugin<Project> {
     }
   }
 
-  private fun parseReleaseVersion(releaseNotes: File): ModuleVersion {
+  private fun parseReleaseVersion(releaseNotes: File, fallback: ModuleVersion): ModuleVersion {
+    if (!releaseNotes.exists()) return fallback
     val version = releaseNotes.readFirstLine().substringAfter("#").trim()
 
     return ModuleVersion.fromStringOrNull(version)
