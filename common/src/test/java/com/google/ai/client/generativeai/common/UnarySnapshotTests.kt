@@ -21,15 +21,22 @@ import com.google.ai.client.generativeai.common.server.FinishReason
 import com.google.ai.client.generativeai.common.server.HarmProbability
 import com.google.ai.client.generativeai.common.server.HarmSeverity
 import com.google.ai.client.generativeai.common.shared.HarmCategory
+import com.google.ai.client.generativeai.common.shared.TextPart
 import com.google.ai.client.generativeai.common.util.goldenUnaryFile
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.matchers.collections.shouldNotBeEmpty
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.ktor.http.HttpStatusCode
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.withTimeout
+import kotlinx.serialization.Serializable
 import org.junit.Test
+
+@Serializable internal data class MountainColors(val name: String, val colors: List<String>)
 
 internal class UnarySnapshotTests {
   private val testTimeout = 5.seconds
@@ -206,6 +213,22 @@ internal class UnarySnapshotTests {
 
         response.candidates?.isEmpty() shouldBe false
         response.candidates?.first()?.citationMetadata?.citationSources?.isNotEmpty() shouldBe true
+      }
+    }
+
+  @Test
+  fun `properly translates json text`() =
+    goldenUnaryFile("success-constraint-decoding-json.json") {
+      withTimeout(testTimeout) {
+        val response = apiController.generateContent(textGenerateContentRequest("prompt"))
+
+        response.candidates?.isEmpty() shouldBe false
+        with(
+          response.candidates?.first()?.content?.parts?.first()?.shouldBeInstanceOf<TextPart>()
+        ) {
+          shouldNotBeNull()
+          JSON.decodeFromString<List<MountainColors>>(text).shouldNotBeEmpty()
+        }
       }
     }
 

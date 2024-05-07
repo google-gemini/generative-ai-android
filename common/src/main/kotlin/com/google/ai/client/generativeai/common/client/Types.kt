@@ -27,6 +27,7 @@ data class GenerationConfig(
   @SerialName("candidate_count") val candidateCount: Int?,
   @SerialName("max_output_tokens") val maxOutputTokens: Int?,
   @SerialName("stop_sequences") val stopSequences: List<String>?,
+  @SerialName("response_mime_type") val responseMimeType: String?
 )
 
 @Serializable data class Tool(val functionDeclarations: List<FunctionDeclaration>)
