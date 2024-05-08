@@ -34,7 +34,7 @@ class GenerateContentResponse(
   val text: String? by lazy { firstPartAs<TextPart>()?.text }
 
   /** Convenience field representing the first function call part in the request, if it exists */
-  @Deprecated("Use functionCallParts instead", ReplaceWith("functionCallParts"))
+  @Deprecated("Use functionCalls instead", ReplaceWith("functionCalls"))
   val functionCall: FunctionCallPart? by lazy { firstPartAs() }
 
   /** Convenience field to get all the function call parts in the request, if they exist */
