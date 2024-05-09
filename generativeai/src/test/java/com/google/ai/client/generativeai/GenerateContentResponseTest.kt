@@ -10,37 +10,76 @@ import org.junit.Test
 
 internal class GenerateContentResponseTest {
 
-    @Test
-    fun `generate response should pull all functions requests`() {
-        val response = GenerateContentResponse(candidates = listOf(Candidate(content {
-            part(FunctionCallPart("blah", mapOf()))
-            part(FunctionCallPart("blah2", mapOf()))
-            text("This is a textPart")
-        }, listOf(), listOf(), null)), null, null)
+  @Test
+  fun `generate response should pull all functions requests`() {
+    val response =
+      GenerateContentResponse(
+        candidates =
+          listOf(
+            Candidate(
+              content {
+                part(FunctionCallPart("blah", mapOf()))
+                part(FunctionCallPart("blah2", mapOf()))
+                text("This is a textPart")
+              },
+              listOf(),
+              listOf(),
+              null
+            )
+          ),
+        null,
+        null
+      )
 
-        response.functionCalls shouldHaveSize 2
-    }
+    response.functionCalls shouldHaveSize 2
+  }
 
-    @Test
-    fun `generate response should get strings even if they are not the first part`() {
-        val response = GenerateContentResponse(candidates = listOf(Candidate(content {
-            part(FunctionCallPart("blah", mapOf()))
-            part(FunctionCallPart("blah2", mapOf()))
-            text("This is a textPart")
-        }, listOf(), listOf(), null)), null, null)
+  @Test
+  fun `generate response should get strings even if they are not the first part`() {
+    val response =
+      GenerateContentResponse(
+        candidates =
+          listOf(
+            Candidate(
+              content {
+                part(FunctionCallPart("blah", mapOf()))
+                part(FunctionCallPart("blah2", mapOf()))
+                text("This is a textPart")
+              },
+              listOf(),
+              listOf(),
+              null
+            )
+          ),
+        null,
+        null
+      )
 
-        response.text shouldBe "This is a textPart"
-    }
+    response.text shouldBe "This is a textPart"
+  }
 
-    @Test
-    fun `generate response should get strings and concatenate them together`() {
-        val response = GenerateContentResponse(candidates = listOf(Candidate(content {
-            part(FunctionCallPart("blah", mapOf()))
-            part(FunctionCallPart("blah2", mapOf()))
-            text("This is a textPart")
-            text("This is another textPart")
-        }, listOf(), listOf(), null)), null, null)
+  @Test
+  fun `generate response should get strings and concatenate them together`() {
+    val response =
+      GenerateContentResponse(
+        candidates =
+          listOf(
+            Candidate(
+              content {
+                part(FunctionCallPart("blah", mapOf()))
+                part(FunctionCallPart("blah2", mapOf()))
+                text("This is a textPart")
+                text("This is another textPart")
+              },
+              listOf(),
+              listOf(),
+              null
+            )
+          ),
+        null,
+        null
+      )
 
-        response.text shouldBe "This is a textPart This is another textPart"
-    }
+    response.text shouldBe "This is a textPart This is another textPart"
+  }
 }
