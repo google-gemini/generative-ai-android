@@ -1,1 +1,0 @@
-{"type":"MAJOR","changes":["Hide private JSON global property that was accidentally leaked into the public api"]}
