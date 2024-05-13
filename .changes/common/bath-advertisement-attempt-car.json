@@ -1,1 +1,0 @@
-{"type":"MINOR","changes":["Add GenerateContentResponse#functionCalls and mark GenerateContentResponse#functionCall deprecated"]}
