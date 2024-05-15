@@ -239,6 +239,13 @@ private suspend fun validateResponse(response: HttpResponse) {
   if (message.contains("quota")) {
     throw QuotaExceededException(message)
   }
+  if (
+    message.contains(
+      "Firebase ML API has not been used in project .* before or it is disabled".toRegex()
+    )
+  ) {
+    throw ServiceDisabledException(message)
+  }
   throw ServerException(message)
 }
 
