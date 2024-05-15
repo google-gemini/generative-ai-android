@@ -42,7 +42,7 @@ abstract class CombineApiChangesTask : DefaultTask() {
   @TaskAction
   fun add() {
     val projectNameToChangeFile =
-      apiChangesFiles.get().map { it.nameWithoutExtension to it.readText() }
+      apiChangesFiles.get().filter { it.exists() }.map { it.nameWithoutExtension to it.readText() }
 
     val texts = projectNameToChangeFile.joinToString("\n\n") { spoiler(it.first, it.second) }
 

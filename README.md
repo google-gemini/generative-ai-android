@@ -1,5 +1,11 @@
 # Google AI SDK for Android
 
+
+> [!CAUTION]
+> **The Google AI SDK for Android is recommended for prototyping only.** If you plan to enable billing, we strongly recommend that you use a backend SDK to access the Google AI Gemini API. You risk
+> potentially exposing your API key to malicious actors if you embed your API key directly in your Android app or fetch it remotely at runtime.
+
+
 The Google AI client SDK for Android enables developers to use Google's state-of-the-art generative AI models (like Gemini) to build AI-powered features and applications. This SDK supports use cases like:
 - Generate text from text-only input
 - Generate text from text-and-images input (multimodal)
@@ -9,7 +15,7 @@ For example, with just a few lines of code, you can access Gemini's multimodal c
 
 ```kotlin
 val generativeModel = GenerativeModel(
-    modelName = "gemini-1.0-pro-vision-latest",
+    modelName = "gemini-1.5-pro-latest",
     apiKey = BuildConfig.apiKey
 )
 
@@ -30,7 +36,7 @@ print(response.text)
 
 This repository contains a sample app demonstrating how the SDK can access and utilize the Gemini model for various use cases.
 
-To try out the sample app you can directly import the project from Android Studio 
+To try out the sample app you can directly import the project from Android Studio
 via **File > New > Import Sample** and searching for *Generative AI Sample* or follow these steps below:
 
 1.  Check out this repository.\
@@ -38,7 +44,7 @@ via **File > New > Import Sample** and searching for *Generative AI Sample* or f
 
 1.  [Obtain an API key](https://makersuite.google.com/app/apikey) to use with the Google AI SDKs.
 
-1.  Open and build the sample app in the `generativeai-android-sample` folder of this repo. 
+1.  Open and build the sample app in the `generativeai-android-sample` folder of this repo.
 
 1.  Paste your API key into the `apiKey` property in the `local.properties` file.
 

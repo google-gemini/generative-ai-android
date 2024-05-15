@@ -17,11 +17,14 @@
 package com.google.ai.client.generativeai.type
 
 /**
- * Contains a set of function declarations that the model has access to. These can be used to gather
- * information, or complete tasks
+ * Usage metadata about response(s).
  *
- * @param functionDeclarations The set of functions that this tool allows the model access to
+ * @param promptTokenCount Number of tokens in the request.
+ * @param candidatesTokenCount Number of tokens in the response(s).
+ * @param totalTokenCount Total number of tokens.
  */
-class Tool(
-  val functionDeclarations: List<FunctionDeclaration>,
+class UsageMetadata(
+  val promptTokenCount: Int,
+  val candidatesTokenCount: Int,
+  val totalTokenCount: Int
 )

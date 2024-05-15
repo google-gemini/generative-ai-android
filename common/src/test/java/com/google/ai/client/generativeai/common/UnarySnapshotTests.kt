@@ -18,16 +18,25 @@ package com.google.ai.client.generativeai.common
 
 import com.google.ai.client.generativeai.common.server.BlockReason
 import com.google.ai.client.generativeai.common.server.FinishReason
+import com.google.ai.client.generativeai.common.server.HarmProbability
+import com.google.ai.client.generativeai.common.server.HarmSeverity
 import com.google.ai.client.generativeai.common.shared.HarmCategory
+import com.google.ai.client.generativeai.common.shared.TextPart
 import com.google.ai.client.generativeai.common.util.goldenUnaryFile
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.matchers.collections.shouldNotBeEmpty
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.ktor.http.HttpStatusCode
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.withTimeout
+import kotlinx.serialization.Serializable
 import org.junit.Test
+
+@Serializable internal data class MountainColors(val name: String, val colors: List<String>)
 
 internal class UnarySnapshotTests {
   private val testTimeout = 5.seconds
@@ -67,6 +76,26 @@ internal class UnarySnapshotTests {
         response.candidates?.first {
           it.safetyRatings?.any { it.category == HarmCategory.UNKNOWN } ?: false
         }
+      }
+    }
+
+  @Test
+  fun `safetyRatings including severity`() =
+    goldenUnaryFile("success-including-severity.json") {
+      withTimeout(testTimeout) {
+        val response = apiController.generateContent(textGenerateContentRequest("prompt"))
+
+        response.candidates?.isEmpty() shouldBe false
+        response.candidates?.first()?.safetyRatings?.isEmpty() shouldBe false
+        response.candidates?.first()?.safetyRatings?.all {
+          it.probability == HarmProbability.NEGLIGIBLE
+        } shouldBe true
+        response.candidates?.first()?.safetyRatings?.all { it.probabilityScore != null } shouldBe
+          true
+        response.candidates?.first()?.safetyRatings?.all {
+          it.severity == HarmSeverity.NEGLIGIBLE
+        } shouldBe true
+        response.candidates?.first()?.safetyRatings?.all { it.severityScore != null } shouldBe true
       }
     }
 
@@ -134,6 +163,22 @@ internal class UnarySnapshotTests {
     }
 
   @Test
+  fun `citation returns correctly with missing license and startIndex`() =
+    goldenUnaryFile("success-citations-nolicense.json") {
+      withTimeout(testTimeout) {
+        val response = apiController.generateContent(textGenerateContentRequest("prompt"))
+
+        response.candidates?.isEmpty() shouldBe false
+        response.candidates?.first()?.citationMetadata?.citationSources?.isNotEmpty() shouldBe true
+        // Verify the values in the citation source
+        with(response.candidates?.first()?.citationMetadata?.citationSources?.first()!!) {
+          license shouldBe null
+          startIndex shouldBe 0
+        }
+      }
+    }
+
+  @Test
   fun `response includes usage metadata`() =
     goldenUnaryFile("success-usage-metadata.json") {
       withTimeout(testTimeout) {
@@ -147,6 +192,20 @@ internal class UnarySnapshotTests {
     }
 
   @Test
+  fun `response includes partial usage metadata`() =
+    goldenUnaryFile("success-partial-usage-metadata.json") {
+      withTimeout(testTimeout) {
+        val response = apiController.generateContent(textGenerateContentRequest("prompt"))
+
+        response.candidates?.isEmpty() shouldBe false
+        response.candidates?.first()?.finishReason shouldBe FinishReason.STOP
+        response.usageMetadata shouldNotBe null
+        response.usageMetadata?.promptTokenCount shouldBe 6
+        response.usageMetadata?.totalTokenCount shouldBe null
+      }
+    }
+
+  @Test
   fun `citation returns correctly when using alternative name`() =
     goldenUnaryFile("success-citations-altname.json") {
       withTimeout(testTimeout) {
@@ -154,6 +213,22 @@ internal class UnarySnapshotTests {
 
         response.candidates?.isEmpty() shouldBe false
         response.candidates?.first()?.citationMetadata?.citationSources?.isNotEmpty() shouldBe true
+      }
+    }
+
+  @Test
+  fun `properly translates json text`() =
+    goldenUnaryFile("success-constraint-decoding-json.json") {
+      withTimeout(testTimeout) {
+        val response = apiController.generateContent(textGenerateContentRequest("prompt"))
+
+        response.candidates?.isEmpty() shouldBe false
+        with(
+          response.candidates?.first()?.content?.parts?.first()?.shouldBeInstanceOf<TextPart>()
+        ) {
+          shouldNotBeNull()
+          JSON.decodeFromString<List<MountainColors>>(text).shouldNotBeEmpty()
+        }
       }
     }
 

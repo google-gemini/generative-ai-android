@@ -38,7 +38,7 @@ data class CountTokensResponse(val totalTokens: Int, val totalBillableCharacters
 
 @Serializable
 data class UsageMetadata(
-  val promptTokenCount: Int,
-  val candidatesTokenCount: Int?,
-  val totalTokenCount: Int
+  val promptTokenCount: Int? = null,
+  val candidatesTokenCount: Int? = null,
+  val totalTokenCount: Int? = null
 )

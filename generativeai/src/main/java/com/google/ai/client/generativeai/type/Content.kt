@@ -40,6 +40,9 @@ class Content @JvmOverloads constructor(val role: String? = "user", val parts: L
 
     @JvmName("addImage") fun image(image: Bitmap) = part(ImagePart(image))
 
+    @JvmName("addFileData")
+    fun fileData(uri: String, mimeType: String) = part(FileDataPart(uri, mimeType))
+
     fun build(): Content = Content(role, parts)
   }
 }

@@ -20,8 +20,8 @@ import com.google.gradle.types.Changelog
 import com.google.gradle.types.LinesChanged
 import com.google.gradle.types.RandomWordsGenerator
 import com.google.gradle.types.VersionType
-import java.io.File
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
@@ -44,18 +44,18 @@ import org.gradle.api.tasks.TaskAction
  * @see [RandomWordsGenerator]
  */
 abstract class MakeChangeTask : DefaultTask() {
-  @get:InputFile abstract val changesFile: Property<File>
+  @get:InputFile abstract val changesFile: RegularFileProperty
 
   @get:[Optional Input]
   abstract val message: Property<String>
 
-  @get:OutputFile abstract val outputFile: Property<File>
+  @get:OutputFile abstract val outputFile: RegularFileProperty
 
   @TaskAction
   fun add() {
-    val diff = LinesChanged.fromFile(changesFile.get())
+    val diff = LinesChanged.fromFile(changesFile.asFile.get())
     val changelog = Changelog(diff.bump, listOfNotNull(message.orNull))
 
-    changelog.toFile(outputFile.get())
+    changelog.toFile(outputFile.asFile.get())
   }
 }

@@ -63,17 +63,20 @@ constructor(@JsonNames("citations") val citationSources: List<CitationSources>)
 
 @Serializable
 data class CitationSources(
-  val startIndex: Int,
+  val startIndex: Int = 0,
   val endIndex: Int,
   val uri: String,
-  val license: String
+  val license: String? = null
 )
 
 @Serializable
 data class SafetyRating(
   val category: HarmCategory,
   val probability: HarmProbability,
-  val blocked: Boolean? = null // TODO(): any reason not to default to false?
+  val blocked: Boolean? = null, // TODO(): any reason not to default to false?
+  val probabilityScore: Float? = null,
+  val severity: HarmSeverity? = null,
+  val severityScore: Float? = null,
 )
 
 @Serializable(HarmProbabilitySerializer::class)
@@ -84,6 +87,16 @@ enum class HarmProbability {
   LOW,
   MEDIUM,
   HIGH
+}
+
+@Serializable
+enum class HarmSeverity {
+  UNKNOWN,
+  @SerialName("HARM_SEVERITY_UNSPECIFIED") UNSPECIFIED,
+  @SerialName("HARM_SEVERITY_NEGLIGIBLE") NEGLIGIBLE,
+  @SerialName("HARM_SEVERITY_LOW") LOW,
+  @SerialName("HARM_SEVERITY_MEDIUM") MEDIUM,
+  @SerialName("HARM_SEVERITY_HIGH") HIGH
 }
 
 @Serializable(FinishReasonSerializer::class)

@@ -34,6 +34,8 @@ import com.google.ai.client.generativeai.common.server.SafetyRating
 import com.google.ai.client.generativeai.common.shared.Blob
 import com.google.ai.client.generativeai.common.shared.BlobPart
 import com.google.ai.client.generativeai.common.shared.Content
+import com.google.ai.client.generativeai.common.shared.FileData
+import com.google.ai.client.generativeai.common.shared.FileDataPart
 import com.google.ai.client.generativeai.common.shared.FunctionCall
 import com.google.ai.client.generativeai.common.shared.FunctionCallPart
 import com.google.ai.client.generativeai.common.shared.FunctionResponse
@@ -47,11 +49,11 @@ import com.google.ai.client.generativeai.type.BlockThreshold
 import com.google.ai.client.generativeai.type.CitationMetadata
 import com.google.ai.client.generativeai.type.FunctionCallingConfig
 import com.google.ai.client.generativeai.type.FunctionDeclaration
-import com.google.ai.client.generativeai.type.GenerativeBeta
 import com.google.ai.client.generativeai.type.ImagePart
 import com.google.ai.client.generativeai.type.SerializationException
 import com.google.ai.client.generativeai.type.Tool
 import com.google.ai.client.generativeai.type.ToolConfig
+import com.google.ai.client.generativeai.type.UsageMetadata
 import com.google.ai.client.generativeai.type.content
 import java.io.ByteArrayOutputStream
 import kotlinx.serialization.json.Json
@@ -76,6 +78,8 @@ internal fun com.google.ai.client.generativeai.type.Part.toInternal(): Part {
       FunctionCallPart(FunctionCall(name, args.orEmpty()))
     is com.google.ai.client.generativeai.type.FunctionResponsePart ->
       FunctionResponsePart(FunctionResponse(name, response.toInternal()))
+    is com.google.ai.client.generativeai.type.FileDataPart ->
+      FileDataPart(FileData(fileUri = uri, mimeType = mimeType))
     else ->
       throw SerializationException(
         "The given subclass of Part (${javaClass.simpleName}) is not supported in the serialization yet."
@@ -94,6 +98,7 @@ internal fun com.google.ai.client.generativeai.type.GenerationConfig.toInternal(
     candidateCount = candidateCount,
     maxOutputTokens = maxOutputTokens,
     stopSequences = stopSequences,
+    responseMimeType = responseMimeType
   )
 
 internal fun com.google.ai.client.generativeai.type.HarmCategory.toInternal() =
@@ -116,11 +121,9 @@ internal fun BlockThreshold.toInternal() =
     BlockThreshold.UNSPECIFIED -> HarmBlockThreshold.UNSPECIFIED
   }
 
-@GenerativeBeta
 internal fun Tool.toInternal() =
   com.google.ai.client.generativeai.common.client.Tool(functionDeclarations.map { it.toInternal() })
 
-@GenerativeBeta
 internal fun ToolConfig.toInternal() =
   com.google.ai.client.generativeai.common.client.ToolConfig(
     com.google.ai.client.generativeai.common.client.FunctionCallingConfig(
@@ -135,7 +138,9 @@ internal fun ToolConfig.toInternal() =
     )
   )
 
-@GenerativeBeta
+internal fun com.google.ai.client.generativeai.common.UsageMetadata.toPublic(): UsageMetadata =
+  UsageMetadata(promptTokenCount ?: 0, candidatesTokenCount ?: 0, totalTokenCount ?: 0)
+
 internal fun FunctionDeclaration.toInternal() =
   com.google.ai.client.generativeai.common.client.FunctionDeclaration(
     name,
@@ -196,6 +201,11 @@ internal fun Part.toPublic(): com.google.ai.client.generativeai.type.Part {
       com.google.ai.client.generativeai.type.FunctionResponsePart(
         functionResponse.name,
         functionResponse.response.toPublic(),
+      )
+    is FileDataPart ->
+      com.google.ai.client.generativeai.type.FileDataPart(
+        fileData.fileUri,
+        fileData.mimeType,
       )
     else ->
       throw SerializationException(
@@ -264,6 +274,7 @@ internal fun GenerateContentResponse.toPublic() =
   com.google.ai.client.generativeai.type.GenerateContentResponse(
     candidates?.map { it.toPublic() }.orEmpty(),
     promptFeedback?.toPublic(),
+    usageMetadata?.toPublic()
   )
 
 internal fun CountTokensResponse.toPublic() =

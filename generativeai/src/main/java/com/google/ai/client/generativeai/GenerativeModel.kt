@@ -29,7 +29,6 @@ import com.google.ai.client.generativeai.type.FourParameterFunction
 import com.google.ai.client.generativeai.type.FunctionCallPart
 import com.google.ai.client.generativeai.type.GenerateContentResponse
 import com.google.ai.client.generativeai.type.GenerationConfig
-import com.google.ai.client.generativeai.type.GenerativeBeta
 import com.google.ai.client.generativeai.type.GoogleGenerativeAIException
 import com.google.ai.client.generativeai.type.InvalidStateException
 import com.google.ai.client.generativeai.type.NoParameterFunction
@@ -58,6 +57,7 @@ import org.json.JSONObject
  * @property generationConfig configuration parameters to use for content generation
  * @property safetySettings the safety bounds to use during alongside prompts during content
  *   generation
+ * @property systemInstruction contains a [Content] that directs the model to behave a certain way
  * @property requestOptions configuration options to utilize during backend communication
  */
 @OptIn(ExperimentalSerializationApi::class)
@@ -69,6 +69,7 @@ internal constructor(
   val safetySettings: List<SafetySetting>? = null,
   val tools: List<Tool>? = null,
   val toolConfig: ToolConfig? = null,
+  val systemInstruction: Content? = null,
   val requestOptions: RequestOptions = RequestOptions(),
   private val controller: APIController,
 ) {
@@ -79,9 +80,10 @@ internal constructor(
     apiKey: String,
     generationConfig: GenerationConfig? = null,
     safetySettings: List<SafetySetting>? = null,
+    requestOptions: RequestOptions = RequestOptions(),
     tools: List<Tool>? = null,
     toolConfig: ToolConfig? = null,
-    requestOptions: RequestOptions = RequestOptions(),
+    systemInstruction: Content? = null,
   ) : this(
     modelName,
     apiKey,
@@ -89,12 +91,13 @@ internal constructor(
     safetySettings,
     tools,
     toolConfig,
+    systemInstruction?.let { Content("system", it.parts) },
     requestOptions,
     APIController(
       apiKey,
       modelName,
       requestOptions.toInternal(),
-      "genai-android/${BuildConfig.VERSION_NAME}"
+      "genai-android/${BuildConfig.VERSION_NAME}",
     ),
   )
 
@@ -205,7 +208,6 @@ internal constructor(
    *   parameters
    * @return The output of the requested function call
    */
-  @OptIn(GenerativeBeta::class)
   suspend fun executeFunction(functionCallPart: FunctionCallPart): JSONObject {
     if (tools == null) {
       throw InvalidStateException("No registered tools")
@@ -229,7 +231,6 @@ internal constructor(
     }
   }
 
-  @OptIn(GenerativeBeta::class)
   private fun constructRequest(vararg prompt: Content) =
     GenerateContentRequest(
       modelName,
@@ -238,6 +239,7 @@ internal constructor(
       generationConfig?.toInternal(),
       tools?.map { it.toInternal() },
       toolConfig?.toInternal(),
+      systemInstruction?.toInternal(),
     )
 
   private fun constructCountTokensRequest(vararg prompt: Content) =
