@@ -118,7 +118,7 @@ internal constructor(
       .map { it.validate() }
       .catch { throw GoogleGenerativeAIException.from(it) }
 
-  suspend fun countTokens(request: CountTokensRequest): CountTokensResponse =
+  suspend fun countTokens(request: GenerateContentRequest): CountTokensResponse =
     try {
       client
         .post("${requestOptions.endpoint}/${requestOptions.apiVersion}/$model:countTokens") {
@@ -131,11 +131,8 @@ internal constructor(
       throw GoogleGenerativeAIException.from(e)
     }
 
-  private fun HttpRequestBuilder.applyCommonConfiguration(request: Request) {
-    when (request) {
-      is GenerateContentRequest -> setBody<GenerateContentRequest>(request)
-      is CountTokensRequest -> setBody<CountTokensRequest>(request)
-    }
+  private fun HttpRequestBuilder.applyCommonConfiguration(request: GenerateContentRequest) {
+    setBody(request)
     contentType(ContentType.Application.Json)
     header("x-goog-api-key", key)
     header("x-goog-api-client", apiClient)

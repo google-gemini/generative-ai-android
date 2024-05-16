@@ -37,7 +37,3 @@ data class GenerateContentRequest(
   @SerialName("tool_config") var toolConfig: ToolConfig? = null,
   @SerialName("system_instruction") val systemInstruction: Content? = null,
 ) : Request
-
-@Serializable
-data class CountTokensRequest(@Transient val model: String? = null, val contents: List<Content>) :
-  Request

@@ -175,7 +175,7 @@ internal constructor(
    * @return A [CountTokensResponse] containing the number of tokens in the prompt.
    */
   suspend fun countTokens(vararg prompt: Content): CountTokensResponse {
-    return controller.countTokens(constructCountTokensRequest(*prompt)).toPublic()
+    return controller.countTokens(constructRequest(*prompt)).toPublic()
   }
 
   /**
@@ -238,9 +238,6 @@ internal constructor(
       toolConfig?.toInternal(),
       systemInstruction?.toInternal(),
     )
-
-  private fun constructCountTokensRequest(vararg prompt: Content) =
-    CountTokensRequest(modelName, prompt.map { it.toInternal() })
 
   private fun GenerateContentResponse.validate() = apply {
     if (candidates.isEmpty() && promptFeedback == null) {
