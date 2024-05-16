@@ -18,7 +18,6 @@ package com.google.ai.client.generativeai
 
 import android.graphics.Bitmap
 import com.google.ai.client.generativeai.common.APIController
-import com.google.ai.client.generativeai.common.CountTokensRequest
 import com.google.ai.client.generativeai.common.GenerateContentRequest
 import com.google.ai.client.generativeai.internal.util.toInternal
 import com.google.ai.client.generativeai.internal.util.toPublic
