@@ -117,7 +117,4 @@ data class GRpcError(
   val details: List<GRpcErrorDetails>,
 )
 
-@Serializable
-data class GRpcErrorDetails(
-  val reason: String? = null
-)
+@Serializable data class GRpcErrorDetails(val reason: String? = null)
