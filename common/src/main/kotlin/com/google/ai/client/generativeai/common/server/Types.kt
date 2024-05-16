@@ -114,4 +114,10 @@ enum class FinishReason {
 data class GRpcError(
   val code: Int,
   val message: String,
+  val details: List<GRpcErrorDetails>,
+)
+
+@Serializable
+data class GRpcErrorDetails(
+  val reason: String? = null
 )
