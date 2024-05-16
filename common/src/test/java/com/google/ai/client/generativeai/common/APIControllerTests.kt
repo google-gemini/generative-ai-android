@@ -182,7 +182,7 @@ internal class RequestFormatTests {
         null
       )
 
-    withTimeout(5.seconds) { controller.countTokens(textCountTokenRequest("cats")) }
+    withTimeout(5.seconds) { controller.countTokens(textGenerateContentRequest("cats")) }
 
     val requestBodyAsText = (mockEngine.requestHistory.first().body as TextContent).text
     requestBodyAsText shouldContainJsonKey "contents"
@@ -206,7 +206,7 @@ internal class RequestFormatTests {
         null
       )
 
-    withTimeout(5.seconds) { controller.countTokens(textCountTokenRequest("cats")) }
+    withTimeout(5.seconds) { controller.countTokens(textGenerateContentRequest("cats")) }
 
     mockEngine.requestHistory.first().headers["x-goog-api-client"] shouldBe TEST_CLIENT_ID
   }
@@ -276,7 +276,7 @@ internal class RequestFormatTests {
         testHeaderProvider
       )
 
-    withTimeout(5.seconds) { controller.countTokens(textCountTokenRequest("cats")) }
+    withTimeout(5.seconds) { controller.countTokens(textGenerateContentRequest("cats")) }
 
     mockEngine.requestHistory.first().headers["header1"] shouldBe "value1"
     mockEngine.requestHistory.first().headers["header2"] shouldBe "value2"
@@ -310,7 +310,7 @@ internal class RequestFormatTests {
         testHeaderProvider
       )
 
-    withTimeout(5.seconds) { controller.countTokens(textCountTokenRequest("cats")) }
+    withTimeout(5.seconds) { controller.countTokens(textGenerateContentRequest("cats")) }
 
     mockEngine.requestHistory.first().headers.contains("header1") shouldBe false
   }
@@ -365,6 +365,3 @@ fun textGenerateContentRequest(prompt: String) =
     model = "unused",
     contents = listOf(Content(parts = listOf(TextPart(prompt))))
   )
-
-fun textCountTokenRequest(prompt: String) =
-  CountTokensRequest(model = "unused", contents = listOf(Content(parts = listOf(TextPart(prompt)))))
