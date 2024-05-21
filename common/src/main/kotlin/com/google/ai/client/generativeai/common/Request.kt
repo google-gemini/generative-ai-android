@@ -23,7 +23,6 @@ import com.google.ai.client.generativeai.common.shared.Content
 import com.google.ai.client.generativeai.common.shared.SafetySetting
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 
 sealed interface Request
 
@@ -39,6 +38,4 @@ data class GenerateContentRequest(
 ) : Request
 
 @Serializable
-data class CountTokensRequest(
-  val generateContentRequest: GenerateContentRequest
-) : Request
+data class CountTokensRequest(val generateContentRequest: GenerateContentRequest) : Request
