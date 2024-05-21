@@ -29,7 +29,7 @@ sealed interface Request
 
 @Serializable
 data class GenerateContentRequest(
-  @Transient val model: String? = null,
+  val model: String? = null,
   val contents: List<Content>,
   @SerialName("safety_settings") val safetySettings: List<SafetySetting>? = null,
   @SerialName("generation_config") val generationConfig: GenerationConfig? = null,
@@ -39,5 +39,6 @@ data class GenerateContentRequest(
 ) : Request
 
 @Serializable
-data class CountTokensRequest(@Transient val model: String? = null, val contents: List<Content>) :
-  Request
+data class CountTokensRequest(
+  val generateContentRequest: GenerateContentRequest
+) : Request

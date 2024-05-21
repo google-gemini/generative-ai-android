@@ -85,7 +85,7 @@ internal constructor(
     toolConfig: ToolConfig? = null,
     systemInstruction: Content? = null,
   ) : this(
-    modelName,
+    fullModelName(modelName),
     apiKey,
     generationConfig,
     safetySettings,
@@ -240,7 +240,7 @@ internal constructor(
     )
 
   private fun constructCountTokensRequest(vararg prompt: Content) =
-    CountTokensRequest(modelName, prompt.map { it.toInternal() })
+    CountTokensRequest(constructRequest(*prompt))
 
   private fun GenerateContentResponse.validate() = apply {
     if (candidates.isEmpty() && promptFeedback == null) {
@@ -251,5 +251,13 @@ internal constructor(
       .mapNotNull { it.finishReason }
       .firstOrNull { it != FinishReason.STOP }
       ?.let { throw ResponseStoppedException(this) }
+  }
+  companion object{
+    /**
+     * Ensures the model name provided has a `models/` prefix
+     *
+     * Models must be prepended with the `models/` prefix when communicating with the backend.
+     */
+    private fun fullModelName(name: String): String = name.takeIf { it.contains("/") } ?: "models/$name"
   }
 }
