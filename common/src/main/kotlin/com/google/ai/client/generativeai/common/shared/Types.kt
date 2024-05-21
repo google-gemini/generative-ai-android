@@ -76,7 +76,11 @@ data class Blob(
 )
 
 @Serializable
-data class SafetySetting(val category: HarmCategory, val threshold: HarmBlockThreshold)
+data class SafetySetting(
+  val category: HarmCategory,
+  val threshold: HarmBlockThreshold,
+  val method: HarmBlockMethod? = null,
+)
 
 @Serializable
 enum class HarmBlockThreshold {
@@ -85,6 +89,13 @@ enum class HarmBlockThreshold {
   BLOCK_MEDIUM_AND_ABOVE,
   BLOCK_ONLY_HIGH,
   BLOCK_NONE,
+}
+
+@Serializable
+enum class HarmBlockMethod {
+  @SerialName("HARM_BLOCK_METHOD_UNSPECIFIED") UNSPECIFIED,
+  SEVERITY,
+  PROBABILITY,
 }
 
 object PartSerializer : JsonContentPolymorphicSerializer<Part>(Part::class) {
