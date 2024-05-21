@@ -367,4 +367,4 @@ fun textGenerateContentRequest(prompt: String) =
   )
 
 fun textCountTokenRequest(prompt: String) =
-  CountTokensRequest(model = "unused", contents = listOf(Content(parts = listOf(TextPart(prompt)))))
+  CountTokensRequest(textGenerateContentRequest(prompt))
