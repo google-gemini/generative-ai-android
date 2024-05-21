@@ -25,7 +25,6 @@ import com.google.ai.client.generativeai.common.util.createResponses
 import com.google.ai.client.generativeai.common.util.doBlocking
 import com.google.ai.client.generativeai.common.util.prepareStreamingResponse
 import io.kotest.assertions.json.shouldContainJsonKey
-import io.kotest.assertions.json.shouldNotContainJsonKey
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
