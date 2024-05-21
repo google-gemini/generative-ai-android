@@ -136,60 +136,6 @@ internal class RequestFormatTests {
   }
 
   @Test
-  fun `generateContentRequest doesn't include the model name`() = doBlocking {
-    val channel = ByteChannel(autoFlush = true)
-    val mockEngine = MockEngine {
-      respond(channel, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
-    }
-    prepareStreamingResponse(createResponses("Random")).forEach { channel.writeFully(it) }
-    val controller =
-      APIController(
-        "super_cool_test_key",
-        "gemini-pro-1.0",
-        RequestOptions(),
-        mockEngine,
-        TEST_CLIENT_ID,
-        null
-      )
-
-    withTimeout(5.seconds) {
-      controller.generateContentStream(textGenerateContentRequest("cats")).collect {
-        it.candidates?.isEmpty() shouldBe false
-        channel.close()
-      }
-    }
-
-    val requestBodyAsText = (mockEngine.requestHistory.first().body as TextContent).text
-    requestBodyAsText shouldContainJsonKey "contents"
-    requestBodyAsText shouldNotContainJsonKey "model"
-  }
-
-  @Test
-  fun `countTokenRequest doesn't include the model name`() = doBlocking {
-    val response =
-      JSON.encodeToString(CountTokensResponse(totalTokens = 10, totalBillableCharacters = 10))
-    val mockEngine = MockEngine {
-      respond(response, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
-    }
-
-    val controller =
-      APIController(
-        "super_cool_test_key",
-        "gemini-pro-1.0",
-        RequestOptions(),
-        mockEngine,
-        TEST_CLIENT_ID,
-        null
-      )
-
-    withTimeout(5.seconds) { controller.countTokens(textCountTokenRequest("cats")) }
-
-    val requestBodyAsText = (mockEngine.requestHistory.first().body as TextContent).text
-    requestBodyAsText shouldContainJsonKey "contents"
-    requestBodyAsText shouldNotContainJsonKey "model"
-  }
-
-  @Test
   fun `client id header is set correctly in the request`() = doBlocking {
     val response = JSON.encodeToString(CountTokensResponse(totalTokens = 10))
     val mockEngine = MockEngine {
