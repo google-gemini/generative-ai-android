@@ -225,11 +225,11 @@ private suspend fun validateResponse(response: HttpResponse) {
   val text = response.bodyAsText()
   val error =
     try {
-      JSON.decodeFromString<GRpcErrorResponse>(text)
+      JSON.decodeFromString<GRpcErrorResponse>(text).error
     } catch (e: Throwable) {
       throw ServerException("Unexpected Response:\n$text $e")
     }
-  val message = error.error.message
+  val message = error.message
   if (message.contains("API key not valid")) {
     throw InvalidAPIKeyException(message)
   }
@@ -240,7 +240,7 @@ private suspend fun validateResponse(response: HttpResponse) {
   if (message.contains("quota")) {
     throw QuotaExceededException(message)
   }
-  if (error.error.details.any { "SERVICE_DISABLED" == it.reason }) {
+  if (error.details.any { "SERVICE_DISABLED" == it.reason }) {
     throw ServiceDisabledException(message)
   }
   throw ServerException(message)
