@@ -366,5 +366,4 @@ fun textGenerateContentRequest(prompt: String) =
     contents = listOf(Content(parts = listOf(TextPart(prompt))))
   )
 
-fun textCountTokenRequest(prompt: String) =
-  CountTokensRequest(textGenerateContentRequest(prompt))
+fun textCountTokenRequest(prompt: String) = CountTokensRequest(textGenerateContentRequest(prompt))
