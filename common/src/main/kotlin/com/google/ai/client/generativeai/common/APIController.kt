@@ -223,12 +223,13 @@ private fun fullModelName(name: String): String = name.takeIf { it.contains("/")
 private suspend fun validateResponse(response: HttpResponse) {
   if (response.status == HttpStatusCode.OK) return
   val text = response.bodyAsText()
-  val message =
+  val error =
     try {
-      JSON.decodeFromString<GRpcErrorResponse>(text).error.message
+      JSON.decodeFromString<GRpcErrorResponse>(text).error
     } catch (e: Throwable) {
-      "Unexpected Response:\n$text"
+      throw ServerException("Unexpected Response:\n$text $e")
     }
+  val message = error.message
   if (message.contains("API key not valid")) {
     throw InvalidAPIKeyException(message)
   }
@@ -238,6 +239,9 @@ private suspend fun validateResponse(response: HttpResponse) {
   }
   if (message.contains("quota")) {
     throw QuotaExceededException(message)
+  }
+  if (error.details.any { "SERVICE_DISABLED" == it.reason }) {
+    throw ServiceDisabledException(message)
   }
   throw ServerException(message)
 }

@@ -112,6 +112,10 @@ class RequestTimeoutException(message: String, cause: Throwable? = null) :
 class QuotaExceededException(message: String, cause: Throwable? = null) :
   GoogleGenerativeAIException(message, cause)
 
+/** The service is not enabled for this project. Visit the Firebase Console to enable it. */
+class ServiceDisabledException(message: String, cause: Throwable? = null) :
+  GoogleGenerativeAIException(message, cause)
+
 /** Catch all case for exceptions not explicitly expected. */
 class UnknownException(message: String, cause: Throwable? = null) :
   GoogleGenerativeAIException(message, cause)
