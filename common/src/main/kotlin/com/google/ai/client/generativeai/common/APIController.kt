@@ -240,8 +240,20 @@ private suspend fun validateResponse(response: HttpResponse) {
   if (message.contains("quota")) {
     throw QuotaExceededException(message)
   }
-  if (error.details.any { "SERVICE_DISABLED" == it.reason }) {
-    throw ServiceDisabledException(message)
+  val serviceDisabledError = error.details.first { "SERVICE_DISABLED" == it.reason }
+  if (serviceDisabledError != null) {
+    val projectID = serviceDisabledError.metadata?.consumer?.split("/")?.last() ?: ""
+    throw ServiceDisabledException(
+      """
+    The Vertex AI for Firebase SDK requires the Firebase ML API `firebaseml.googleapis.com` to 
+    be enabled for your project. Get started in the Firebase Console 
+    (https://console.firebase.google.com/project/${projectID}/genai/vertex) or verify that the 
+    API is enabled in the Google Cloud Console 
+    (https://console.developers.google.com/apis/api/firebaseml.googleapis.com/overview?project=
+    ${projectID})).
+    """
+        .trimIndent()
+    )
   }
   throw ServerException(message)
 }
