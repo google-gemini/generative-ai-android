@@ -37,10 +37,10 @@ val GenerativeViewModelFactory = object : ViewModelProvider.Factory {
         return with(viewModelClass) {
             when {
                 isAssignableFrom(SummarizeViewModel::class.java) -> {
-                    // Initialize a GenerativeModel with the `gemini-pro` AI model
+                    // Initialize a GenerativeModel with the `gemini-flash` AI model
                     // for text generation
                     val generativeModel = GenerativeModel(
-                        modelName = "gemini-1.0-pro",
+                        modelName = "gemini-1.5-flash-latest",
                         apiKey = BuildConfig.apiKey,
                         generationConfig = config
                     )
@@ -48,10 +48,10 @@ val GenerativeViewModelFactory = object : ViewModelProvider.Factory {
                 }
 
                 isAssignableFrom(PhotoReasoningViewModel::class.java) -> {
-                    // Initialize a GenerativeModel with the `gemini-pro-vision` AI model
+                    // Initialize a GenerativeModel with the `gemini-flash` AI model
                     // for multimodal text generation
                     val generativeModel = GenerativeModel(
-                        modelName = "gemini-1.0-pro-vision-latest",
+                        modelName = "gemini-1.5-flash-latest",
                         apiKey = BuildConfig.apiKey,
                         generationConfig = config
                     )
@@ -59,9 +59,9 @@ val GenerativeViewModelFactory = object : ViewModelProvider.Factory {
                 }
 
                 isAssignableFrom(ChatViewModel::class.java) -> {
-                    // Initialize a GenerativeModel with the `gemini-pro` AI model for chat
+                    // Initialize a GenerativeModel with the `gemini-flash` AI model for chat
                     val generativeModel = GenerativeModel(
-                        modelName = "gemini-1.0-pro",
+                        modelName = "gemini-1.5-flash-latest",
                         apiKey = BuildConfig.apiKey,
                         generationConfig = config
                     )
