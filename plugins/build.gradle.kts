@@ -15,11 +15,11 @@
  */
 
 plugins {
-    `java-library`
+//    `java-library`
     `java-gradle-plugin`
     `kotlin-dsl`
     kotlin("jvm") version "1.8.22"
-    id("com.ncorti.ktfmt.gradle") version "0.16.0"
+    id("com.ncorti.ktfmt.gradle") version "0.18.0"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.2"
     kotlin("plugin.serialization") version "1.8.22"
 }
@@ -57,7 +57,7 @@ gradlePlugin {
 }
 
 dependencies {
-    implementation("com.android.tools.build:gradle:8.1.3")
+    implementation("com.android.tools.build:gradle:8.4.1")
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.22")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
     implementation("org.jetbrains.kotlinx.binary-compatibility-validator:org.jetbrains.kotlinx.binary-compatibility-validator.gradle.plugin:0.13.2")

@@ -14,13 +14,19 @@
  * limitations under the License.
  */
 
+@file:Suppress("UnstableApiUsage")
+@file:OptIn(ExperimentalKotlinGradlePluginApi::class)
+
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+
 plugins {
-    id("com.android.library")
+    id("com.android.kotlin.multiplatform.library") // version "8.6.0-alpha02"
+    kotlin("multiplatform") version "2.0.0"
     id("maven-publish")
-    id("com.ncorti.ktfmt.gradle")
+    id("com.ncorti.ktfmt.gradle") version "0.18.0"
     id("changelog-plugin")
     id("release-plugin")
-    kotlin("android")
     kotlin("plugin.serialization")
 }
 
@@ -28,75 +34,54 @@ ktfmt {
     googleStyle()
 }
 
-android {
-    namespace = "com.google.ai.client.generativeai.common"
-    compileSdk = 34
-
-    buildFeatures.buildConfig = true
-
-    defaultConfig {
-        minSdk = 21
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
-
-        buildConfigField("String", "VERSION_NAME", "\"${project.version.toString()}\"")
-    }
-
-    publishing {
-        singleVariant("release") {
-            withSourcesJar()
-        }
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-
-    testOptions {
-        unitTests.isReturnDefaultValues = true
-    }
-}
-
-dependencies {
+kotlin {
     val ktorVersion = "2.3.2"
+    androidLibrary {
+        compileSdk = 34
+        minSdk = 21
+        namespace = "com.google.ai.client.generativeai.common"
+        optimization {
+            minify = false
+            consumerKeepRules.file("consumer-rules.pro")
+            consumerKeepRules.publish = true
+        }
+        withAndroidTestOnJvm {
+            isReturnDefaultValues = true
+        }
+    }
+    jvmToolchain(17)
+    compilerOptions {
+        apiVersion.set(KotlinVersion.KOTLIN_1_8)
+        languageVersion.set(KotlinVersion.KOTLIN_1_8)
+    }
 
-    implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
-    implementation("io.ktor:ktor-client-core:$ktorVersion")
-    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-    implementation("io.ktor:ktor-client-logging:$ktorVersion")
+    jvm()
+    sourceSets {
+        commonMain.dependencies {
+            implementation("io.ktor:ktor-client-core:$ktorVersion")
+            implementation("org.jetbrains.kotlin:kotlin-stdlib-common:1.8.22")
+            implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+            implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+            implementation("io.ktor:ktor-client-logging:$ktorVersion")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("org.slf4j:slf4j-nop:2.0.9")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactive:1.7.3")
-    implementation("org.reactivestreams:reactive-streams:1.0.3")
-
-    implementation("com.google.guava:listenablefuture:1.0")
-    implementation("androidx.concurrent:concurrent-futures:1.2.0-alpha02")
-    implementation("androidx.concurrent:concurrent-futures-ktx:1.2.0-alpha02")
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("io.kotest:kotest-assertions-core:4.0.7")
-    testImplementation("io.kotest:kotest-assertions-jvm:4.0.7")
-    testImplementation("io.kotest:kotest-assertions-json:4.0.7")
-    testImplementation("io.ktor:ktor-client-mock:$ktorVersion")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+            implementation("org.slf4j:slf4j-nop:2.0.9")
+        }
+        androidMain.dependencies {
+            implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
+            implementation("org.jetbrains.kotlin:kotlin-stdlib:1.8.22")
+        }
+        jvmMain.dependencies {
+            implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
+            implementation("org.jetbrains.kotlin:kotlin-stdlib:1.8.22")
+        }
+        jvmTest.dependencies {
+            implementation("junit:junit:4.13.2")
+            implementation("io.kotest:kotest-assertions-core-jvm:4.0.7")
+            implementation("io.kotest:kotest-assertions-json-jvm:4.0.7")
+            implementation("io.ktor:ktor-client-mock-jvm:$ktorVersion")
+        }
+    }
 }
 
 publishing {
@@ -112,9 +97,6 @@ publishing {
                         url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
                     }
                 }
-            }
-            afterEvaluate {
-                from(components["release"])
             }
         }
     }
