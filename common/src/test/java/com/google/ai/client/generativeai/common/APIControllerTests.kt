@@ -95,7 +95,7 @@ internal class RequestFormatTests {
         RequestOptions(),
         mockEngine,
         "genai-android/${BuildConfig.VERSION_NAME}",
-        null
+        null,
       )
 
     withTimeout(5.seconds) {
@@ -122,7 +122,7 @@ internal class RequestFormatTests {
         RequestOptions(endpoint = "https://my.custom.endpoint"),
         mockEngine,
         TEST_CLIENT_ID,
-        null
+        null,
       )
 
     withTimeout(5.seconds) {
@@ -149,7 +149,7 @@ internal class RequestFormatTests {
         RequestOptions(),
         mockEngine,
         TEST_CLIENT_ID,
-        null
+        null,
       )
 
     withTimeout(5.seconds) {
@@ -179,7 +179,7 @@ internal class RequestFormatTests {
         RequestOptions(),
         mockEngine,
         TEST_CLIENT_ID,
-        null
+        null,
       )
 
     withTimeout(5.seconds) { controller.countTokens(textCountTokenRequest("cats")) }
@@ -203,7 +203,7 @@ internal class RequestFormatTests {
         RequestOptions(),
         mockEngine,
         TEST_CLIENT_ID,
-        null
+        null,
       )
 
     withTimeout(5.seconds) { controller.countTokens(textCountTokenRequest("cats")) }
@@ -226,7 +226,7 @@ internal class RequestFormatTests {
         RequestOptions(),
         mockEngine,
         TEST_CLIENT_ID,
-        null
+        null,
       )
 
     withTimeout(5.seconds) {
@@ -239,7 +239,7 @@ internal class RequestFormatTests {
               ToolConfig(
                 functionCallingConfig =
                   FunctionCallingConfig(mode = FunctionCallingConfig.Mode.AUTO)
-              )
+              ),
           )
         )
         .collect { channel.close() }
@@ -273,7 +273,7 @@ internal class RequestFormatTests {
         RequestOptions(),
         mockEngine,
         TEST_CLIENT_ID,
-        testHeaderProvider
+        testHeaderProvider,
       )
 
     withTimeout(5.seconds) { controller.countTokens(textCountTokenRequest("cats")) }
@@ -307,7 +307,7 @@ internal class RequestFormatTests {
         RequestOptions(),
         mockEngine,
         TEST_CLIENT_ID,
-        testHeaderProvider
+        testHeaderProvider,
       )
 
     withTimeout(5.seconds) { controller.countTokens(textCountTokenRequest("cats")) }
@@ -333,7 +333,7 @@ internal class ModelNamingTests(private val modelName: String, private val actua
         RequestOptions(),
         mockEngine,
         TEST_CLIENT_ID,
-        null
+        null,
       )
 
     withTimeout(5.seconds) {
@@ -363,7 +363,7 @@ internal class ModelNamingTests(private val modelName: String, private val actua
 fun textGenerateContentRequest(prompt: String) =
   GenerateContentRequest(
     model = "unused",
-    contents = listOf(Content(parts = listOf(TextPart(prompt))))
+    contents = listOf(Content(parts = listOf(TextPart(prompt)))),
   )
 
 fun textCountTokenRequest(prompt: String) =

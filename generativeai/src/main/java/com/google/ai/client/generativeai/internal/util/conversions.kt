@@ -204,10 +204,7 @@ internal fun Part.toPublic(): com.google.ai.client.generativeai.type.Part {
         functionResponse.response.toPublic(),
       )
     is FileDataPart ->
-      com.google.ai.client.generativeai.type.FileDataPart(
-        fileData.fileUri,
-        fileData.mimeType,
-      )
+      com.google.ai.client.generativeai.type.FileDataPart(fileData.fileUri, fileData.mimeType)
     else ->
       throw SerializationException(
         "Unsupported part type \"${javaClass.simpleName}\" provided. This model may not be supported by this SDK."
@@ -275,7 +272,7 @@ internal fun GenerateContentResponse.toPublic() =
   com.google.ai.client.generativeai.type.GenerateContentResponse(
     candidates?.map { it.toPublic() }.orEmpty(),
     promptFeedback?.toPublic(),
-    usageMetadata?.toPublic()
+    usageMetadata?.toPublic(),
   )
 
 internal fun CountTokensResponse.toPublic() =

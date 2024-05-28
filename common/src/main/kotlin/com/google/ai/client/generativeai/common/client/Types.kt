@@ -52,11 +52,7 @@ data class FunctionCallingConfig(val mode: Mode) {
 }
 
 @Serializable
-data class FunctionDeclaration(
-  val name: String,
-  val description: String,
-  val parameters: Schema,
-)
+data class FunctionDeclaration(val name: String, val description: String, val parameters: Schema)
 
 @Serializable
 data class Schema(

@@ -66,14 +66,10 @@ data class Content(@EncodeDefault val role: String? = "user", val parts: List<Pa
 @Serializable
 data class FileData(
   @SerialName("mime_type") val mimeType: String,
-  @SerialName("file_uri") val fileUri: String
+  @SerialName("file_uri") val fileUri: String,
 )
 
-@Serializable
-data class Blob(
-  @SerialName("mime_type") val mimeType: String,
-  val data: Base64,
-)
+@Serializable data class Blob(@SerialName("mime_type") val mimeType: String, val data: Base64)
 
 @Serializable
 data class SafetySetting(

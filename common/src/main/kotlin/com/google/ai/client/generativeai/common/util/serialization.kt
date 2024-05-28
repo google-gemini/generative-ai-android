@@ -55,7 +55,7 @@ class FirstOrdinalSerializer<T : Enum<T>>(private val enumClass: KClass<T>) : KS
         |GitHub to bring it to our attention:
         |https://github.com/google/google-ai-android
        """
-        .trimMargin()
+        .trimMargin(),
     )
   }
 
