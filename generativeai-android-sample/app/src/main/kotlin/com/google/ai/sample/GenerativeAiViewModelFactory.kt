@@ -20,8 +20,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.google.ai.client.generativeai.GenerativeModel
-import com.google.ai.client.generativeai.type.FunctionType
-import com.google.ai.client.generativeai.type.Schema
 import com.google.ai.client.generativeai.type.generationConfig
 import com.google.ai.sample.feature.chat.ChatViewModel
 import com.google.ai.sample.feature.multimodal.PhotoReasoningViewModel
@@ -33,13 +31,7 @@ val GenerativeViewModelFactory = object : ViewModelProvider.Factory {
         extras: CreationExtras
     ): T {
         val config = generationConfig {
-            //temperature = 0.7f
-            responseMimeType = "application/json"
-            schema = Schema.obj(
-                "schema",
-                "a response naming a person",
-                Schema.str("name", "The name of the person")
-            )
+            temperature = 0.7f
         }
 
         return with(viewModelClass) {
@@ -69,7 +61,7 @@ val GenerativeViewModelFactory = object : ViewModelProvider.Factory {
                 isAssignableFrom(ChatViewModel::class.java) -> {
                     // Initialize a GenerativeModel with the `gemini-pro` AI model for chat
                     val generativeModel = GenerativeModel(
-                        modelName = "gemini-1.5-pro",
+                        modelName = "gemini-1.0-pro",
                         apiKey = BuildConfig.apiKey,
                         generationConfig = config
                     )

@@ -75,6 +75,5 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-    implementation("com.google.ai.client.generativeai:generativeai:0.7.0")
-    //implementation("com.google.ai.client.generativeai:generativeai-common:0.6.0")
+    implementation("com.google.ai.client.generativeai:generativeai:0.6.0")
 }
