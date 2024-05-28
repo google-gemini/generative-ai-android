@@ -30,6 +30,7 @@ data class GenerationConfig(
   @SerialName("response_mime_type") val responseMimeType: String? = null,
   @SerialName("presence_penalty") val presencePenalty: Float? = null,
   @SerialName("frequency_penalty") val frequencyPenalty: Float? = null,
+  val schema: Schema? = null,
 )
 
 @Serializable data class Tool(val functionDeclarations: List<FunctionDeclaration>)

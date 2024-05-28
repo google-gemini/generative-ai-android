@@ -98,7 +98,8 @@ internal fun com.google.ai.client.generativeai.type.GenerationConfig.toInternal(
     candidateCount = candidateCount,
     maxOutputTokens = maxOutputTokens,
     stopSequences = stopSequences,
-    responseMimeType = responseMimeType
+    responseMimeType = responseMimeType,
+    schema = schema?.toInternal(),
   )
 
 internal fun com.google.ai.client.generativeai.type.HarmCategory.toInternal() =
