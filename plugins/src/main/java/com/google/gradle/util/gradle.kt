@@ -157,18 +157,19 @@ fun <T : Any> List<Provider<T>>.asSingleProvider(): Provider<List<T>> {
   }
 }
 
+/**
+ * TODO()
+ */
 fun Project.getReleaseClasses(): FileCollection {
-  val android = extensions.findByType<KotlinAndroidProjectExtension>()
-  if(android !== null) {
-    return android.target.compilations.getByName("release").output.classesDirs
+  extensions.findByType<KotlinAndroidProjectExtension>()?.let {
+    return it.target.compilations.getByName("release").output.classesDirs
   }
 
-  val kmp = extensions.findByType<KotlinMultiplatformExtension>()
-  if(kmp !== null) {
-    return kmp.targets.getByName("android").compilations.getByName("main").output.classesDirs
+  extensions.findByType<KotlinMultiplatformExtension>()?.let {
+    return it.targets.getByName("android").compilations.getByName("main").output.classesDirs
   }
 
-  throw RuntimeException("TODO() I shouldn't exist")
+  throw RuntimeException("Library is missing an Android or KMP plugin")
 }
 
 /**
