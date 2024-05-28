@@ -138,7 +138,7 @@ data class ModuleVersion(
   val major: Int,
   val minor: Int,
   val patch: Int,
-  val pre: PreReleaseVersion? = null
+  val pre: PreReleaseVersion? = null,
 ) : Comparable<ModuleVersion>, Serializable {
 
   /** Formatted as `MAJOR.MINOR.PATCH-PRE` */
@@ -152,7 +152,7 @@ data class ModuleVersion(
       { it.minor },
       { it.patch },
       { it.pre == null }, // a version with no prerelease version takes precedence
-      { it.pre }
+      { it.pre },
     )
 
   companion object {
@@ -205,7 +205,7 @@ data class ModuleVersion(
                 major.toInt(),
                 minor.toInt(),
                 patch.toInt(),
-                PreReleaseVersion.fromStringsOrNull(pre, build)
+                PreReleaseVersion.fromStringsOrNull(pre, build),
               )
               .takeUnless { it.pre == null && (pre.isNotEmpty() || build.isNotEmpty()) }
           }

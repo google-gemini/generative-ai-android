@@ -58,7 +58,7 @@ internal class GenerativeModelTests {
       mockApiController.generateContent(
         GenerateContentRequest_Common(
           "gemini-pro-1.0",
-          contents = listOf(Content_Common(parts = listOf(TextPart_Common("Why's the sky blue?"))))
+          contents = listOf(Content_Common(parts = listOf(TextPart_Common("Why's the sky blue?")))),
         )
       )
     } returns
@@ -73,16 +73,11 @@ internal class GenerativeModelTests {
             safetyRatings = listOf(),
             citationMetadata =
               CitationMetadata_Common(
-                listOf(
-                  CitationSources(
-                    endIndex = 100,
-                    uri = "http://www.example.com",
-                  )
-                )
-              )
+                listOf(CitationSources(endIndex = 100, uri = "http://www.example.com"))
+              ),
           )
         ),
-        usageMetadata = UsageMetadata_Common(promptTokenCount = 10)
+        usageMetadata = UsageMetadata_Common(promptTokenCount = 10),
       )
 
     val expectedResponse =
@@ -97,14 +92,14 @@ internal class GenerativeModelTests {
                   startIndex = 0,
                   endIndex = 100,
                   uri = "http://www.example.com",
-                  license = null
+                  license = null,
                 )
               ),
-            finishReason = null
+            finishReason = null,
           )
         ),
         PromptFeedback(null, listOf()),
-        UsageMetadata(10, 0, 0 /* default to 0*/)
+        UsageMetadata(10, 0, 0 /* default to 0*/),
       )
 
     val response = model.generateContent("Why's the sky blue?")
@@ -114,7 +109,7 @@ internal class GenerativeModelTests {
     response.candidates[0].shouldBeEqualToUsingFields(
       expectedResponse.candidates[0],
       Candidate::finishReason,
-      Candidate::safetyRatings
+      Candidate::safetyRatings,
     )
     response.candidates[0]
       .citationMetadata[0]
@@ -134,7 +129,7 @@ internal class GenerativeModelTests {
       mockApiController.generateContent(
         GenerateContentRequest_Common(
           "gemini-pro-1.0",
-          contents = listOf(Content_Common(parts = listOf(TextPart_Common("Why's the sky blue?"))))
+          contents = listOf(Content_Common(parts = listOf(TextPart_Common("Why's the sky blue?")))),
         )
       )
     } throws InvalidAPIKeyException_Common("exception message")
@@ -149,7 +144,7 @@ internal class GenerativeModelTests {
       mockApiController.generateContentStream(
         GenerateContentRequest_Common(
           "gemini-pro-1.0",
-          contents = listOf(Content_Common(parts = listOf(TextPart_Common("Why's the sky blue?"))))
+          contents = listOf(Content_Common(parts = listOf(TextPart_Common("Why's the sky blue?")))),
         )
       )
     } returns flow { throw UnsupportedUserLocationException_Common() }

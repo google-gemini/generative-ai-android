@@ -72,7 +72,7 @@ internal constructor(
   private val requestOptions: RequestOptions,
   httpEngine: HttpClientEngine,
   private val apiClient: String,
-  private val headerProvider: HeaderProvider?
+  private val headerProvider: HeaderProvider?,
 ) {
 
   constructor(
@@ -80,7 +80,7 @@ internal constructor(
     model: String,
     requestOptions: RequestOptions,
     apiClient: String,
-    headerProvider: HeaderProvider? = null
+    headerProvider: HeaderProvider? = null,
   ) : this(key, model, requestOptions, OkHttp.create(), apiClient, headerProvider)
 
   private val model = fullModelName(model)

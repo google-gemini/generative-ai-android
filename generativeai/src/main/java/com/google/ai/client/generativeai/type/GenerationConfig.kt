@@ -37,7 +37,7 @@ private constructor(
   val candidateCount: Int?,
   val maxOutputTokens: Int?,
   val stopSequences: List<String>?,
-  val responseMimeType: String?
+  val responseMimeType: String?,
 ) {
 
   class Builder {
@@ -57,7 +57,7 @@ private constructor(
         candidateCount = candidateCount,
         maxOutputTokens = maxOutputTokens,
         stopSequences = stopSequences,
-        responseMimeType = responseMimeType
+        responseMimeType = responseMimeType,
       )
   }
 

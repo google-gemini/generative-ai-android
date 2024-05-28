@@ -40,11 +40,11 @@ internal class GenerateContentResponseTest {
               },
               listOf(),
               listOf(),
-              null
+              null,
             )
           ),
         null,
-        null
+        null,
       )
 
     response.functionCalls shouldHaveSize 2
@@ -64,11 +64,11 @@ internal class GenerateContentResponseTest {
               },
               listOf(),
               listOf(),
-              null
+              null,
             )
           ),
         null,
-        null
+        null,
       )
 
     response.text shouldBe "This is a textPart"
@@ -89,11 +89,11 @@ internal class GenerateContentResponseTest {
               },
               listOf(),
               listOf(),
-              null
+              null,
             )
           ),
         null,
-        null
+        null,
       )
 
     response.text shouldBe "This is a textPart This is another textPart"

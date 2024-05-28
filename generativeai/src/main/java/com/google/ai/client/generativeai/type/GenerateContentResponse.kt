@@ -28,7 +28,7 @@ import android.util.Log
 class GenerateContentResponse(
   val candidates: List<Candidate>,
   val promptFeedback: PromptFeedback?,
-  val usageMetadata: UsageMetadata?
+  val usageMetadata: UsageMetadata?,
 ) {
   /** Convenience field representing all the text parts in the response, if they exists. */
   val text: String? by lazy {
