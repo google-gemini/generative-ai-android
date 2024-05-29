@@ -240,7 +240,7 @@ private suspend fun validateResponse(response: HttpResponse) {
   if (message.contains("quota")) {
     throw QuotaExceededException(message)
   }
-  if (error.details.any { "SERVICE_DISABLED" == it.reason }) {
+  if (error.details?.any { "SERVICE_DISABLED" == it.reason } == true) {
     throw ServiceDisabledException(message)
   }
   throw ServerException(message)
