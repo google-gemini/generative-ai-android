@@ -14,23 +14,8 @@
  * limitations under the License.
  */
 
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-    includeBuild("./plugins")
-}
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
+package com.google.ai.client.generativeai.common.util
 
-rootProject.name = "generativeai"
-include(":generativeai")
-include(":common")
+import kotlin.reflect.KClass
 
+internal expect inline fun <reified T : Any> KClass<T>.name(): String

@@ -16,6 +16,7 @@
 
 package com.google.gradle.util
 
+import com.android.build.api.dsl.KotlinMultiplatformAndroidExtension
 import com.google.gradle.types.ModuleVersion
 import java.io.File
 import org.gradle.api.DefaultTask
@@ -29,11 +30,14 @@ import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.StopActionException
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.workers.WorkAction
 import org.gradle.workers.WorkParameters
 import org.gradle.workers.WorkQueue
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import org.jetbrains.kotlin.gradle.plugin.KotlinAndroidPluginWrapper
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinJvmAndroidCompilation
 import org.jetbrains.kotlin.gradle.utils.provider
 
@@ -153,17 +157,20 @@ fun <T : Any> List<Provider<T>>.asSingleProvider(): Provider<List<T>> {
   }
 }
 
-/** The Android extension specific for Kotlin projects within Gradle. */
-val Project.android: KotlinAndroidProjectExtension
-  get() = extensions.getByType<KotlinAndroidProjectExtension>()
-
 /**
- * The `"release"` compilation target of a Kotlin Android project.
- *
- * In non android projects, this would be referred to as the main source set.
+ * TODO()
  */
-val KotlinAndroidProjectExtension.release: KotlinJvmAndroidCompilation
-  get() = target.compilations.getByName("release")
+fun Project.getReleaseClasses(): FileCollection {
+  extensions.findByType<KotlinAndroidProjectExtension>()?.let {
+    return it.target.compilations.getByName("release").output.classesDirs
+  }
+
+  extensions.findByType<KotlinMultiplatformExtension>()?.let {
+    return it.targets.getByName("android").compilations.getByName("main").output.classesDirs
+  }
+
+  throw RuntimeException("Library is missing an Android or KMP plugin")
+}
 
 /**
  * Provides a project property as the specified type, or null otherwise.

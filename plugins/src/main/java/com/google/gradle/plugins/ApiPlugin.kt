@@ -17,11 +17,10 @@
 package com.google.gradle.plugins
 
 import com.google.gradle.tasks.CopyFileTask
-import com.google.gradle.util.android
 import com.google.gradle.util.apply
 import com.google.gradle.util.file
+import com.google.gradle.util.getReleaseClasses
 import com.google.gradle.util.regularOutputFile
-import com.google.gradle.util.release
 import com.google.gradle.util.tempFile
 import kotlinx.validation.KotlinApiBuildTask
 import org.gradle.api.Plugin
@@ -61,7 +60,7 @@ abstract class ApiPlugin : Plugin<Project> {
 
   private fun Project.registerBuildApiTask() =
     tasks.register<BuildApiTask>("buildApi") {
-      val classes = provider { android.release.output.classesDirs }
+      val classes = provider { getReleaseClasses() }
 
       inputClassesDirs = files(classes)
       inputDependencies = files(classes)

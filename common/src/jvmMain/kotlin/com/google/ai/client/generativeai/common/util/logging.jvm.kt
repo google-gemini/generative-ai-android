@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2024 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,12 @@
  * limitations under the License.
  */
 
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-    includeBuild("./plugins")
-}
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
+package com.google.ai.client.generativeai.common.util
+
+internal actual fun Error(tag: String, message: String) {
+  System.err.println("[$tag]: $message")
 }
 
-rootProject.name = "generativeai"
-include(":generativeai")
-include(":common")
-
+internal actual fun Warning(tag: String, message: String) {
+  println("[$tag]: $message")
+}
