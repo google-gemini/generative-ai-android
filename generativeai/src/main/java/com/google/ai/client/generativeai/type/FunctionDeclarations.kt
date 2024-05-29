@@ -210,7 +210,7 @@ class Schema<T>(
         name = name,
         description = description,
         type = FunctionType.ARRAY,
-        items = items
+        items = items,
       )
 
     /** Registers a schema for an enum */
