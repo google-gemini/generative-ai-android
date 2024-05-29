@@ -54,6 +54,7 @@ data class Candidate(
   val finishReason: FinishReason? = null,
   val safetyRatings: List<SafetyRating>? = null,
   val citationMetadata: CitationMetadata? = null,
+  val groundingMetadata: GroundingMetadata? = null,
 )
 
 @Serializable
@@ -77,6 +78,32 @@ data class SafetyRating(
   val probabilityScore: Float? = null,
   val severity: HarmSeverity? = null,
   val severityScore: Float? = null,
+)
+
+@Serializable
+data class GroundingMetadata(
+  @SerialName("web_search_queries") val webSearchQueries: List<String>?,
+  @SerialName("search_entry_point") val searchEntryPoint: SearchEntryPoint?,
+  @SerialName("retrieval_queries") val retrievalQueries: List<String>?,
+  @SerialName("grounding_attribution") val groundingAttribution: List<GroundingAttribution>?,
+)
+
+@Serializable
+data class SearchEntryPoint(
+  @SerialName("rendered_content") val renderedContent: String?,
+  @SerialName("sdk_blob") val sdkBlob: String?,
+)
+
+@Serializable
+data class GroundingAttribution(
+  val segment: Segment,
+  @SerialName("confidence_score") val confidenceScore: Float?,
+)
+
+@Serializable
+data class Segment(
+  @SerialName("start_index") val startIndex: Int,
+  @SerialName("end_index") val endIndex: Int,
 )
 
 @Serializable(HarmProbabilitySerializer::class)
@@ -110,4 +137,7 @@ enum class FinishReason {
   OTHER
 }
 
-@Serializable data class GRpcError(val code: Int, val message: String)
+@Serializable
+data class GRpcError(val code: Int, val message: String, val details: List<GRpcErrorDetails>)
+
+@Serializable data class GRpcErrorDetails(val reason: String? = null)

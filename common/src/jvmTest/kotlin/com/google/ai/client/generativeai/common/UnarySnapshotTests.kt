@@ -291,4 +291,14 @@ internal class UnarySnapshotTests {
         }
       }
     }
+
+  @Test
+  fun `service disabled`() =
+    goldenUnaryFile("failure-service-disabled.json", HttpStatusCode.Forbidden) {
+      withTimeout(testTimeout) {
+        shouldThrow<ServiceDisabledException> {
+          apiController.generateContent(textGenerateContentRequest("prompt"))
+        }
+      }
+    }
 }
