@@ -205,8 +205,13 @@ class Schema<T>(
       Schema<JSONObject>(name = name, description = description, type = FunctionType.OBJECT)
 
     /** Registers a schema for an array */
-    fun arr(name: String, description: String) =
-      Schema<List<String>>(name = name, description = description, type = FunctionType.ARRAY)
+    fun arr(name: String, description: String, items: Schema<out Any> = Schema.str("", "")) =
+      Schema<List<String>>(
+        name = name,
+        description = description,
+        type = FunctionType.ARRAY,
+        items = items
+      )
 
     /** Registers a schema for an enum */
     fun enum(name: String, description: String, values: List<String>) =
