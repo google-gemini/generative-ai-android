@@ -20,7 +20,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.google.ai.client.generativeai.GenerativeModel
-import com.google.ai.client.generativeai.type.Schema
 import com.google.ai.client.generativeai.type.generationConfig
 import com.google.ai.sample.feature.chat.ChatViewModel
 import com.google.ai.sample.feature.multimodal.PhotoReasoningViewModel
@@ -33,16 +32,6 @@ val GenerativeViewModelFactory = object : ViewModelProvider.Factory {
     ): T {
         val config = generationConfig {
             temperature = 0.7f
-            responseSchema = Schema.arr(
-                "name",
-                "description",
-                Schema.obj(
-                    "person",
-                    "person",
-                    Schema.str("name", "person's name"),
-                    Schema.str("birthday", "person's birthday")
-                )
-            )
         }
 
         return with(viewModelClass) {
