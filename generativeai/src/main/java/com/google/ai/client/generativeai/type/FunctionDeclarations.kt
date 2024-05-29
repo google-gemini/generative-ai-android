@@ -201,8 +201,14 @@ class Schema<T>(
     /**
      * Registers a schema for a complex object. In a function it will be returned as a [JSONObject]
      */
-    fun obj(name: String, description: String) =
-      Schema<JSONObject>(name = name, description = description, type = FunctionType.OBJECT)
+    fun obj(name: String, description: String, vararg contents: Schema<out Any>) =
+      Schema<JSONObject>(
+        name = name,
+        description = description,
+        type = FunctionType.OBJECT,
+        required = contents.map { it.name },
+        properties = contents.associateBy { it.name }.toMap(),
+      )
 
     /** Registers a schema for an array */
     fun arr(name: String, description: String, items: Schema<out Any> = Schema.str("", "")) =
