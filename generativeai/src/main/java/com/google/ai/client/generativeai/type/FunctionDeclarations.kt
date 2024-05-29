@@ -207,7 +207,7 @@ class Schema<T>(
         description = description,
         type = FunctionType.OBJECT,
         required = contents.map { it.name },
-        properties = contents.associateBy { it.name }.toMap()
+        properties = contents.associateBy { it.name }.toMap(),
       )
 
     /** Registers a schema for an array */

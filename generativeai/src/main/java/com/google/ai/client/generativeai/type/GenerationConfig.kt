@@ -38,7 +38,7 @@ private constructor(
   val maxOutputTokens: Int?,
   val stopSequences: List<String>?,
   val responseMimeType: String?,
-  val responseSchema: Schema<*>?
+  val responseSchema: Schema<*>?,
 ) {
 
   class Builder {
@@ -60,7 +60,7 @@ private constructor(
         maxOutputTokens = maxOutputTokens,
         stopSequences = stopSequences,
         responseMimeType = responseMimeType,
-        responseSchema = responseSchema
+        responseSchema = responseSchema,
       )
   }
 
