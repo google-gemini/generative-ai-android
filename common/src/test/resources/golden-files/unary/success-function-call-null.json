@@ -7,20 +7,8 @@
             "functionCall": {
               "name": "functionName",
               "args": {
-                "cast": "String",
-                "brief_description": "String",
                 "original_title": "String",
-                "season": null,
-                "year": "1999",
-                "rating": "8.7",
-                "genres": "String",
-                "country": "САЩ",
-                "country_origin_english": "US",
-                "more_info": "String",
-                "title": "String",
-                "duration": "136",
-                "types": "String",
-                "complete_description": "String"
+                "season": null
               }
             }
           }
