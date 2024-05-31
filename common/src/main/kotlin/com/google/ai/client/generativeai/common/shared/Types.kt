@@ -59,7 +59,7 @@ data class Content(@EncodeDefault val role: String? = "user", val parts: List<Pa
 
 @Serializable data class FunctionResponse(val name: String, val response: JsonObject)
 
-@Serializable data class FunctionCall(val name: String, val args: Map<String, String>)
+@Serializable data class FunctionCall(val name: String, val args: Map<String, String?>)
 
 @Serializable data class FileDataPart(@SerialName("file_data") val fileData: FileData) : Part
 

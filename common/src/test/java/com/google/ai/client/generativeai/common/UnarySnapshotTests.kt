@@ -20,6 +20,7 @@ import com.google.ai.client.generativeai.common.server.BlockReason
 import com.google.ai.client.generativeai.common.server.FinishReason
 import com.google.ai.client.generativeai.common.server.HarmProbability
 import com.google.ai.client.generativeai.common.server.HarmSeverity
+import com.google.ai.client.generativeai.common.shared.FunctionCallPart
 import com.google.ai.client.generativeai.common.shared.HarmCategory
 import com.google.ai.client.generativeai.common.shared.TextPart
 import com.google.ai.client.generativeai.common.util.goldenUnaryFile
@@ -299,6 +300,17 @@ internal class UnarySnapshotTests {
         shouldThrow<ServiceDisabledException> {
           apiController.generateContent(textGenerateContentRequest("prompt"))
         }
+      }
+    }
+
+  @Test
+  fun `function call contains null param`() =
+    goldenUnaryFile("success-function-call-null.json") {
+      withTimeout(testTimeout) {
+        val response = apiController.generateContent(textGenerateContentRequest("prompt"))
+        val callPart = (response.candidates!!.first().content!!.parts.first() as FunctionCallPart)
+
+        callPart.functionCall.args["season"] shouldBe null
       }
     }
 }
