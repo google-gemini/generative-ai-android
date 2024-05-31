@@ -185,19 +185,39 @@ class Schema<T>(
   companion object {
     /** Registers a schema for an integer number */
     fun int(name: String, description: String) =
-      Schema<Long>(name = name, description = description, type = FunctionType.INTEGER, nullable = false)
+      Schema<Long>(
+        name = name,
+        description = description,
+        type = FunctionType.INTEGER,
+        nullable = false,
+      )
 
     /** Registers a schema for a string */
     fun str(name: String, description: String) =
-      Schema<String>(name = name, description = description, type = FunctionType.STRING, nullable = false)
+      Schema<String>(
+        name = name,
+        description = description,
+        type = FunctionType.STRING,
+        nullable = false,
+      )
 
     /** Registers a schema for a boolean */
     fun bool(name: String, description: String) =
-      Schema<Boolean>(name = name, description = description, type = FunctionType.BOOLEAN, nullable = false)
+      Schema<Boolean>(
+        name = name,
+        description = description,
+        type = FunctionType.BOOLEAN,
+        nullable = false,
+      )
 
     /** Registers a schema for a floating point number */
     fun num(name: String, description: String) =
-      Schema<Double>(name = name, description = description, type = FunctionType.NUMBER, nullable = false)
+      Schema<Double>(
+        name = name,
+        description = description,
+        type = FunctionType.NUMBER,
+        nullable = false,
+      )
 
     /**
      * Registers a schema for a complex object. In a function it will be returned as a [JSONObject]
@@ -214,7 +234,12 @@ class Schema<T>(
 
     /** Registers a schema for an array */
     fun arr(name: String, description: String) =
-      Schema<List<String>>(name = name, description = description, type = FunctionType.ARRAY, nullable = false)
+      Schema<List<String>>(
+        name = name,
+        description = description,
+        type = FunctionType.ARRAY,
+        nullable = false,
+      )
 
     /** Registers a schema for an enum */
     fun enum(name: String, description: String, values: List<String>) =
