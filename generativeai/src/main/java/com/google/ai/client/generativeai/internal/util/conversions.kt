@@ -150,6 +150,7 @@ internal fun FunctionDeclaration.toInternal() =
       properties = getParameters().associate { it.name to it.toInternal() },
       required = getParameters().map { it.name },
       type = "OBJECT",
+      nullable = false,
     ),
   )
 
@@ -158,6 +159,7 @@ internal fun <T> com.google.ai.client.generativeai.type.Schema<T>.toInternal(): 
     type.name,
     description,
     format,
+    nullable,
     enum,
     properties?.mapValues { it.value.toInternal() },
     required,
