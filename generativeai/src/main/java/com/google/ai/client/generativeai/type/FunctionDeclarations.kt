@@ -233,7 +233,7 @@ class Schema<T>(
       )
 
     /** Registers a schema for an array */
-    fun arr(name: String, description: String, items: Schema<out Any> = Schema.str("", "")) =
+    fun arr(name: String, description: String, items: Schema<out Any>? = null) =
       Schema<List<String>>(
         name = name,
         description = description,
