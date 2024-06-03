@@ -50,7 +50,7 @@ internal class FunctionCallingTests {
           ("param2" to "2.2"),
           ("param3" to "false"),
           ("param4" to "2"),
-        )
+        ),
       )
 
     val result = model.executeFunction(functionCall)
