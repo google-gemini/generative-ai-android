@@ -41,3 +41,11 @@ data class GenerateContentRequest(
 @Serializable
 data class CountTokensRequest(@Transient val model: String? = null, val contents: List<Content>) :
   Request
+
+@Serializable
+data class VertexCountTokensRequest(
+  val model: String? = null,
+  val contents: List<Content>,
+  @SerialName("system_instruction") val systemInstruction: Content?,
+  val tools: List<Tool>? = null,
+) : Request
