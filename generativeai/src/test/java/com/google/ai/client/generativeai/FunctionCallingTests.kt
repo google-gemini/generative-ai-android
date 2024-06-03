@@ -30,12 +30,28 @@ internal class FunctionCallingTests {
   @Test
   fun `function calls with valid args should succeed`() = doBlocking {
     val functionDeclaration =
-      defineFunction("name", "description", Schema.str("param1", "description")) { param1 ->
+      defineFunction(
+        "name",
+        "description",
+        Schema.str("param1", "description"),
+        Schema.num("param2", "description"),
+        Schema.bool("param3", "description"),
+        Schema.int("param4", "description"),
+      ) { param1, param2, param3, param4 ->
         JSONObject(mapOf("result" to "success"))
       }
     val model = GenerativeModel("model", "key", tools = listOf(Tool(listOf(functionDeclaration))))
 
-    val functionCall = FunctionCallPart("name", mapOf("param1" to "valid parameter"))
+    val functionCall =
+      FunctionCallPart(
+        "name",
+        mapOf(
+          ("param1" to "valid parameter"),
+          ("param2" to "2.2"),
+          ("param3" to "false"),
+          ("param4" to "2"),
+        )
+      )
 
     val result = model.executeFunction(functionCall)
 
