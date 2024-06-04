@@ -67,7 +67,7 @@ data class CitationSources(
   val startIndex: Int = 0,
   val endIndex: Int,
   val uri: String,
-  val license: String? = null
+  val license: String? = null,
 )
 
 @Serializable
@@ -138,7 +138,6 @@ enum class FinishReason {
 }
 
 @Serializable
-data class GRpcError(
-  val code: Int,
-  val message: String,
-)
+data class GRpcError(val code: Int, val message: String, val details: List<GRpcErrorDetails>)
+
+@Serializable data class GRpcErrorDetails(val reason: String? = null)

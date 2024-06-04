@@ -26,5 +26,5 @@ package com.google.ai.client.generativeai.type
 class UsageMetadata(
   val promptTokenCount: Int,
   val candidatesTokenCount: Int,
-  val totalTokenCount: Int
+  val totalTokenCount: Int,
 )

@@ -37,7 +37,8 @@ private constructor(
   val candidateCount: Int?,
   val maxOutputTokens: Int?,
   val stopSequences: List<String>?,
-  val responseMimeType: String?
+  val responseMimeType: String?,
+  val responseSchema: Schema<*>?,
 ) {
 
   class Builder {
@@ -48,6 +49,7 @@ private constructor(
     @JvmField var maxOutputTokens: Int? = null
     @JvmField var stopSequences: List<String>? = null
     @JvmField var responseMimeType: String? = null
+    @JvmField var responseSchema: Schema<*>? = null
 
     fun build() =
       GenerationConfig(
@@ -57,7 +59,8 @@ private constructor(
         candidateCount = candidateCount,
         maxOutputTokens = maxOutputTokens,
         stopSequences = stopSequences,
-        responseMimeType = responseMimeType
+        responseMimeType = responseMimeType,
+        responseSchema = responseSchema,
       )
   }
 

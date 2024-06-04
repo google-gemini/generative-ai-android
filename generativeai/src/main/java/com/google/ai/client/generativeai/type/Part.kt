@@ -49,7 +49,7 @@ class FileDataPart(val uri: String, val mimeType: String) : Part
 fun Part.asFileDataPartOrNull(): FileDataPart? = this as? FileDataPart
 
 /** Represents function call name and params received from requests. */
-class FunctionCallPart(val name: String, val args: Map<String, String>) : Part
+class FunctionCallPart(val name: String, val args: Map<String, String?>) : Part
 
 /** Represents function call output to be returned to the model when it requests a function call */
 class FunctionResponsePart(val name: String, val response: JSONObject) : Part

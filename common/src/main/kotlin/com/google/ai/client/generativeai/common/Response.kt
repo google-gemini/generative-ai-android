@@ -27,7 +27,7 @@ sealed interface Response
 data class GenerateContentResponse(
   val candidates: List<Candidate>? = null,
   val promptFeedback: PromptFeedback? = null,
-  val usageMetadata: UsageMetadata? = null
+  val usageMetadata: UsageMetadata? = null,
 ) : Response
 
 @Serializable
@@ -40,5 +40,5 @@ data class CountTokensResponse(val totalTokens: Int, val totalBillableCharacters
 data class UsageMetadata(
   val promptTokenCount: Int? = null,
   val candidatesTokenCount: Int? = null,
-  val totalTokenCount: Int? = null
+  val totalTokenCount: Int? = null,
 )
