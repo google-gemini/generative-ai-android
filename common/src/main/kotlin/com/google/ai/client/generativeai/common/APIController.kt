@@ -131,24 +131,10 @@ internal constructor(
       throw GoogleGenerativeAIException.from(e)
     }
 
-  suspend fun vertexCountTokens(request: VertexCountTokensRequest): CountTokensResponse =
-    try {
-      client
-        .post("${requestOptions.endpoint}/${requestOptions.apiVersion}/$model:countTokens") {
-          applyCommonConfiguration(request)
-          applyHeaderProvider()
-        }
-        .also { validateResponse(it) }
-        .body()
-    } catch (e: Throwable) {
-      throw GoogleGenerativeAIException.from(e)
-    }
-
   private fun HttpRequestBuilder.applyCommonConfiguration(request: Request) {
     when (request) {
       is GenerateContentRequest -> setBody<GenerateContentRequest>(request)
       is CountTokensRequest -> setBody<CountTokensRequest>(request)
-      is VertexCountTokensRequest -> setBody<VertexCountTokensRequest>(request)
     }
     contentType(ContentType.Application.Json)
     header("x-goog-api-key", key)
