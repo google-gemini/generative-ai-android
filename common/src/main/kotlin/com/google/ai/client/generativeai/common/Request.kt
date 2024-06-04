@@ -38,4 +38,10 @@ data class GenerateContentRequest(
 ) : Request
 
 @Serializable
-data class CountTokensRequest(val generateContentRequest: GenerateContentRequest) : Request
+data class CountTokensRequest(
+  val generateContentRequest: GenerateContentRequest,
+  val model: String? = null,
+  val contents: List<Content>? = null,
+  @SerialName("tool_config") var toolConfig: ToolConfig? = null,
+  @SerialName("system_instruction") val systemInstruction: Content? = null,
+) : Request
