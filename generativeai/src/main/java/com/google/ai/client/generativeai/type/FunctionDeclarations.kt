@@ -232,7 +232,10 @@ class Schema<T>(
         nullable = false,
       )
 
-    /** Registers a schema for an array */
+    /**
+     * Registers a schema for an array.
+     * @param items can be used to specify the type of the array
+     */
     fun arr(name: String, description: String, items: Schema<out Any>? = null) =
       Schema<List<String>>(
         name = name,
