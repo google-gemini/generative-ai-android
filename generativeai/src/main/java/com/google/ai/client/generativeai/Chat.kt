@@ -72,7 +72,7 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
    * @param prompt The text to be converted into a single piece of [Content] to send to the model.
    * @throws InvalidStateException if the [Chat] instance has an active request.
    */
-  suspend fun sendMessage(prompt: String): GenerateContentResponse {
+  suspend fun sendMessage(prompt: String, foo: Float): GenerateContentResponse {
     val content = content { text(prompt) }
     return sendMessage(content)
   }
