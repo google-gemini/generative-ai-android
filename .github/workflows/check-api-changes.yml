@@ -1,0 +1,23 @@
+name: Check API Changes
+
+on: pull_request
+
+jobs:
+  check-format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v3.5.3
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+          cache: gradle
+      - name: Run API versioning check
+        run: |
+          if test -d .changes && git diff --quiet HEAD^..HEAD .changes ; then ./gradlew warnVersionBump ; else exit 0 ; fi
+      - name : Log errors
+        if: failure()
+        run: |
+          echo "PR contains a Major or Minor API bump without an associated changelog entry. Either generate a changelog entry for the change or revert the API changes."

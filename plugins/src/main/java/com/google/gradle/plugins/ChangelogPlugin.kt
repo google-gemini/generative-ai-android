@@ -20,6 +20,7 @@ import com.google.gradle.tasks.FindChangesTask
 import com.google.gradle.tasks.MakeChangeTask
 import com.google.gradle.tasks.MakeReleaseNotesTask
 import com.google.gradle.tasks.WarnAboutApiChangesTask
+import com.google.gradle.tasks.WarnVersionBumpTask
 import com.google.gradle.types.Changelog
 import com.google.gradle.types.RandomWordsGenerator
 import com.google.gradle.util.apply
@@ -34,6 +35,7 @@ import com.google.gradle.util.regularOutputFile
 import com.google.gradle.util.tempFile
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.file.RegularFile
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.Delete
 import org.gradle.api.tasks.Optional
@@ -85,12 +87,17 @@ abstract class ChangelogPlugin : Plugin<Project> {
 
       tasks.register<MakeChangeTask>("makeChange") {
         val changeMessage = provideProperty<String>("changeMessage")
-        val changeName = RandomWordsGenerator.generateString()
-        val changeOutput = extension.outputDirectory.childFile("$changeName.json")
+        val changeName = provideProperty<String>("changeName")
+          .orElse(RandomWordsGenerator.generateString())
+        val changeOutput = extension.outputDirectory.childFile("${changeName.get()}.json")
 
         changesFile.set(fileChanges)
         message.set(changeMessage)
         outputFile.set(changeOutput)
+      }
+
+      tasks.register<WarnVersionBumpTask>("warnVersionBump") {
+        changesFile.set(fileChanges)
       }
 
       tasks.register<WarnAboutApiChangesTask>("warnAboutApiChanges") {
