@@ -6,16 +6,43 @@ jobs:
   warn-version-bump:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout branch
+      - name: Checkout master
         uses: actions/checkout@v3.5.3
         with:
-          fetch-depth: 2
+          ref: ${{ github.base_ref }}
+
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: 17
           distribution: temurin
           cache: gradle
+
+      - name: Generate the api file
+        run: |
+          ./gradlew exportApi --no-daemon
+
+      - name: Save public.api from master
+        run: |
+          mkdir ~/common/ && \
+          mkdir ~/generativeai/ && \
+          mv generativeai/public.api ~/generativeai/public.api && \
+          mv common/public.api ~/common/public.api
+
+      - name: Checkout branch
+        uses: actions/checkout@v3.5.3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+          cache: gradle
+
+      - name: Copy saved api to branch
+        run: |
+          mv ~/generativeai/public.api generativeai/public.api && \
+          mv ~/common/public.api common/public.api
       - name: Run API versioning check
         run: |
           if ! test -d .changes || git diff --quiet ${{ github.event.pull_request.base.sha }}..HEAD .changes ; then ./gradlew warnVersionBump ; else exit 0 ; fi
