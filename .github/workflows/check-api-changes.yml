@@ -18,4 +18,4 @@ jobs:
           cache: gradle
       - name: Run API versioning check
         run: |
-          if ! test -d .changes || ! git diff --quiet HEAD^..HEAD .changes ; then ./gradlew warnVersionBump ; else exit 0 ; fi
+          if ! test -d .changes || ! git diff --quiet ${{ github.event.pull_request.base.sha }}..HEAD .changes ; then ./gradlew warnVersionBump ; else exit 0 ; fi
