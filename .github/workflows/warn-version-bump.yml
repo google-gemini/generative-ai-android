@@ -1,9 +1,9 @@
-name: Check API Changes
+name: Warn Version Bump
 
 on: pull_request
 
 jobs:
-  check-api-changes:
+  warn-version-bump:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout branch
