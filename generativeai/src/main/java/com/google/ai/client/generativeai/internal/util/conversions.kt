@@ -98,7 +98,8 @@ internal fun com.google.ai.client.generativeai.type.GenerationConfig.toInternal(
     candidateCount = candidateCount,
     maxOutputTokens = maxOutputTokens,
     stopSequences = stopSequences,
-    responseMimeType = responseMimeType
+    responseMimeType = responseMimeType,
+    responseSchema = responseSchema?.toInternal(),
   )
 
 internal fun com.google.ai.client.generativeai.type.HarmCategory.toInternal() =
@@ -149,6 +150,7 @@ internal fun FunctionDeclaration.toInternal() =
       properties = getParameters().associate { it.name to it.toInternal() },
       required = getParameters().map { it.name },
       type = "OBJECT",
+      nullable = false,
     ),
   )
 
@@ -157,6 +159,7 @@ internal fun <T> com.google.ai.client.generativeai.type.Schema<T>.toInternal(): 
     type.name,
     description,
     format,
+    nullable,
     enum,
     properties?.mapValues { it.value.toInternal() },
     required,
@@ -203,10 +206,7 @@ internal fun Part.toPublic(): com.google.ai.client.generativeai.type.Part {
         functionResponse.response.toPublic(),
       )
     is FileDataPart ->
-      com.google.ai.client.generativeai.type.FileDataPart(
-        fileData.fileUri,
-        fileData.mimeType,
-      )
+      com.google.ai.client.generativeai.type.FileDataPart(fileData.fileUri, fileData.mimeType)
     else ->
       throw SerializationException(
         "Unsupported part type \"${javaClass.simpleName}\" provided. This model may not be supported by this SDK."
@@ -274,7 +274,7 @@ internal fun GenerateContentResponse.toPublic() =
   com.google.ai.client.generativeai.type.GenerateContentResponse(
     candidates?.map { it.toPublic() }.orEmpty(),
     promptFeedback?.toPublic(),
-    usageMetadata?.toPublic()
+    usageMetadata?.toPublic(),
   )
 
 internal fun CountTokensResponse.toPublic() =

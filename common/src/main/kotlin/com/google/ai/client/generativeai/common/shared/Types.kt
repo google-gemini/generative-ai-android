@@ -59,24 +59,24 @@ data class Content(@EncodeDefault val role: String? = "user", val parts: List<Pa
 
 @Serializable data class FunctionResponse(val name: String, val response: JsonObject)
 
-@Serializable data class FunctionCall(val name: String, val args: Map<String, String>)
+@Serializable data class FunctionCall(val name: String, val args: Map<String, String?>)
 
 @Serializable data class FileDataPart(@SerialName("file_data") val fileData: FileData) : Part
 
 @Serializable
 data class FileData(
   @SerialName("mime_type") val mimeType: String,
-  @SerialName("file_uri") val fileUri: String
+  @SerialName("file_uri") val fileUri: String,
 )
 
-@Serializable
-data class Blob(
-  @SerialName("mime_type") val mimeType: String,
-  val data: Base64,
-)
+@Serializable data class Blob(@SerialName("mime_type") val mimeType: String, val data: Base64)
 
 @Serializable
-data class SafetySetting(val category: HarmCategory, val threshold: HarmBlockThreshold)
+data class SafetySetting(
+  val category: HarmCategory,
+  val threshold: HarmBlockThreshold,
+  val method: HarmBlockMethod? = null,
+)
 
 @Serializable
 enum class HarmBlockThreshold {
@@ -85,6 +85,13 @@ enum class HarmBlockThreshold {
   BLOCK_MEDIUM_AND_ABOVE,
   BLOCK_ONLY_HIGH,
   BLOCK_NONE,
+}
+
+@Serializable
+enum class HarmBlockMethod {
+  @SerialName("HARM_BLOCK_METHOD_UNSPECIFIED") UNSPECIFIED,
+  SEVERITY,
+  PROBABILITY,
 }
 
 object PartSerializer : JsonContentPolymorphicSerializer<Part>(Part::class) {

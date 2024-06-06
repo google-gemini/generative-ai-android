@@ -72,7 +72,7 @@ internal constructor(
   private val requestOptions: RequestOptions,
   httpEngine: HttpClientEngine,
   private val apiClient: String,
-  private val headerProvider: HeaderProvider?
+  private val headerProvider: HeaderProvider?,
 ) {
 
   constructor(
@@ -80,7 +80,7 @@ internal constructor(
     model: String,
     requestOptions: RequestOptions,
     apiClient: String,
-    headerProvider: HeaderProvider? = null
+    headerProvider: HeaderProvider? = null,
   ) : this(key, model, requestOptions, OkHttp.create(), apiClient, headerProvider)
 
   private val model = fullModelName(model)
@@ -223,12 +223,13 @@ private fun fullModelName(name: String): String = name.takeIf { it.contains("/")
 private suspend fun validateResponse(response: HttpResponse) {
   if (response.status == HttpStatusCode.OK) return
   val text = response.bodyAsText()
-  val message =
+  val error =
     try {
-      JSON.decodeFromString<GRpcErrorResponse>(text).error.message
+      JSON.decodeFromString<GRpcErrorResponse>(text).error
     } catch (e: Throwable) {
-      "Unexpected Response:\n$text"
+      throw ServerException("Unexpected Response:\n$text $e")
     }
+  val message = error.message
   if (message.contains("API key not valid")) {
     throw InvalidAPIKeyException(message)
   }
@@ -238,6 +239,9 @@ private suspend fun validateResponse(response: HttpResponse) {
   }
   if (message.contains("quota")) {
     throw QuotaExceededException(message)
+  }
+  if (error.details?.any { "SERVICE_DISABLED" == it.reason } == true) {
+    throw ServiceDisabledException(message)
   }
   throw ServerException(message)
 }

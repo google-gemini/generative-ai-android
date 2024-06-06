@@ -100,7 +100,7 @@ internal typealias CommonTest = suspend CommonTestScope.() -> Unit
 internal fun commonTest(
   status: HttpStatusCode = HttpStatusCode.OK,
   requestOptions: RequestOptions = RequestOptions(),
-  block: CommonTest
+  block: CommonTest,
 ) = doBlocking {
   val channel = ByteChannel(autoFlush = true)
   val mockEngine = MockEngine {
@@ -113,7 +113,7 @@ internal fun commonTest(
       requestOptions,
       mockEngine,
       TEST_CLIENT_ID,
-      null
+      null,
     )
   CommonTestScope(channel, apiController).block()
 }
@@ -132,7 +132,7 @@ internal fun commonTest(
 internal fun goldenStreamingFile(
   name: String,
   httpStatusCode: HttpStatusCode = HttpStatusCode.OK,
-  block: CommonTest
+  block: CommonTest,
 ) = doBlocking {
   val goldenFile = loadGoldenFile("streaming/$name")
   val messages = goldenFile.readLines().filter { it.isNotBlank() }
@@ -162,7 +162,7 @@ internal fun goldenStreamingFile(
 internal fun goldenUnaryFile(
   name: String,
   httpStatusCode: HttpStatusCode = HttpStatusCode.OK,
-  block: CommonTest
+  block: CommonTest,
 ) =
   commonTest(httpStatusCode) {
     val goldenFile = loadGoldenFile("unary/$name")
