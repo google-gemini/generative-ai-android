@@ -45,7 +45,7 @@ abstract class WarnVersionBumpTask : DefaultTask() {
     val diff = LinesChanged.fromFile(changesFile.asFile.get())
 
     if (diff.bump == MAJOR || diff.bump == MINOR) {
-      throw TaskExecutionException(this, Exception("Changes are ${diff.bump}, higher than PATCH"))
+      throw TaskExecutionException(this, Exception("Changes are ${diff.bump}, higher than PATCH. If this is intended, add a changelog entry. Otherwise, revert the changes."))
     }
   }
 }

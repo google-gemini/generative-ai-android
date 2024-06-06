@@ -3,7 +3,7 @@ name: Check API Changes
 on: pull_request
 
 jobs:
-  check-format:
+  check-api-changes:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout branch
@@ -17,7 +17,3 @@ jobs:
       - name: Run API versioning check
         run: |
           if ! test -d .changes || ! git diff --quiet HEAD^..HEAD .changes ; then ./gradlew warnVersionBump ; else exit 0 ; fi
-      - name : Log errors
-        if: failure()
-        run: |
-          echo "PR contains a Major or Minor API bump without an associated changelog entry. Either generate a changelog entry for the change or revert the API changes."
