@@ -45,10 +45,6 @@ import kotlinx.coroutines.flow.onEach
 class Chat(private val model: GenerativeModel, val history: MutableList<Content> = ArrayList()) {
   private var lock = Semaphore(1)
 
-  fun foo(bar: String) {
-
-  }
-
   /**
    * Generates a response from the backend with the provided [Content], and any previous ones
    * sent/returned from this chat.
@@ -57,7 +53,7 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
    * @throws InvalidStateException if the prompt is not coming from the 'user' role
    * @throws InvalidStateException if the [Chat] instance has an active request.
    */
-  suspend fun sendMessage(prompt: Content, some: String = ""): GenerateContentResponse {
+  suspend fun sendMessage(prompt: Content): GenerateContentResponse {
     prompt.assertComesFromUser()
     attemptLock()
     try {
@@ -76,7 +72,7 @@ class Chat(private val model: GenerativeModel, val history: MutableList<Content>
    * @param prompt The text to be converted into a single piece of [Content] to send to the model.
    * @throws InvalidStateException if the [Chat] instance has an active request.
    */
-  suspend fun sendMessage(prompt: String, foo: Bitmap? = null, bar: Float = 0f): GenerateContentResponse {
+  suspend fun sendMessage(prompt: String): GenerateContentResponse {
     val content = content { text(prompt) }
     return sendMessage(content)
   }
