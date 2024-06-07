@@ -21,6 +21,7 @@ import com.google.ai.client.generativeai.common.client.Tool
 import com.google.ai.client.generativeai.common.client.ToolConfig
 import com.google.ai.client.generativeai.common.shared.Content
 import com.google.ai.client.generativeai.common.shared.SafetySetting
+import com.google.ai.client.generativeai.common.util.fullModelName
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -39,9 +40,27 @@ data class GenerateContentRequest(
 
 @Serializable
 data class CountTokensRequest(
-  val generateContentRequest: GenerateContentRequest,
+  val generateContentRequest: GenerateContentRequest? = null,
   val model: String? = null,
   val contents: List<Content>? = null,
-  @SerialName("tool_config") var toolConfig: ToolConfig? = null,
+  val tools: List<Tool>? = null,
   @SerialName("system_instruction") val systemInstruction: Content? = null,
-) : Request
+) : Request {
+  companion object {
+    fun forGenAI(generateContentRequest: GenerateContentRequest) =
+      CountTokensRequest(
+        generateContentRequest =
+          generateContentRequest.model?.let {
+            generateContentRequest.copy(model = fullModelName(it))
+          } ?: generateContentRequest
+      )
+
+    fun forVertexAI(generateContentRequest: GenerateContentRequest) =
+      CountTokensRequest(
+        model = generateContentRequest.model?.let { fullModelName(it) },
+        contents = generateContentRequest.contents,
+        tools = generateContentRequest.tools,
+        systemInstruction = generateContentRequest.systemInstruction,
+      )
+  }
+}

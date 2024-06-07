@@ -240,7 +240,7 @@ internal constructor(
     )
 
   private fun constructCountTokensRequest(vararg prompt: Content) =
-    CountTokensRequest(generateContentRequest = constructRequest(*prompt))
+    CountTokensRequest.forGenAI(constructRequest(*prompt))
 
   private fun GenerateContentResponse.validate() = apply {
     if (candidates.isEmpty() && promptFeedback == null) {
