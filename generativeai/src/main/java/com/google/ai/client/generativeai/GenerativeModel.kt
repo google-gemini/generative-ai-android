@@ -20,6 +20,7 @@ import android.graphics.Bitmap
 import com.google.ai.client.generativeai.common.APIController
 import com.google.ai.client.generativeai.common.CountTokensRequest
 import com.google.ai.client.generativeai.common.GenerateContentRequest
+import com.google.ai.client.generativeai.common.util.fullModelName
 import com.google.ai.client.generativeai.internal.util.toInternal
 import com.google.ai.client.generativeai.internal.util.toPublic
 import com.google.ai.client.generativeai.type.Content
@@ -251,15 +252,5 @@ internal constructor(
       .mapNotNull { it.finishReason }
       .firstOrNull { it != FinishReason.STOP }
       ?.let { throw ResponseStoppedException(this) }
-  }
-
-  companion object {
-    /**
-     * Ensures the model name provided has a `models/` prefix
-     *
-     * Models must be prepended with the `models/` prefix when communicating with the backend.
-     */
-    private fun fullModelName(name: String): String =
-      name.takeIf { it.contains("/") } ?: "models/$name"
   }
 }
