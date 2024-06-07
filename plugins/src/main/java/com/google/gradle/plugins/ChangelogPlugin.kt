@@ -97,6 +97,9 @@ abstract class ChangelogPlugin : Plugin<Project> {
       }
 
       tasks.register<WarnVersionBumpTask>("warnVersionBump") {
+        if (export.isPresent) {
+          export.set(apiPlugin.exportFile)
+        }
         changesFile.set(fileChanges)
       }
 

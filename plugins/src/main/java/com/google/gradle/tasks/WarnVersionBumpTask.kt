@@ -17,13 +17,11 @@
 package com.google.gradle.tasks
 
 import com.google.gradle.types.LinesChanged
-import com.google.gradle.types.VersionType
 import com.google.gradle.types.VersionType.*
-import com.google.gradle.util.SkipTask
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.InputFile
-import org.gradle.api.tasks.StopExecutionException
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.TaskExecutionException
 
@@ -38,6 +36,8 @@ import org.gradle.api.tasks.TaskExecutionException
  * @throws TaskExecutionException if changes cause an minor or major API bump
  */
 abstract class WarnVersionBumpTask : DefaultTask() {
+  @get:[Optional InputFile] abstract val export: RegularFileProperty
+
   @get:InputFile abstract val changesFile: RegularFileProperty
 
   @TaskAction
@@ -45,7 +45,11 @@ abstract class WarnVersionBumpTask : DefaultTask() {
     val diff = LinesChanged.fromFile(changesFile.asFile.get())
 
     if (diff.bump == MAJOR || diff.bump == MINOR) {
-      throw TaskExecutionException(this, Exception("Changes are ${diff.bump}, higher than PATCH. If this is intended, add a changelog entry. Otherwise, revert the changes."))
+      if (export.isPresent) {
+        throw TaskExecutionException(this, Exception("Based on exported API, changes are ${diff.bump}, higher than PATCH. If this is intended, add a changelog entry. Otherwise, revert the changes."))
+      } else {
+        throw TaskExecutionException(this, Exception("Based on last release API, changes are ${diff.bump}, higher than PATCH. If this is intended, add a changelog entry. Otherwise, revert the changes. To compare local changes, run exportApi on a commit first."))
+      }
     }
   }
 }
