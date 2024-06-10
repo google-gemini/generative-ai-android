@@ -22,7 +22,7 @@ jobs:
         run: |
           ./gradlew exportApi --no-daemon
 
-      - name: Save public.api from master
+      - name: Save public.api from target branch
         run: |
           mkdir ~/common/ && \
           mkdir ~/generativeai/ && \
