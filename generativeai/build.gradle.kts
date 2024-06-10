@@ -41,7 +41,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
 
-        buildConfigField("String", "VERSION_NAME", "\"${project.version.toString()}\"")
+        buildConfigField("String", "VERSION_NAME", "\"${project.version}\"")
     }
 
     publishing {
