@@ -1,1 +1,1 @@
-{"type":"MAJOR","changes":["Simplify function calling and remove automated function calling."]}
+{"type":"MAJOR","changes":["Simplify function calling and remove provided function execution."]}
