@@ -20,6 +20,7 @@ import android.graphics.Bitmap
 import com.google.ai.client.generativeai.common.APIController
 import com.google.ai.client.generativeai.common.CountTokensRequest
 import com.google.ai.client.generativeai.common.GenerateContentRequest
+import com.google.ai.client.generativeai.common.util.fullModelName
 import com.google.ai.client.generativeai.internal.util.toInternal
 import com.google.ai.client.generativeai.internal.util.toPublic
 import com.google.ai.client.generativeai.type.Content
@@ -85,7 +86,7 @@ internal constructor(
     toolConfig: ToolConfig? = null,
     systemInstruction: Content? = null,
   ) : this(
-    modelName,
+    fullModelName(modelName),
     apiKey,
     generationConfig,
     safetySettings,
@@ -240,7 +241,7 @@ internal constructor(
     )
 
   private fun constructCountTokensRequest(vararg prompt: Content) =
-    CountTokensRequest(modelName, prompt.map { it.toInternal() })
+    CountTokensRequest.forGenAI(constructRequest(*prompt))
 
   private fun GenerateContentResponse.validate() = apply {
     if (candidates.isEmpty() && promptFeedback == null) {

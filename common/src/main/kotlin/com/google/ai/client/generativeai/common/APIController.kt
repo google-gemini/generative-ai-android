@@ -19,6 +19,7 @@ package com.google.ai.client.generativeai.common
 import android.util.Log
 import com.google.ai.client.generativeai.common.server.FinishReason
 import com.google.ai.client.generativeai.common.util.decodeToFlow
+import com.google.ai.client.generativeai.common.util.fullModelName
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.HttpClientEngine
@@ -212,13 +213,6 @@ interface HeaderProvider {
 
   suspend fun generateHeaders(): Map<String, String>
 }
-
-/**
- * Ensures the model name provided has a `models/` prefix
- *
- * Models must be prepended with the `models/` prefix when communicating with the backend.
- */
-private fun fullModelName(name: String): String = name.takeIf { it.contains("/") } ?: "models/$name"
 
 private suspend fun validateResponse(response: HttpResponse) {
   if (response.status == HttpStatusCode.OK) return
