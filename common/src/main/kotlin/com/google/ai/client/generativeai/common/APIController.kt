@@ -52,6 +52,7 @@ import kotlinx.serialization.json.Json
 internal val JSON = Json {
   ignoreUnknownKeys = true
   prettyPrint = false
+  isLenient = true
 }
 
 /**
