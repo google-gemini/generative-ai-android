@@ -192,7 +192,7 @@ internal fun loadResourceFile(path: String) = File("src/test/resources/$path")
  *
  * Syntax sugar for [shouldNotBeNull] and [shouldNotBeEmpty].
  */
-inline fun <reified T: Any> Collection<T>?.shouldNotBeNullOrEmpty(): Collection<T> {
+inline fun <reified T : Any> Collection<T>?.shouldNotBeNullOrEmpty(): Collection<T> {
   shouldNotBeNull()
   shouldNotBeEmpty()
   return this

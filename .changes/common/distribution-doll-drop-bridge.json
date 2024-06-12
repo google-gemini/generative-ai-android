@@ -1,0 +1,1 @@
+{"type":"PATCH","changes":["Make JSON decoding lenient. This should fix issues with JSON literals."]}

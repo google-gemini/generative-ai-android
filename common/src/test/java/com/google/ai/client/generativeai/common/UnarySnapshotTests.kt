@@ -321,11 +321,12 @@ internal class UnarySnapshotTests {
       withTimeout(testTimeout) {
         val response = apiController.generateContent(textGenerateContentRequest("prompt"))
         val content = response.candidates.shouldNotBeNullOrEmpty().first().content
-        val callPart = content.let {
-          it.shouldNotBeNull()
-          it.parts.shouldNotBeEmpty()
-          it.parts.first().shouldBeInstanceOf<FunctionCallPart>()
-        }
+        val callPart =
+          content.let {
+            it.shouldNotBeNull()
+            it.parts.shouldNotBeEmpty()
+            it.parts.first().shouldBeInstanceOf<FunctionCallPart>()
+          }
 
         callPart.functionCall.args["current"] shouldBe "true"
       }
