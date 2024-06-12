@@ -24,6 +24,7 @@ import com.google.ai.client.generativeai.common.shared.FunctionCallPart
 import com.google.ai.client.generativeai.common.shared.HarmCategory
 import com.google.ai.client.generativeai.common.shared.TextPart
 import com.google.ai.client.generativeai.common.util.goldenUnaryFile
+import com.google.ai.client.generativeai.common.util.shouldNotBeNullOrEmpty
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -311,6 +312,22 @@ internal class UnarySnapshotTests {
         val callPart = (response.candidates!!.first().content!!.parts.first() as FunctionCallPart)
 
         callPart.functionCall.args["season"] shouldBe null
+      }
+    }
+
+  @Test
+  fun `function call contains json literal`() =
+    goldenUnaryFile("success-function-call-json-literal.json") {
+      withTimeout(testTimeout) {
+        val response = apiController.generateContent(textGenerateContentRequest("prompt"))
+        val content = response.candidates.shouldNotBeNullOrEmpty().first().content
+        val callPart = content.let {
+          it.shouldNotBeNull()
+          it.parts.shouldNotBeEmpty()
+          it.parts.first().shouldBeInstanceOf<FunctionCallPart>()
+        }
+
+        callPart.functionCall.args["current"] shouldBe "true"
       }
     }
 }

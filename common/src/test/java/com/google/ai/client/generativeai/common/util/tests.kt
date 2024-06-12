@@ -26,6 +26,8 @@ import com.google.ai.client.generativeai.common.RequestOptions
 import com.google.ai.client.generativeai.common.server.Candidate
 import com.google.ai.client.generativeai.common.shared.Content
 import com.google.ai.client.generativeai.common.shared.TextPart
+import io.kotest.matchers.collections.shouldNotBeEmpty
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.http.HttpHeaders
@@ -184,3 +186,14 @@ internal fun loadGoldenFile(path: String): File = loadResourceFile("golden-files
 
 /** Loads a file from the test resources directory. */
 internal fun loadResourceFile(path: String) = File("src/test/resources/$path")
+
+/**
+ * Ensures that a collection is neither null or empty.
+ *
+ * Syntax sugar for [shouldNotBeNull] and [shouldNotBeEmpty].
+ */
+inline fun <reified T: Any> Collection<T>?.shouldNotBeNullOrEmpty(): Collection<T> {
+  shouldNotBeNull()
+  shouldNotBeEmpty()
+  return this
+}
