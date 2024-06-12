@@ -18,7 +18,7 @@ package com.google.ai.client.generativeai.common.server
 
 import com.google.ai.client.generativeai.common.shared.Content
 import com.google.ai.client.generativeai.common.shared.HarmCategory
-import com.google.ai.client.generativeai.common.util.FirstOrdinalSerializer
+import com.google.ai.client.generativeai.common.util.firstOrdinalSerializer
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
@@ -26,13 +26,13 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonNames
 
 object BlockReasonSerializer :
-  KSerializer<BlockReason> by FirstOrdinalSerializer(BlockReason::class)
+  KSerializer<BlockReason> by firstOrdinalSerializer<BlockReason>()
 
 object HarmProbabilitySerializer :
-  KSerializer<HarmProbability> by FirstOrdinalSerializer(HarmProbability::class)
+  KSerializer<HarmProbability> by firstOrdinalSerializer<HarmProbability>()
 
 object FinishReasonSerializer :
-  KSerializer<FinishReason> by FirstOrdinalSerializer(FinishReason::class)
+  KSerializer<FinishReason> by firstOrdinalSerializer<FinishReason>()
 
 @Serializable
 data class PromptFeedback(

@@ -16,7 +16,7 @@
 
 package com.google.ai.client.generativeai.common.shared
 
-import com.google.ai.client.generativeai.common.util.FirstOrdinalSerializer
+import com.google.ai.client.generativeai.common.util.firstOrdinalSerializer
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -30,7 +30,7 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonObject
 
 object HarmCategorySerializer :
-  KSerializer<HarmCategory> by FirstOrdinalSerializer(HarmCategory::class)
+  KSerializer<HarmCategory> by firstOrdinalSerializer<HarmCategory>()
 
 @Serializable(HarmCategorySerializer::class)
 enum class HarmCategory {
