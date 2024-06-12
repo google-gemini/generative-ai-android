@@ -52,7 +52,6 @@ suspend fun chatStreaming() {
       )
   )
 
-  val chat = generativeModel.startChat()
   chat.sendMessageStream("How many paws are in my house?").collect { chunk ->
     print(chunk.text)
   }
@@ -76,7 +75,6 @@ suspend fun chatStreamingWithImages() {
       )
   )
 
-  val chat = generativeModel.startChat()
   val image: Bitmap // = ...
 
   val inputContent = content {
