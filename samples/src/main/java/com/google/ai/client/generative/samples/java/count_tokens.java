@@ -18,41 +18,49 @@ class CountTokens {
   void tokensTextOnly() {
     // [START tokens_text-only]
     // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
-    GenerativeModel gm = new GenerativeModel(/* modelName */ "gemini-1.5-flash",
-                                             // Access your API key as a Build Configuration variable (see "Set up your API key" above)
-                                             /* apiKey */ BuildConfig.apiKey);
+    GenerativeModel gm =
+        new GenerativeModel(
+            /* modelName */ "gemini-1.5-flash",
+            // Access your API key as a Build Configuration variable (see "Set up your API key"
+            // above)
+            /* apiKey */ BuildConfig.apiKey);
     GenerativeModelFutures model = GenerativeModelFutures.from(gm);
 
-    Content inputContent = new Content.Builder()
-      .addText("Write a story about a magic backpack.")
-      .build();
+    Content inputContent =
+        new Content.Builder().addText("Write a story about a magic backpack.").build();
 
     Executor executor; // =  ...
 
     // For text-only input
     ListenableFuture<CountTokensResponse> countTokensResponse = model.countTokens(inputContent);
 
-    Futures.addCallback(countTokensResponse, new FutureCallback<CountTokensResponse>() {
-        @Override
-        public void onSuccess(CountTokensResponse result) {
-          int totalTokens = result.getTotalTokens();
-          System.out.println("TotalTokens = " + totalTokens);
-        }
+    Futures.addCallback(
+        countTokensResponse,
+        new FutureCallback<CountTokensResponse>() {
+          @Override
+          public void onSuccess(CountTokensResponse result) {
+            int totalTokens = result.getTotalTokens();
+            System.out.println("TotalTokens = " + totalTokens);
+          }
 
-        @Override
-        public void onFailure(Throwable t) {
-          t.printStackTrace();
-        }
-      }, executor);
+          @Override
+          public void onFailure(Throwable t) {
+            t.printStackTrace();
+          }
+        },
+        executor);
     // [END tokens_text-only]
   }
 
-  void tokensChat (){
+  void tokensChat() {
     // [START tokens_chat]
     // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
-    GenerativeModel gm = new GenerativeModel(/* modelName */ "gemini-1.5-flash",
-                                             // Access your API key as a Build Configuration variable (see "Set up your API key" above)
-                                             /* apiKey */ BuildConfig.apiKey);
+    GenerativeModel gm =
+        new GenerativeModel(
+            /* modelName */ "gemini-1.5-flash",
+            // Access your API key as a Build Configuration variable (see "Set up your API key"
+            // above)
+            /* apiKey */ BuildConfig.apiKey);
     GenerativeModelFutures model = GenerativeModelFutures.from(gm);
 
     // (optional) Create previous chat history for context
@@ -73,73 +81,78 @@ class CountTokens {
 
     List<Content> history = chat.getChat().getHistory();
 
-    Content messageContent = new Content.Builder()
-      .addText("This is the message I intend to send")
-      .build();
+    Content messageContent =
+        new Content.Builder().addText("This is the message I intend to send").build();
 
     Collections.addAll(history, messageContent);
 
-    ListenableFuture<CountTokensResponse> countTokensResponse = model.countTokens(history.toArray(new Content[0]));
-    Futures.addCallback(response, new FutureCallback<CountTokenResponse>() {
-        @Override
-        public void onSuccess(CountTokenResponse result) {
-          System.out.println(result);
-        }
+    ListenableFuture<CountTokensResponse> countTokensResponse =
+        model.countTokens(history.toArray(new Content[0]));
+    Futures.addCallback(
+        response,
+        new FutureCallback<CountTokenResponse>() {
+          @Override
+          public void onSuccess(CountTokenResponse result) {
+            System.out.println(result);
+          }
 
-        @Override
-        public void onFailure(Throwable t) {
-          t.printStackTrace();
-        }
-      }, executor);
+          @Override
+          public void onFailure(Throwable t) {
+            t.printStackTrace();
+          }
+        },
+        executor);
     // [END tokens_chat]
 
   }
 
-
-  void tokensMultimodalImageInline () {
-    Content text = new Content.Builder()
-      .addText("Write a story about a magic backpack.")
-      .build();
+  void tokensMultimodalImageInline() {
+    Content text = new Content.Builder().addText("Write a story about a magic backpack.").build();
 
     Executor executor = // ...
 
-      // For text-only input
-      ListenableFuture<CountTokensResponse> countTokensResponse = model.countTokens(text);
+        // For text-only input
+        ListenableFuture < CountTokensResponse > countTokensResponse = model.countTokens(text);
 
-    Futures.addCallback(countTokensResponse, new FutureCallback<CountTokensResponse>() {
-        @Override
-        public void onSuccess(CountTokensResponse result) {
-          int totalTokens = result.getTotalTokens();
-          System.out.println("TotalTokens = " + totalTokens);
-        }
+    Futures.addCallback(
+        countTokensResponse,
+        new FutureCallback<CountTokensResponse>() {
+          @Override
+          public void onSuccess(CountTokensResponse result) {
+            int totalTokens = result.getTotalTokens();
+            System.out.println("TotalTokens = " + totalTokens);
+          }
 
-        @Override
-        public void onFailure(Throwable t) {
-          t.printStackTrace();
-        }
-      }, executor);
+          @Override
+          public void onFailure(Throwable t) {
+            t.printStackTrace();
+          }
+        },
+        executor);
 
     // For text-and-image input
-    Bitmap image1 = // ...
-      Bitmap image2 = // ...
+    Bitmap image1; // = ...
+    Bitmap image2; // = ...
 
-      Content multiModalContent = new Content.Builder()
-      .addImage(image1)
-      .addImage(image2)
-      .addText("What's different between these pictures?")
-      .build();
+    Content multiModalContent =
+        new Content.Builder()
+            .addImage(image1)
+            .addImage(image2)
+            .addText("What's different between these pictures?")
+            .build();
 
-    ListenableFuture<CountTokensResponse> countTokensResponse = model.countTokens(multiModalContent);
+    ListenableFuture<CountTokensResponse> countTokensResponse =
+        model.countTokens(multiModalContent);
 
     // For multi-turn conversations (like chat)
     List<Content> history = chat.getChat().getHistory();
 
-    Content messageContent = new Content.Builder()
-      .addText("This is the message I intend to send")
-      .build();
+    Content messageContent =
+        new Content.Builder().addText("This is the message I intend to send").build();
 
     Collections.addAll(history, messageContent);
 
-    ListenableFuture<CountTokensResponse> countTokensResponse = model.countTokens(history.toArray(new Content[0]));
+    ListenableFuture<CountTokensResponse> countTokensResponse =
+        model.countTokens(history.toArray(new Content[0]));
   }
 }

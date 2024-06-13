@@ -18,9 +18,12 @@ class Chat {
   void chat() {
     // [START chat]
     // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
-    GenerativeModel gm = new GenerativeModel(/* modelName */ "gemini-1.5-flash",
-                                             // Access your API key as a Build Configuration variable (see "Set up your API key" above)
-                                             /* apiKey */ BuildConfig.apiKey);
+    GenerativeModel gm =
+        new GenerativeModel(
+            /* modelName */ "gemini-1.5-flash",
+            // Access your API key as a Build Configuration variable (see "Set up your API key"
+            // above)
+            /* apiKey */ BuildConfig.apiKey);
     GenerativeModelFutures model = GenerativeModelFutures.from(gm);
 
     // (optional) Create previous chat history for context
@@ -50,27 +53,33 @@ class Chat {
     // Send the message
     ListenableFuture<GenerateContentResponse> response = chat.sendMessage(userMessage);
 
-    Futures.addCallback(response, new FutureCallback<GenerateContentResponse>() {
-        @Override
-        public void onSuccess(GenerateContentResponse result) {
-          String resultText = result.getText();
-          System.out.println(resultText);
-        }
+    Futures.addCallback(
+        response,
+        new FutureCallback<GenerateContentResponse>() {
+          @Override
+          public void onSuccess(GenerateContentResponse result) {
+            String resultText = result.getText();
+            System.out.println(resultText);
+          }
 
-        @Override
-        public void onFailure(Throwable t) {
-          t.printStackTrace();
-        }
-      }, executor);
+          @Override
+          public void onFailure(Throwable t) {
+            t.printStackTrace();
+          }
+        },
+        executor);
     // [END chat]
   }
 
   void chatStreaming() {
     // [START chat_streaming]
     // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
-    GenerativeModel gm = new GenerativeModel(/* modelName */ "gemini-1.5-flash",
-                                             // Access your API key as a Build Configuration variable (see "Set up your API key" above)
-                                             /* apiKey */ BuildConfig.apiKey);
+    GenerativeModel gm =
+        new GenerativeModel(
+            /* modelName */ "gemini-1.5-flash",
+            // Access your API key as a Build Configuration variable (see "Set up your API key"
+            // above)
+            /* apiKey */ BuildConfig.apiKey);
     GenerativeModelFutures model = GenerativeModelFutures.from(gm);
 
     // (optional) Create previous chat history for context
@@ -99,29 +108,30 @@ class Chat {
 
     // Use streaming with text-only input
     Publisher<GenerateContentResponse> streamingResponse =
-      model.generateContentStream(inputContent);
+        model.generateContentStream(inputContent);
 
     StringBuilder outputContent = new StringBuilder();
 
-    streamingResponse.subscribe(new Subscriber<GenerateContentResponse>() {
-        @Override
-        public void onNext(GenerateContentResponse generateContentResponse) {
-          String chunk = generateContentResponse.getText();
-          outputContent.append(chunk);
-        }
+    streamingResponse.subscribe(
+        new Subscriber<GenerateContentResponse>() {
+          @Override
+          public void onNext(GenerateContentResponse generateContentResponse) {
+            String chunk = generateContentResponse.getText();
+            outputContent.append(chunk);
+          }
 
-        @Override
-        public void onComplete() {
-          System.out.println(outputContent);
-        }
+          @Override
+          public void onComplete() {
+            System.out.println(outputContent);
+          }
 
-        @Override
-        public void onSubscribe(Subscription s) {
-          s.request(Long.MAX_VALUE);
-        }
+          @Override
+          public void onSubscribe(Subscription s) {
+            s.request(Long.MAX_VALUE);
+          }
 
-        // ... other methods omitted for brevity
-      });
+          // ... other methods omitted for brevity
+        });
 
     // [END chat_streaming]
   }
@@ -129,9 +139,12 @@ class Chat {
   void chatStreamingWithImages() {
     // [START chat_with-images_streaming]
     // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
-    GenerativeModel gm = new GenerativeModel(/* modelName */ "gemini-1.5-flash",
-                                             // Access your API key as a Build Configuration variable (see "Set up your API key" above)
-                                             /* apiKey */ BuildConfig.apiKey);
+    GenerativeModel gm =
+        new GenerativeModel(
+            /* modelName */ "gemini-1.5-flash",
+            // Access your API key as a Build Configuration variable (see "Set up your API key"
+            // above)
+            /* apiKey */ BuildConfig.apiKey);
     GenerativeModelFutures model = GenerativeModelFutures.from(gm);
 
     // (optional) Create previous chat history for context
@@ -153,9 +166,8 @@ class Chat {
     // Create a new user message
     Bitmap image; // = ...
 
-    Content content = new Content.Builder()
-      .addText("What's different between these pictures?")
-      .build();
+    Content content =
+        new Content.Builder().addText("What's different between these pictures?").build();
 
     Content.Builder userMessageBuilder = new Content.Builder();
     userMessageBuilder.setRole("user");
@@ -167,30 +179,30 @@ class Chat {
 
     // Use streaming with text-only input
     Publisher<GenerateContentResponse> streamingResponse =
-      model.generateContentStream(inputContent);
+        model.generateContentStream(inputContent);
 
     StringBuilder outputContent = new StringBuilder();
 
-    streamingResponse.subscribe(new Subscriber<GenerateContentResponse>() {
-        @Override
-        public void onNext(GenerateContentResponse generateContentResponse) {
-          String chunk = generateContentResponse.getText();
-          outputContent.append(chunk);
-        }
+    streamingResponse.subscribe(
+        new Subscriber<GenerateContentResponse>() {
+          @Override
+          public void onNext(GenerateContentResponse generateContentResponse) {
+            String chunk = generateContentResponse.getText();
+            outputContent.append(chunk);
+          }
 
-        @Override
-        public void onComplete() {
-          System.out.println(outputContent);
-        }
+          @Override
+          public void onComplete() {
+            System.out.println(outputContent);
+          }
 
-        @Override
-        public void onSubscribe(Subscription s) {
-          s.request(Long.MAX_VALUE);
-        }
+          @Override
+          public void onSubscribe(Subscription s) {
+            s.request(Long.MAX_VALUE);
+          }
 
-        // ... other methods omitted for brevity
-      });
+          // ... other methods omitted for brevity
+        });
     // [END chat_with-images_streaming]
   }
-
 }

@@ -15,41 +15,40 @@
 package com.google.ai.client.generative.samples.java;
 
 class SafetySettings {
-    void safetySettings() {
-        // [START safety-settings]
-        SafetySetting harassmentSafety = new SafetySetting(HarmCategory.HARASSMENT,
-                                                           BlockThreshold.ONLY_HIGH);
+  void safetySettings() {
+    // [START safety-settings]
+    SafetySetting harassmentSafety =
+        new SafetySetting(HarmCategory.HARASSMENT, BlockThreshold.ONLY_HIGH);
 
-        // The Gemini 1.5 models are versatile and work with most use cases
-        GenerativeModel gm = new GenerativeModel(
-                                                 "gemini-1.5-flash",
-                                                 BuildConfig.apiKey,
-                                                 null, // generation config is optional
-                                                 Collections.singletonList(harassmentSafety)
-                                                 );
+    // The Gemini 1.5 models are versatile and work with most use cases
+    GenerativeModel gm =
+        new GenerativeModel(
+            "gemini-1.5-flash",
+            BuildConfig.apiKey,
+            null, // generation config is optional
+            Collections.singletonList(harassmentSafety));
 
-        GenerativeModelFutures model = GenerativeModelFutures.from(gm);
-        // [END safety-settings]
-    }
+    GenerativeModelFutures model = GenerativeModelFutures.from(gm);
+    // [END safety-settings]
+  }
 
-    void SafetySettingsMulti() {
-        // [START safety-settings_multi]
-        SafetySetting harassmentSafety = new SafetySetting(HarmCategory.HARASSMENT,
-                                                           BlockThreshold.ONLY_HIGH);
+  void SafetySettingsMulti() {
+    // [START safety-settings_multi]
+    SafetySetting harassmentSafety =
+        new SafetySetting(HarmCategory.HARASSMENT, BlockThreshold.ONLY_HIGH);
 
-        SafetySetting hateSpeechSafety = new SafetySetting(HarmCategory.HATE_SPEECH,
-                                                           BlockThreshold.MEDIUM_AND_ABOVE);
+    SafetySetting hateSpeechSafety =
+        new SafetySetting(HarmCategory.HATE_SPEECH, BlockThreshold.MEDIUM_AND_ABOVE);
 
-        // The Gemini 1.5 models are versatile and work with most use cases
-        GenerativeModel gm = new GenerativeModel(
-                                                 "gemini-1.5-flash",
-                                                 BuildConfig.apiKey,
-                                                 null, // generation config is optional
-                                                 Arrays.asList(harassmentSafety, hateSpeechSafety)
-                                                 );
+    // The Gemini 1.5 models are versatile and work with most use cases
+    GenerativeModel gm =
+        new GenerativeModel(
+            "gemini-1.5-flash",
+            BuildConfig.apiKey,
+            null, // generation config is optional
+            Arrays.asList(harassmentSafety, hateSpeechSafety));
 
-        GenerativeModelFutures model = GenerativeModelFutures.from(gm);
-        // [END safety-settings_multi]
-    }
-
+    GenerativeModelFutures model = GenerativeModelFutures.from(gm);
+    // [END safety-settings_multi]
+  }
 }

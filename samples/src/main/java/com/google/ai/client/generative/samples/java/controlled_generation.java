@@ -15,5 +15,5 @@
 package com.google.ai.client.generative.samples.java;
 
 class ControlledGeneration {
-    // TODO
+  // TODO
 }

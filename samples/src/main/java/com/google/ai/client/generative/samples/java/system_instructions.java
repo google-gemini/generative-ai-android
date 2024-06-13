@@ -15,19 +15,20 @@
 package com.google.ai.client.generative.samples.java;
 
 class SystemInstructions {
-    void systemInstructions() {
-        // [START system_instructions]
-        GenerativeModel model = new GenerativeModel(
-                                                    /* modelName */ "gemini-1.5-flash",
-                                                    /* apiKey */ BuildConfig.apiKey,
-                                                    /* generationConfig (optional) */ null,
-                                                    /* safetySettings (optional) */ null,
-                                                    /* requestOptions (optional) */ new RequestOptions(),
-                                                    /* tools (optional) */ null,
-                                                    /* toolsConfig (optional) */ null,
-                                                    /* systemInstruction (optional) */ new Content.Builder().addText("You are a cat. Your name is Neko.").build()
-                                                    );
-        // [END system_instructions]
-    }
-
+  void systemInstructions() {
+    // [START system_instructions]
+    GenerativeModel model =
+        new GenerativeModel(
+            /* modelName */ "gemini-1.5-flash",
+            /* apiKey */ BuildConfig.apiKey,
+            /* generationConfig (optional) */ null,
+            /* safetySettings (optional) */ null,
+            /* requestOptions (optional) */ new RequestOptions(),
+            /* tools (optional) */ null,
+            /* toolsConfig (optional) */ null,
+            /* systemInstruction (optional) */ new Content.Builder()
+                .addText("You are a cat. Your name is Neko.")
+                .build());
+    // [END system_instructions]
+  }
 }

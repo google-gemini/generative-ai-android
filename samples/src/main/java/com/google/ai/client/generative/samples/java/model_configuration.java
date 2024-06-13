@@ -15,26 +15,22 @@
 package com.google.ai.client.generative.samples.java;
 
 class ConfigureModel {
-    void configureModel() {
-        // [START configure_model]
-        GenerationConfig.Builder configBuilder = new GenerationConfig.Builder();
-        configBuilder.temperature = 0.9f;
-        configBuilder.topK = 16;
-        configBuilder.topP = 0.1f;
-        configBuilder.maxOutputTokens = 200;
-        configBuilder.stopSequences = Arrays.asList("red");
+  void configureModel() {
+    // [START configure_model]
+    GenerationConfig.Builder configBuilder = new GenerationConfig.Builder();
+    configBuilder.temperature = 0.9f;
+    configBuilder.topK = 16;
+    configBuilder.topP = 0.1f;
+    configBuilder.maxOutputTokens = 200;
+    configBuilder.stopSequences = Arrays.asList("red");
 
-        GenerationConfig generationConfig = configBuilder.build();
+    GenerationConfig generationConfig = configBuilder.build();
 
-        // The Gemini 1.5 models are versatile and work with most use cases
-        GenerativeModel gm = new GenerativeModel(
-                                                 "gemini-1.5-flash",
-                                                 BuildConfig.apiKey,
-                                                 generationConfig
-                                                 );
+    // The Gemini 1.5 models are versatile and work with most use cases
+    GenerativeModel gm =
+        new GenerativeModel("gemini-1.5-flash", BuildConfig.apiKey, generationConfig);
 
-        GenerativeModelFutures model = GenerativeModelFutures.from(gm);
-        // [END configure_model]
-    }
-
+    GenerativeModelFutures model = GenerativeModelFutures.from(gm);
+    // [END configure_model]
+  }
 }
