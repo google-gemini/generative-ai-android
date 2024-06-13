@@ -17,4 +17,5 @@ jobs:
       - name: compile sample app
         run: |
           cd generativeai-android-sample
+          echo "apiKey=invalidApiKey" > local.properties
           ./gradlew app:assemble
