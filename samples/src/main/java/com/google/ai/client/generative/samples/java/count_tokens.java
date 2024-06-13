@@ -14,12 +14,16 @@
 
 package com.google.ai.client.generative.samples.java;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import com.google.ai.client.generativeai.GenerativeModel;
 import com.google.ai.client.generativeai.java.ChatFutures;
 import com.google.ai.client.generativeai.java.GenerativeModelFutures;
 import com.google.ai.client.generativeai.type.Content;
 import com.google.ai.client.generativeai.type.CountTokensResponse;
+import com.google.ai.sample.R;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -123,7 +127,7 @@ class CountTokens {
 
   }
 
-  void tokensMultimodalImageInline() {
+  void tokensMultimodalImageInline(Context context) {
     // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
     GenerativeModel gm =
         new GenerativeModel(
@@ -138,8 +142,8 @@ class CountTokens {
     Executor executor = Executors.newSingleThreadExecutor();
 
     // For text-and-image input
-    Bitmap image1; // = ...
-    Bitmap image2; // = ...
+    Bitmap image1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.image1);
+    Bitmap image2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.image2);
 
     Content multiModalContent =
         new Content.Builder()

@@ -14,9 +14,12 @@
 
 package com.google.ai.client.generative.samples
 
+import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
+import com.google.ai.sample.R
 
 suspend fun tokensTextOnly () {
   // [START tokens_text-only]
@@ -56,7 +59,7 @@ suspend fun tokensChat () {
   // [END tokens_chat]
 }
 
-suspend fun tokensMultimodalImageInline () {
+suspend fun tokensMultimodalImageInline (context: Context) {
   // [START tokens_multimodal-image_inline]
   val generativeModel = GenerativeModel(
       // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
@@ -65,8 +68,8 @@ suspend fun tokensMultimodalImageInline () {
       apiKey = BuildConfig.apiKey
   )
 
-  val image1: Bitmap // = ...
-  val image2: Bitmap // = ...
+  val image1: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.image1)
+  val image2: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.image2)
 
   val multiModalContent = content {
     image(image1)

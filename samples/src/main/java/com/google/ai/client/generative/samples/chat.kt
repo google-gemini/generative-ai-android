@@ -14,9 +14,13 @@
 
 package com.google.ai.client.generative.samples
 
+import android.app.Application
+import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
+import com.google.ai.sample.R
 
 suspend fun chat() {
   // [START chat]
@@ -62,7 +66,7 @@ suspend fun chatStreaming() {
   // [END chat_streaming]
 }
 
-suspend fun chatStreamingWithImages() {
+suspend fun chatStreamingWithImages(context: Context) {
   // [START chat_with-images_streaming]
   // Use streaming with multi-turn conversations (like chat)
   val generativeModel = GenerativeModel(
@@ -79,7 +83,7 @@ suspend fun chatStreamingWithImages() {
       )
   )
 
-  val image: Bitmap // = ...
+  val image: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.image)
 
   val inputContent = content {
     image(image)

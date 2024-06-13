@@ -14,12 +14,16 @@
 
 package com.google.ai.client.generative.samples.java;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import com.google.ai.client.generativeai.GenerativeModel;
 import com.google.ai.client.generativeai.java.ChatFutures;
 import com.google.ai.client.generativeai.java.GenerativeModelFutures;
 import com.google.ai.client.generativeai.type.Content;
 import com.google.ai.client.generativeai.type.GenerateContentResponse;
+import com.google.ai.sample.R;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -156,7 +160,7 @@ class Chat {
     // [END chat_streaming]
   }
 
-  void chatStreamingWithImages() {
+  void chatStreamingWithImages(Context context) {
     // [START chat_with-images_streaming]
     // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
     GenerativeModel gm =
@@ -184,7 +188,7 @@ class Chat {
     ChatFutures chat = model.startChat(history);
 
     // Create a new user message
-    Bitmap image; // = ...
+    Bitmap image = BitmapFactory.decodeResource(context.getResources(), R.drawable.image);
 
     Content.Builder userMessageBuilder = new Content.Builder();
     userMessageBuilder.setRole("user");

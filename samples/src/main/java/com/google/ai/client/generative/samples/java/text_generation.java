@@ -14,11 +14,15 @@
 
 package com.google.ai.client.generative.samples.java;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import com.google.ai.client.generativeai.GenerativeModel;
 import com.google.ai.client.generativeai.java.GenerativeModelFutures;
 import com.google.ai.client.generativeai.type.Content;
 import com.google.ai.client.generativeai.type.GenerateContentResponse;
+import com.google.ai.sample.R;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -109,7 +113,7 @@ class TextGeneration {
     // [END text_gen_text-only-prompt_streaming]
   }
 
-  void TextGenMultimodalOneImagePrompt() {
+  void TextGenMultimodalOneImagePrompt(Context context) {
     // [START text_gen_multimodal-one-image-prompt]
     // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
     GenerativeModel gm =
@@ -120,7 +124,7 @@ class TextGeneration {
             /* apiKey */ BuildConfig.apiKey);
     GenerativeModelFutures model = GenerativeModelFutures.from(gm);
 
-    Bitmap image; // = ...
+    Bitmap image = BitmapFactory.decodeResource(context.getResources(), R.drawable.image);
 
     Content content =
         new Content.Builder()
@@ -150,7 +154,7 @@ class TextGeneration {
     // [END text_gen_multimodal-one-image-prompt]
   }
 
-  void TextGenMultimodalOneImagePromptStreaming() {
+  void TextGenMultimodalOneImagePromptStreaming(Context context) {
     // [START text_gen_multimodal-one-image-prompt_streaming]
     // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
     GenerativeModel gm =
@@ -161,8 +165,8 @@ class TextGeneration {
             /* apiKey */ BuildConfig.apiKey);
     GenerativeModelFutures model = GenerativeModelFutures.from(gm);
 
-    Bitmap image1; // = ...
-    Bitmap image2; // = ...
+    Bitmap image1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.image1);
+    Bitmap image2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.image2);
 
     Content content =
         new Content.Builder()
@@ -204,7 +208,7 @@ class TextGeneration {
     // [END text_gen_multimodal-one-image-prompt_streaming]
   }
 
-  void TextGenMultimodalMultiImagePrompt() {
+  void TextGenMultimodalMultiImagePrompt(Context context) {
     // [START text_gen_multimodal-multi-image-prompt]
     // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
     GenerativeModel gm =
@@ -215,8 +219,8 @@ class TextGeneration {
             /* apiKey */ BuildConfig.apiKey);
     GenerativeModelFutures model = GenerativeModelFutures.from(gm);
 
-    Bitmap image1; // = ...
-    Bitmap image2; // = ...
+    Bitmap image1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.image1);
+    Bitmap image2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.image2);
 
     Content content =
         new Content.Builder()
@@ -247,7 +251,7 @@ class TextGeneration {
     // [END text_gen_multimodal-multi-image-prompt]
   }
 
-  void TextGenMultimodalMultiImagePromptStreaming() {
+  void TextGenMultimodalMultiImagePromptStreaming(Context context) {
     // [START text_gen_multimodal-multi-image-prompt_streaming]
     // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
     GenerativeModel gm =
@@ -258,8 +262,8 @@ class TextGeneration {
             /* apiKey */ BuildConfig.apiKey);
     GenerativeModelFutures model = GenerativeModelFutures.from(gm);
 
-    Bitmap image1; // = ...
-    Bitmap image2; // = ...
+    Bitmap image1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.image1);
+    Bitmap image2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.image2);
 
     Content content =
         new Content.Builder()
