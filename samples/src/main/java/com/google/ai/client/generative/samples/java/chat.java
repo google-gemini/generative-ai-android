@@ -17,7 +17,6 @@ package com.google.ai.client.generative.samples.java;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-
 import com.google.ai.client.generativeai.GenerativeModel;
 import com.google.ai.client.generativeai.java.ChatFutures;
 import com.google.ai.client.generativeai.java.GenerativeModelFutures;
@@ -127,8 +126,7 @@ class Chat {
     Content userMessage = userMessageBuilder.build();
 
     // Use streaming with text-only input
-    Publisher<GenerateContentResponse> streamingResponse =
-        model.generateContentStream(userMessage);
+    Publisher<GenerateContentResponse> streamingResponse = model.generateContentStream(userMessage);
 
     StringBuilder outputContent = new StringBuilder();
 
@@ -197,8 +195,7 @@ class Chat {
     Content userMessage = userMessageBuilder.build();
 
     // Use streaming with text-only input
-    Publisher<GenerateContentResponse> streamingResponse =
-        model.generateContentStream(userMessage);
+    Publisher<GenerateContentResponse> streamingResponse = model.generateContentStream(userMessage);
 
     StringBuilder outputContent = new StringBuilder();
 
