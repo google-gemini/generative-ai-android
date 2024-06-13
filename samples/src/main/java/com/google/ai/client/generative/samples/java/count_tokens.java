@@ -105,7 +105,8 @@ class CountTokens {
 
     ListenableFuture<CountTokensResponse> countTokensResponse =
         model.countTokens(history.toArray(new Content[0]));
-    Futures.addCallback(countTokensResponse,
+    Futures.addCallback(
+        countTokensResponse,
         new FutureCallback<CountTokensResponse>() {
           @Override
           public void onSuccess(CountTokensResponse result) {
@@ -150,22 +151,22 @@ class CountTokens {
     ListenableFuture<CountTokensResponse> countTokensResponse =
         model.countTokens(multiModalContent);
 
-      Futures.addCallback(
-              countTokensResponse,
-              new FutureCallback<CountTokensResponse>() {
-                  @Override
-                  public void onSuccess(CountTokensResponse result) {
-                      int totalTokens = result.getTotalTokens();
-                      System.out.println("TotalTokens = " + totalTokens);
-                  }
+    Futures.addCallback(
+        countTokensResponse,
+        new FutureCallback<CountTokensResponse>() {
+          @Override
+          public void onSuccess(CountTokensResponse result) {
+            int totalTokens = result.getTotalTokens();
+            System.out.println("TotalTokens = " + totalTokens);
+          }
 
-                  @Override
-                  public void onFailure(Throwable t) {
-                      t.printStackTrace();
-                  }
-              },
-              executor);
-      // [END tokens_text-only]
+          @Override
+          public void onFailure(Throwable t) {
+            t.printStackTrace();
+          }
+        },
+        executor);
+    // [END tokens_text-only]
 
   }
 }

@@ -60,10 +60,10 @@ suspend fun textGenMultimodalOneImagePrompt () {
       apiKey = BuildConfig.apiKey
   )
 
-  val image: Bitmap // = ...
+
 
   val inputContent = content {
-    image(image)
+
     text("What's in this picture?")
   }
 
@@ -81,10 +81,10 @@ suspend fun textGenMultimodalOneImagePromptStreaming () {
       apiKey = BuildConfig.apiKey
   )
 
-  val image1: Bitmap // = ...
+
 
   val inputContent = content {
-    image(image1)
+
     text("What's in this picture?")
   }
 
@@ -103,12 +103,9 @@ suspend fun textGenMultimodalMultiImagePrompt () {
       apiKey = BuildConfig.apiKey
   )
 
-  val image1: Bitmap // = ...
-  val image2: Bitmap // = ...
 
   val inputContent = content {
-    image(image1)
-    image(image2)
+
     text("What's different between these pictures?")
   }
 
@@ -127,12 +124,10 @@ suspend fun textGenMultimodalMultiImagePromptStreaming () {
       apiKey = BuildConfig.apiKey
   )
 
-  val image1: Bitmap // = ...
-  val image2: Bitmap // = ...
+
 
   val inputContent = content {
-    image(image1)
-    image(image2)
+
     text("What's different between these pictures?")
   }
 

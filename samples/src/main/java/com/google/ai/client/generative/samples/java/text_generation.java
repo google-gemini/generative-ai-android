@@ -14,6 +14,7 @@
 
 package com.google.ai.client.generative.samples.java;
 
+import android.graphics.Bitmap;
 import com.google.ai.client.generativeai.GenerativeModel;
 import com.google.ai.client.generativeai.java.GenerativeModelFutures;
 import com.google.ai.client.generativeai.type.Content;
@@ -21,9 +22,11 @@ import com.google.ai.client.generativeai.type.GenerateContentResponse;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
-
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import org.reactivestreams.Publisher;
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
 class TextGeneration {
   void TextGenTextOnlyPrompt() {
@@ -125,7 +128,8 @@ class TextGeneration {
             .addImage(image)
             .build();
 
-    Executor executor; // = ...
+    // TODO COMMENT
+    Executor executor = Executors.newSingleThreadExecutor();
 
     ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
     Futures.addCallback(
@@ -167,7 +171,8 @@ class TextGeneration {
             .addImage(image2)
             .build();
 
-    Executor executor; // = ...
+    // TODO COMMENT
+    Executor executor = Executors.newSingleThreadExecutor();
 
     Publisher<GenerateContentResponse> streamingResponse = model.generateContentStream(content);
 
@@ -220,7 +225,8 @@ class TextGeneration {
             .addImage(image2)
             .build();
 
-    Executor executor; // = ...
+    // TODO COMMENT
+    Executor executor = Executors.newSingleThreadExecutor();
 
     ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
     Futures.addCallback(

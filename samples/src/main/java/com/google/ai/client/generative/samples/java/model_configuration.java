@@ -14,6 +14,11 @@
 
 package com.google.ai.client.generative.samples.java;
 
+import com.google.ai.client.generativeai.GenerativeModel;
+import com.google.ai.client.generativeai.java.GenerativeModelFutures;
+import com.google.ai.client.generativeai.type.GenerationConfig;
+import java.util.Arrays;
+
 class ConfigureModel {
   void configureModel() {
     // [START configure_model]
