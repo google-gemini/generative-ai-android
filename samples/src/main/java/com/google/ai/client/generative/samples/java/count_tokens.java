@@ -109,10 +109,10 @@ class CountTokens {
   void tokensMultimodalImageInline() {
     Content text = new Content.Builder().addText("Write a story about a magic backpack.").build();
 
-    Executor executor = // ...
+    Executor executor; // = ...
 
-        // For text-only input
-        ListenableFuture < CountTokensResponse > countTokensResponse = model.countTokens(text);
+    // For text-only input
+    ListenableFuture < CountTokensResponse > countTokensResponse = model.countTokens(text);
 
     Futures.addCallback(
         countTokensResponse,
