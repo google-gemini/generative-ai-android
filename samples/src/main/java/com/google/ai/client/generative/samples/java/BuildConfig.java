@@ -14,6 +14,9 @@
 
 package com.google.ai.client.generative.samples.java;
 
+// This file was manually created for testing purposes only.
+// For instructions on how to generate this file automatically, see the section
+// "Set up your API Key" in https://ai.google.dev/gemini-api/docs/quickstart?lang=android
 public class BuildConfig {
   public static String apiKey = "invalidApiKey";
 }
