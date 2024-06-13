@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.google.ai.client.generative.samples;
+package com.google.ai.client.generative.samples.java;
 
 class Chat {
   void chat() {
