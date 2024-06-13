@@ -1,0 +1,19 @@
+name: Sample action
+
+on:
+    workflow_dispatch
+
+jobs:
+  build-sample-app:
+    runs-on: ubuntu-latest
+
+    steps: actions/checkout@v2
+    - uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        cache: gradle
+    - name: compile sample app
+      run: |
+        cd generativeai-android-sample
+        ./gradlew app:assemble
