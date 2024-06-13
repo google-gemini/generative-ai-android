@@ -21,14 +21,14 @@ import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
 import com.google.ai.sample.R
 
-suspend fun tokensTextOnly () {
+suspend fun tokensTextOnly() {
   // [START tokens_text-only]
-  val generativeModel = GenerativeModel(
-      // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
-      modelName = "gemini-1.5-flash",
-      // Access your API key as a Build Configuration variable (see "Set up your API key" above)
-      apiKey = BuildConfig.apiKey
-  )
+  val generativeModel =
+      GenerativeModel(
+          // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
+          modelName = "gemini-1.5-flash",
+          // Access your API key as a Build Configuration variable (see "Set up your API key" above)
+          apiKey = BuildConfig.apiKey)
 
   // For text-only input
   val (totalTokens) = generativeModel.countTokens("Write a story about a magic backpack.")
@@ -36,37 +36,39 @@ suspend fun tokensTextOnly () {
   // [END tokens_text-only]
 }
 
-suspend fun tokensChat () {
+suspend fun tokensChat() {
   // [START tokens_chat]
-    val generativeModel = GenerativeModel(
-      // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
-      modelName = "gemini-1.5-flash",
-      // Access your API key as a Build Configuration variable (see "Set up your API key" above)
-      apiKey = BuildConfig.apiKey
-  )
+  val generativeModel =
+      GenerativeModel(
+          // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
+          modelName = "gemini-1.5-flash",
+          // Access your API key as a Build Configuration variable (see "Set up your API key" above)
+          apiKey = BuildConfig.apiKey)
 
-  val chat = generativeModel.startChat(
-      history = listOf(
-          content(role = "user") { text("Hello, I have 2 dogs in my house.") },
-          content(role = "model") { text("Great to meet you. What would you like to know?") }
-      )
-  )
+  val chat =
+      generativeModel.startChat(
+          history =
+              listOf(
+                  content(role = "user") { text("Hello, I have 2 dogs in my house.") },
+                  content(role = "model") {
+                    text("Great to meet you. What would you like to know?")
+                  }))
 
   val history = chat.history
-  val messageContent = content { text("This is the message I intend to send")}
+  val messageContent = content { text("This is the message I intend to send") }
   val (totalTokens) = generativeModel.countTokens(*history.toTypedArray(), messageContent)
   print(totalTokens)
   // [END tokens_chat]
 }
 
-suspend fun tokensMultimodalImageInline (context: Context) {
+suspend fun tokensMultimodalImageInline(context: Context) {
   // [START tokens_multimodal-image_inline]
-  val generativeModel = GenerativeModel(
-      // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
-      modelName = "gemini-1.5-flash",
-      // Access your API key as a Build Configuration variable (see "Set up your API key" above)
-      apiKey = BuildConfig.apiKey
-  )
+  val generativeModel =
+      GenerativeModel(
+          // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
+          modelName = "gemini-1.5-flash",
+          // Access your API key as a Build Configuration variable (see "Set up your API key" above)
+          apiKey = BuildConfig.apiKey)
 
   val image1: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.image1)
   val image2: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.image2)

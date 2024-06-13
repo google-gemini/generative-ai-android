@@ -21,14 +21,12 @@ import com.google.ai.client.generativeai.type.SafetySetting
 
 suspend fun safetySettings() {
   // [START safety-settings]
-  val generativeModel = GenerativeModel(
-      // The Gemini 1.5 models are versatile and work with most use cases
-      modelName = "gemini-1.5-flash",
-      apiKey = BuildConfig.apiKey,
-      safetySettings = listOf(
-          SafetySetting(HarmCategory.HARASSMENT, BlockThreshold.ONLY_HIGH)
-      )
-  )
+  val generativeModel =
+      GenerativeModel(
+          // The Gemini 1.5 models are versatile and work with most use cases
+          modelName = "gemini-1.5-flash",
+          apiKey = BuildConfig.apiKey,
+          safetySettings = listOf(SafetySetting(HarmCategory.HARASSMENT, BlockThreshold.ONLY_HIGH)))
   // [END safety-settings]
 }
 
@@ -38,11 +36,11 @@ suspend fun SafetySettingsMulti() {
 
   val hateSpeechSafety = SafetySetting(HarmCategory.HATE_SPEECH, BlockThreshold.MEDIUM_AND_ABOVE)
 
-  val generativeModel = GenerativeModel(
-      // The Gemini 1.5 models are versatile and work with most use cases
-      modelName = "gemini-1.5-flash",
-      apiKey = BuildConfig.apiKey,
-      safetySettings = listOf(harassmentSafety, hateSpeechSafety)
-  )
+  val generativeModel =
+      GenerativeModel(
+          // The Gemini 1.5 models are versatile and work with most use cases
+          modelName = "gemini-1.5-flash",
+          apiKey = BuildConfig.apiKey,
+          safetySettings = listOf(harassmentSafety, hateSpeechSafety))
   // [END safety-settings_multi]
 }

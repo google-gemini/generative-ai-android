@@ -19,10 +19,11 @@ import com.google.ai.client.generativeai.type.content
 
 suspend fun systemInstructions() {
   // [START system_instructions]
-  val generativeModel = GenerativeModel(
-      modelName = "gemini-1.5-flash",
-      apiKey = BuildConfig.apiKey,
-      systemInstruction = content { text("You are a cat. Your name is Neko.") },
-  )
+  val generativeModel =
+      GenerativeModel(
+          modelName = "gemini-1.5-flash",
+          apiKey = BuildConfig.apiKey,
+          systemInstruction = content { text("You are a cat. Your name is Neko.") },
+      )
   // [END system_instructions]
 }

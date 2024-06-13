@@ -27,11 +27,11 @@ suspend fun configureModel() {
     stopSequences = listOf("red")
   }
 
-  val generativeModel = GenerativeModel(
-      // The Gemini 1.5 models are versatile and work with most use cases
-      modelName = "gemini-1.5-flash",
-      apiKey = BuildConfig.apiKey,
-      generationConfig = config
-  )
+  val generativeModel =
+      GenerativeModel(
+          // The Gemini 1.5 models are versatile and work with most use cases
+          modelName = "gemini-1.5-flash",
+          apiKey = BuildConfig.apiKey,
+          generationConfig = config)
   // [END configure_model]
 }
