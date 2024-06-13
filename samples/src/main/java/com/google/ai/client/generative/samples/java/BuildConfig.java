@@ -15,5 +15,5 @@
 package com.google.ai.client.generative.samples.java;
 
 public class BuildConfig {
-    public static String apiKey = "invalidApiKey";
+  public static String apiKey = "invalidApiKey";
 }

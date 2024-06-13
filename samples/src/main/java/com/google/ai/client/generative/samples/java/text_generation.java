@@ -14,6 +14,17 @@
 
 package com.google.ai.client.generative.samples.java;
 
+import com.google.ai.client.generativeai.GenerativeModel;
+import com.google.ai.client.generativeai.java.GenerativeModelFutures;
+import com.google.ai.client.generativeai.type.Content;
+import com.google.ai.client.generativeai.type.GenerateContentResponse;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 class TextGeneration {
   void TextGenTextOnlyPrompt() {
     // [START text_gen_text-only-prompt]
@@ -29,7 +40,8 @@ class TextGeneration {
     Content content =
         new Content.Builder().addText("Write a story about a magic backpack.").build();
 
-    Executor executor; // = ...
+    // TODO COMMENT
+    Executor executor = Executors.newSingleThreadExecutor();
 
     ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
     Futures.addCallback(

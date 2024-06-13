@@ -14,7 +14,25 @@
 
 package com.google.ai.client.generative.samples.java;
 
+import android.graphics.Bitmap;
+
 import com.google.ai.client.generativeai.GenerativeModel;
+import com.google.ai.client.generativeai.java.ChatFutures;
+import com.google.ai.client.generativeai.java.GenerativeModelFutures;
+import com.google.ai.client.generativeai.type.Content;
+import com.google.ai.client.generativeai.type.GenerateContentResponse;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+
+import org.reactivestreams.Publisher;
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 class Chat {
   void chat() {
@@ -50,7 +68,8 @@ class Chat {
     userMessageBuilder.addText("How many paws are in my house?");
     Content userMessage = userMessageBuilder.build();
 
-    Executor executor; // = ...
+      // TODO COMMENT
+      Executor executor = Executors.newSingleThreadExecutor();
 
     // Send the message
     ListenableFuture<GenerateContentResponse> response = chat.sendMessage(userMessage);
@@ -106,7 +125,8 @@ class Chat {
     userMessageBuilder.addText("How many paws are in my house?");
     Content userMessage = userMessageBuilder.build();
 
-    Executor executor; // = ...
+      // TODO COMMENT
+      Executor executor = Executors.newSingleThreadExecutor();
 
     // Use streaming with text-only input
     Publisher<GenerateContentResponse> streamingResponse =
@@ -177,7 +197,8 @@ class Chat {
     userMessageBuilder.addText("This is a picture of them, what breed are they?");
     Content userMessage = userMessageBuilder.build();
 
-    Executor executor; // = ...
+      // TODO COMMENT
+      Executor executor = Executors.newSingleThreadExecutor();
 
     // Use streaming with text-only input
     Publisher<GenerateContentResponse> streamingResponse =

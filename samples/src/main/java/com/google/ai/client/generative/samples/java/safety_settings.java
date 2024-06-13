@@ -14,6 +14,14 @@
 
 package com.google.ai.client.generative.samples.java;
 
+import com.google.ai.client.generativeai.GenerativeModel;
+import com.google.ai.client.generativeai.java.GenerativeModelFutures;
+import com.google.ai.client.generativeai.type.BlockThreshold;
+import com.google.ai.client.generativeai.type.HarmCategory;
+import com.google.ai.client.generativeai.type.SafetySetting;
+import java.util.Arrays;
+import java.util.Collections;
+
 class SafetySettings {
   void safetySettings() {
     // [START safety-settings]

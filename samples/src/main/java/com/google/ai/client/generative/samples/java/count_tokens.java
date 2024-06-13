@@ -14,6 +14,21 @@
 
 package com.google.ai.client.generative.samples.java;
 
+import android.graphics.Bitmap;
+import com.google.ai.client.generativeai.GenerativeModel;
+import com.google.ai.client.generativeai.java.ChatFutures;
+import com.google.ai.client.generativeai.java.GenerativeModelFutures;
+import com.google.ai.client.generativeai.type.Content;
+import com.google.ai.client.generativeai.type.CountTokensResponse;
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 class CountTokens {
   void tokensTextOnly() {
     // [START tokens_text-only]
@@ -29,7 +44,8 @@ class CountTokens {
     Content inputContent =
         new Content.Builder().addText("Write a story about a magic backpack.").build();
 
-    Executor executor; // =  ...
+    // TODO COMMENT
+    Executor executor = Executors.newSingleThreadExecutor();
 
     // For text-only input
     ListenableFuture<CountTokensResponse> countTokensResponse = model.countTokens(inputContent);
@@ -79,20 +95,20 @@ class CountTokens {
     // Initialize the chat
     ChatFutures chat = model.startChat(history);
 
-    List<Content> history = chat.getChat().getHistory();
-
     Content messageContent =
         new Content.Builder().addText("This is the message I intend to send").build();
 
     Collections.addAll(history, messageContent);
 
+    // TODO COMMENT
+    Executor executor = Executors.newSingleThreadExecutor();
+
     ListenableFuture<CountTokensResponse> countTokensResponse =
         model.countTokens(history.toArray(new Content[0]));
-    Futures.addCallback(
-        response,
-        new FutureCallback<CountTokenResponse>() {
+    Futures.addCallback(countTokensResponse,
+        new FutureCallback<CountTokensResponse>() {
           @Override
-          public void onSuccess(CountTokenResponse result) {
+          public void onSuccess(CountTokensResponse result) {
             System.out.println(result);
           }
 
@@ -107,28 +123,18 @@ class CountTokens {
   }
 
   void tokensMultimodalImageInline() {
+    // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
+    GenerativeModel gm =
+        new GenerativeModel(
+            /* modelName */ "gemini-1.5-flash",
+            // Access your API key as a Build Configuration variable (see "Set up your API key"
+            // above)
+            /* apiKey */ BuildConfig.apiKey);
+    GenerativeModelFutures model = GenerativeModelFutures.from(gm);
     Content text = new Content.Builder().addText("Write a story about a magic backpack.").build();
 
-    Executor executor; // = ...
-
-    // For text-only input
-    ListenableFuture < CountTokensResponse > countTokensResponse = model.countTokens(text);
-
-    Futures.addCallback(
-        countTokensResponse,
-        new FutureCallback<CountTokensResponse>() {
-          @Override
-          public void onSuccess(CountTokensResponse result) {
-            int totalTokens = result.getTotalTokens();
-            System.out.println("TotalTokens = " + totalTokens);
-          }
-
-          @Override
-          public void onFailure(Throwable t) {
-            t.printStackTrace();
-          }
-        },
-        executor);
+    // TODO COMMENT
+    Executor executor = Executors.newSingleThreadExecutor();
 
     // For text-and-image input
     Bitmap image1; // = ...
@@ -144,15 +150,22 @@ class CountTokens {
     ListenableFuture<CountTokensResponse> countTokensResponse =
         model.countTokens(multiModalContent);
 
-    // For multi-turn conversations (like chat)
-    List<Content> history = chat.getChat().getHistory();
+      Futures.addCallback(
+              countTokensResponse,
+              new FutureCallback<CountTokensResponse>() {
+                  @Override
+                  public void onSuccess(CountTokensResponse result) {
+                      int totalTokens = result.getTotalTokens();
+                      System.out.println("TotalTokens = " + totalTokens);
+                  }
 
-    Content messageContent =
-        new Content.Builder().addText("This is the message I intend to send").build();
+                  @Override
+                  public void onFailure(Throwable t) {
+                      t.printStackTrace();
+                  }
+              },
+              executor);
+      // [END tokens_text-only]
 
-    Collections.addAll(history, messageContent);
-
-    ListenableFuture<CountTokensResponse> countTokensResponse =
-        model.countTokens(history.toArray(new Content[0]));
   }
 }
