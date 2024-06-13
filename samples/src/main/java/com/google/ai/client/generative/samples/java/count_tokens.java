@@ -47,7 +47,7 @@ class CountTokens {
     Content inputContent =
         new Content.Builder().addText("Write a story about a magic backpack.").build();
 
-    // TODO COMMENT
+    // For illustrative purposes only. You should use an executor that fits your needs.
     Executor executor = Executors.newSingleThreadExecutor();
 
     // For text-only input
@@ -103,7 +103,7 @@ class CountTokens {
 
     Collections.addAll(history, messageContent);
 
-    // TODO COMMENT
+    // For illustrative purposes only. You should use an executor that fits your needs.
     Executor executor = Executors.newSingleThreadExecutor();
 
     ListenableFuture<CountTokensResponse> countTokensResponse =
@@ -137,7 +137,7 @@ class CountTokens {
     GenerativeModelFutures model = GenerativeModelFutures.from(gm);
     Content text = new Content.Builder().addText("Write a story about a magic backpack.").build();
 
-    // TODO COMMENT
+    // For illustrative purposes only. You should use an executor that fits your needs.
     Executor executor = Executors.newSingleThreadExecutor();
 
     // For text-and-image input

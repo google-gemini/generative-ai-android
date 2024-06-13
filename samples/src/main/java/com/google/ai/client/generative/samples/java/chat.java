@@ -68,7 +68,7 @@ class Chat {
     userMessageBuilder.addText("How many paws are in my house?");
     Content userMessage = userMessageBuilder.build();
 
-    // TODO COMMENT
+    // For illustrative purposes only. You should use an executor that fits your needs.
     Executor executor = Executors.newSingleThreadExecutor();
 
     // Send the message

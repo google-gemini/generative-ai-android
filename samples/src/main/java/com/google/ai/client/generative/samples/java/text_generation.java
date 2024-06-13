@@ -46,7 +46,7 @@ class TextGeneration {
     Content content =
         new Content.Builder().addText("Write a story about a magic backpack.").build();
 
-    // TODO COMMENT
+    // For illustrative purposes only. You should use an executor that fits your needs.
     Executor executor = Executors.newSingleThreadExecutor();
 
     ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
@@ -131,7 +131,7 @@ class TextGeneration {
             .addImage(image)
             .build();
 
-    // TODO COMMENT
+    // For illustrative purposes only. You should use an executor that fits your needs.
     Executor executor = Executors.newSingleThreadExecutor();
 
     ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
@@ -174,7 +174,7 @@ class TextGeneration {
             .addImage(image2)
             .build();
 
-    // TODO COMMENT
+    // For illustrative purposes only. You should use an executor that fits your needs.
     Executor executor = Executors.newSingleThreadExecutor();
 
     Publisher<GenerateContentResponse> streamingResponse = model.generateContentStream(content);
@@ -228,7 +228,7 @@ class TextGeneration {
             .addImage(image2)
             .build();
 
-    // TODO COMMENT
+    // For illustrative purposes only. You should use an executor that fits your needs.
     Executor executor = Executors.newSingleThreadExecutor();
 
     ListenableFuture<GenerateContentResponse> response = model.generateContent(content);
