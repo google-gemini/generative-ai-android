@@ -14,6 +14,10 @@
 
 package com.google.ai.client.generative.samples
 
+import android.graphics.Bitmap
+import com.google.ai.client.generativeai.GenerativeModel
+import com.google.ai.client.generativeai.type.content
+
 suspend fun textGenTextOnlyPrompt () {
   // [START text_gen_text-only-prompt]
   val generativeModel = GenerativeModel(
@@ -84,7 +88,7 @@ suspend fun textGenMultimodalOneImagePromptStreaming () {
     text("What's in this picture?")
   }
 
-  generativeModel.generateContentStream(prompt).collect { chunk ->
+  generativeModel.generateContentStream(inputContent).collect { chunk ->
     print(chunk.text)
   }
   // [END text_gen_multimodal-one-image-prompt_streaming]
@@ -132,7 +136,7 @@ suspend fun textGenMultimodalMultiImagePromptStreaming () {
     text("What's different between these pictures?")
   }
 
-  generativeModel.generateContentStream(prompt).collect { chunk ->
+  generativeModel.generateContentStream(inputContent).collect { chunk ->
     print(chunk.text)
   }
   // [END text_gen_multimodal-multi-image-prompt_streaming]

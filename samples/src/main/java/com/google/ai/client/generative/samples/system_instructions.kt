@@ -14,6 +14,9 @@
 
 package com.google.ai.client.generative.samples
 
+import com.google.ai.client.generativeai.GenerativeModel
+import com.google.ai.client.generativeai.type.content
+
 suspend fun systemInstructions() {
   // [START system_instructions]
   val generativeModel = GenerativeModel(

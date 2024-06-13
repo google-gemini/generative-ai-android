@@ -14,6 +14,11 @@
 
 package com.google.ai.client.generative.samples
 
+import com.google.ai.client.generativeai.GenerativeModel
+import com.google.ai.client.generativeai.type.BlockThreshold
+import com.google.ai.client.generativeai.type.HarmCategory
+import com.google.ai.client.generativeai.type.SafetySetting
+
 suspend fun safetySettings() {
   // [START safety-settings]
   val generativeModel = GenerativeModel(

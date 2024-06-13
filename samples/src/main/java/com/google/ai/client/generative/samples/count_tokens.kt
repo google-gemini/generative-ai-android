@@ -14,7 +14,11 @@
 
 package com.google.ai.client.generative.samples
 
-fun tokensTextOnly () {
+import android.graphics.Bitmap
+import com.google.ai.client.generativeai.GenerativeModel
+import com.google.ai.client.generativeai.type.content
+
+suspend fun tokensTextOnly () {
   // [START tokens_text-only]
   val generativeModel = GenerativeModel(
       // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
@@ -29,7 +33,7 @@ fun tokensTextOnly () {
   // [END tokens_text-only]
 }
 
-fun tokensChat () {
+suspend fun tokensChat () {
   // [START tokens_chat]
     val generativeModel = GenerativeModel(
       // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
@@ -52,7 +56,7 @@ fun tokensChat () {
   // [END tokens_chat]
 }
 
-fun tokensMultimodalImageInline () {
+suspend fun tokensMultimodalImageInline () {
   // [START tokens_multimodal-image_inline]
   val generativeModel = GenerativeModel(
       // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)

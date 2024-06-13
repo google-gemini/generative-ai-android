@@ -14,6 +14,8 @@
 
 package com.google.ai.client.generative.samples.java;
 
+import com.google.ai.client.generativeai.GenerativeModel;
+
 class Chat {
   void chat() {
     // [START chat]

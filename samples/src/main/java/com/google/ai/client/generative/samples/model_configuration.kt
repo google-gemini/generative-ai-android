@@ -14,6 +14,9 @@
 
 package com.google.ai.client.generative.samples
 
+import com.google.ai.client.generativeai.GenerativeModel
+import com.google.ai.client.generativeai.type.generationConfig
+
 suspend fun configureModel() {
   // [START configure_model]
   val config = generationConfig {

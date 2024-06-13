@@ -14,6 +14,10 @@
 
 package com.google.ai.client.generative.samples
 
+import android.graphics.Bitmap
+import com.google.ai.client.generativeai.GenerativeModel
+import com.google.ai.client.generativeai.type.content
+
 suspend fun chat() {
   // [START chat]
   val generativeModel = GenerativeModel(
