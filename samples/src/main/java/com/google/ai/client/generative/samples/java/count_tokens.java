@@ -127,6 +127,7 @@ class CountTokens {
   }
 
   void tokensMultimodalImageInline(Context context) {
+      // [START tokens_multimodal-image_inline]
     // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
     GenerativeModel gm =
         new GenerativeModel(
@@ -169,7 +170,7 @@ class CountTokens {
           }
         },
         executor);
-    // [END tokens_text-only]
+    // [END tokens_multimodal-image_inline]
 
   }
 }
