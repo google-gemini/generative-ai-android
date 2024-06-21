@@ -41,7 +41,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
 
-        buildConfigField("String", "VERSION_NAME", "\"${project.version.toString()}\"")
+        buildConfigField("String", "VERSION_NAME", "\"${project.version}\"")
     }
 
     publishing {
@@ -85,6 +85,7 @@ dependencies {
     implementation("com.google.guava:listenablefuture:1.0")
     implementation("androidx.concurrent:concurrent-futures:1.2.0-alpha03")
     implementation("androidx.concurrent:concurrent-futures-ktx:1.2.0-alpha03")
+    testImplementation("org.json:json:20210307") // Required for JSONObject to function in tests
     testImplementation("junit:junit:4.13.2")
     testImplementation("io.kotest:kotest-assertions-core:5.5.5")
     testImplementation("io.kotest:kotest-assertions-core-jvm:5.5.5")
