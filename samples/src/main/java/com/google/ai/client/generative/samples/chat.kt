@@ -27,7 +27,7 @@ suspend fun chat() {
   // [START chat]
   val generativeModel =
       GenerativeModel(
-          // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
+          // Specify a Gemini model appropriate for your use case
           modelName = "gemini-1.5-flash",
           // Access your API key as a Build Configuration variable (see "Set up your API key" above)
           apiKey = BuildConfig.apiKey)
