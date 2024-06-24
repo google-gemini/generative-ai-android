@@ -31,7 +31,7 @@ suspend fun configureModel() {
 
   val generativeModel =
       GenerativeModel(
-          // The Gemini 1.5 models are versatile and work with most use cases
+          // Specify a Gemini model appropriate for your use case
           modelName = "gemini-1.5-flash",
           apiKey = BuildConfig.apiKey,
           generationConfig = config)

@@ -23,6 +23,7 @@ suspend fun systemInstructions() {
   // [START system_instructions]
   val generativeModel =
       GenerativeModel(
+          // Specify a Gemini model appropriate for your use case
           modelName = "gemini-1.5-flash",
           apiKey = BuildConfig.apiKey,
           systemInstruction = content { text("You are a cat. Your name is Neko.") },

@@ -25,7 +25,7 @@ suspend fun safetySettings() {
   // [START safety-settings]
   val generativeModel =
       GenerativeModel(
-          // The Gemini 1.5 models are versatile and work with most use cases
+          // Specify a Gemini model appropriate for your use case
           modelName = "gemini-1.5-flash",
           apiKey = BuildConfig.apiKey,
           safetySettings = listOf(SafetySetting(HarmCategory.HARASSMENT, BlockThreshold.ONLY_HIGH)))
@@ -33,7 +33,7 @@ suspend fun safetySettings() {
 }
 
 suspend fun SafetySettingsMulti() {
-  // [START safety-settings_multi]
+  // [START safety_settings_multi]
   val harassmentSafety = SafetySetting(HarmCategory.HARASSMENT, BlockThreshold.ONLY_HIGH)
 
   val hateSpeechSafety = SafetySetting(HarmCategory.HATE_SPEECH, BlockThreshold.MEDIUM_AND_ABOVE)
@@ -44,5 +44,5 @@ suspend fun SafetySettingsMulti() {
           modelName = "gemini-1.5-flash",
           apiKey = BuildConfig.apiKey,
           safetySettings = listOf(harassmentSafety, hateSpeechSafety))
-  // [END safety-settings_multi]
+  // [END safety_settings_multi]
 }

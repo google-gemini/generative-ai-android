@@ -24,11 +24,11 @@ import java.util.Collections;
 
 class SafetySettings {
   void safetySettings() {
-    // [START safety-settings]
+    // [START safety_settings]
     SafetySetting harassmentSafety =
         new SafetySetting(HarmCategory.HARASSMENT, BlockThreshold.ONLY_HIGH);
 
-    // The Gemini 1.5 models are versatile and work with most use cases
+    // Specify a Gemini model appropriate for your use case
     GenerativeModel gm =
         new GenerativeModel(
             "gemini-1.5-flash",
@@ -37,7 +37,7 @@ class SafetySettings {
             Collections.singletonList(harassmentSafety));
 
     GenerativeModelFutures model = GenerativeModelFutures.from(gm);
-    // [END safety-settings]
+    // [END safety_settings]
   }
 
   void SafetySettingsMulti() {
@@ -48,7 +48,7 @@ class SafetySettings {
     SafetySetting hateSpeechSafety =
         new SafetySetting(HarmCategory.HATE_SPEECH, BlockThreshold.MEDIUM_AND_ABOVE);
 
-    // The Gemini 1.5 models are versatile and work with most use cases
+    // Specify a Gemini model appropriate for your use case
     GenerativeModel gm =
         new GenerativeModel(
             "gemini-1.5-flash",
@@ -57,6 +57,6 @@ class SafetySettings {
             Arrays.asList(harassmentSafety, hateSpeechSafety));
 
     GenerativeModelFutures model = GenerativeModelFutures.from(gm);
-    // [END safety-settings_multi]
+    // [END safety_settings_multi]
   }
 }

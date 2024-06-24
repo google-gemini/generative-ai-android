@@ -24,6 +24,7 @@ class SystemInstructions {
     GenerativeModel model =
         new GenerativeModel(
             // Specify a Gemini model appropriate for your use case
+            // Specify a Gemini model appropriate for your use case
             /* modelName */ "gemini-1.5-flash",
             /* apiKey */ BuildConfig.apiKey,
             /* generationConfig (optional) */ null,

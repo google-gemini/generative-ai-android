@@ -33,8 +33,8 @@ import org.reactivestreams.Subscription;
 
 class TextGeneration {
   void TextGenTextOnlyPrompt() {
-    // [START text_gen_text-only-prompt]
-    // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
+    // [START text_gen_text_only_prompt]
+    // Specify a Gemini model appropriate for your use case
     GenerativeModel gm =
         new GenerativeModel(
             /* modelName */ "gemini-1.5-flash",
@@ -65,12 +65,12 @@ class TextGeneration {
           }
         },
         executor);
-    // [END text_gen_text-only-prompt]
+    // [END text_gen_text_only_prompt]
   }
 
   void TextGenTextOnlyPromptStreaming() {
-    // [START text_gen_text-only-prompt_streaming]
-    // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
+    // [START text_gen_text_only_prompt_streaming]
+    // Specify a Gemini model appropriate for your use case
     GenerativeModel gm =
         new GenerativeModel(
             /* modelName */ "gemini-1.5-flash",
@@ -109,12 +109,12 @@ class TextGeneration {
             s.request(Long.MAX_VALUE);
           }
         });
-    // [END text_gen_text-only-prompt_streaming]
+    // [END text_gen_text_only_prompt_streaming]
   }
 
   void TextGenMultimodalOneImagePrompt(Context context) {
-    // [START text_gen_multimodal-one-image-prompt]
-    // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
+    // [START text_gen_multimodal_one_image_prompt]
+    // Specify a Gemini model appropriate for your use case
     GenerativeModel gm =
         new GenerativeModel(
             /* modelName */ "gemini-1.5-flash",
@@ -150,12 +150,12 @@ class TextGeneration {
           }
         },
         executor);
-    // [END text_gen_multimodal-one-image-prompt]
+    // [END text_gen_multimodal_one_image_prompt]
   }
 
   void TextGenMultimodalOneImagePromptStreaming(Context context) {
-    // [START text_gen_multimodal-one-image-prompt_streaming]
-    // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
+    // [START text_gen_multimodal_one_image_prompt_streaming]
+    // Specify a Gemini model appropriate for your use case
     GenerativeModel gm =
         new GenerativeModel(
             /* modelName */ "gemini-1.5-flash",
@@ -204,12 +204,12 @@ class TextGeneration {
             s.request(Long.MAX_VALUE);
           }
         });
-    // [END text_gen_multimodal-one-image-prompt_streaming]
+    // [END text_gen_multimodal_one_image_prompt_streaming]
   }
 
   void TextGenMultimodalMultiImagePrompt(Context context) {
     // [START text_gen_multimodal-multi-image-prompt]
-    // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
+    // Specify a Gemini model appropriate for your use case
     GenerativeModel gm =
         new GenerativeModel(
             /* modelName */ "gemini-1.5-flash",
@@ -247,12 +247,12 @@ class TextGeneration {
           }
         },
         executor);
-    // [END text_gen_multimodal-multi-image-prompt]
+    // [END text_gen_multimodal_multi_image_prompt]
   }
 
   void TextGenMultimodalMultiImagePromptStreaming(Context context) {
-    // [START text_gen_multimodal-multi-image-prompt_streaming]
-    // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
+    // [START text_gen_multimodal_multi_image_prompt_streaming]
+    // Specify a Gemini model appropriate for your use case
     GenerativeModel gm =
         new GenerativeModel(
             /* modelName */ "gemini-1.5-flash",
@@ -300,18 +300,18 @@ class TextGeneration {
             s.request(Long.MAX_VALUE);
           }
         });
-    // [END text_gen_multimodal-multi-image-prompt_streaming]
+    // [END text_gen_multimodal_multi_image_prompt_streaming]
   }
 
   void TextGenMultimodalVideoPrompt() {
-    // [START text_gen_multimodal-video-prompt]
+    // [START text_gen_multimodal_video_prompt]
     // TODO
-    // [END text_gen_multimodal-video-prompt]
+    // [END text_gen_multimodal_video_prompt]
   }
 
   void TextGenMultimodalVideoPromptStreaming() {
-    // [START text_gen_multimodal-video-prompt_streaming]
+    // [START text_gen_multimodal_video_prompt_streaming]
     // TODO
-    // [END text_gen_multimodal-video-prompt_streaming]
+    // [END text_gen_multimodal_video_prompt_streaming]
   }
 }
