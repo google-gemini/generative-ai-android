@@ -83,5 +83,5 @@ suspend fun tokensMultimodalImageInline(context: Context) {
 
   val (totalTokens) = generativeModel.countTokens(multiModalContent)
   print(totalTokens)
-  // [START tokens_multimodal_image_inline]
+  // [END tokens_multimodal_image_inline]
 }
