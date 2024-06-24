@@ -75,7 +75,7 @@ internal fun com.google.ai.client.generativeai.type.Part.toInternal(): Part {
     is com.google.ai.client.generativeai.type.BlobPart ->
       BlobPart(Blob(mimeType, Base64.encodeToString(blob, BASE_64_FLAGS)))
     is com.google.ai.client.generativeai.type.FunctionCallPart ->
-      FunctionCallPart(FunctionCall(name, args.orEmpty()))
+      FunctionCallPart(FunctionCall(name, args))
     is com.google.ai.client.generativeai.type.FunctionResponsePart ->
       FunctionResponsePart(FunctionResponse(name, response.toInternal()))
     is com.google.ai.client.generativeai.type.FileDataPart ->
@@ -147,8 +147,8 @@ internal fun FunctionDeclaration.toInternal() =
     name,
     description,
     Schema(
-      properties = getParameters().associate { it.name to it.toInternal() },
-      required = getParameters().map { it.name },
+      properties = parameters.associate { it.name to it.toInternal() },
+      required = requiredParameters,
       type = "OBJECT",
       nullable = false,
     ),
@@ -196,10 +196,7 @@ internal fun Part.toPublic(): com.google.ai.client.generativeai.type.Part {
       }
     }
     is FunctionCallPart ->
-      com.google.ai.client.generativeai.type.FunctionCallPart(
-        functionCall.name,
-        functionCall.args.orEmpty(),
-      )
+      com.google.ai.client.generativeai.type.FunctionCallPart(functionCall.name, functionCall.args)
     is FunctionResponsePart ->
       com.google.ai.client.generativeai.type.FunctionResponsePart(
         functionResponse.name,
