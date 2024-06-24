@@ -24,10 +24,10 @@ import com.google.ai.client.generativeai.type.content
 import com.google.ai.sample.R
 
 suspend fun tokensTextOnly() {
-  // [START tokens_text-only]
+  // [START tokens_text_only]
   val generativeModel =
       GenerativeModel(
-          // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
+          // Specify a Gemini model appropriate for your use case
           modelName = "gemini-1.5-flash",
           // Access your API key as a Build Configuration variable (see "Set up your API key" above)
           apiKey = BuildConfig.apiKey)
@@ -35,14 +35,14 @@ suspend fun tokensTextOnly() {
   // For text-only input
   val (totalTokens) = generativeModel.countTokens("Write a story about a magic backpack.")
   print(totalTokens)
-  // [END tokens_text-only]
+  // [END tokens_text_only]
 }
 
 suspend fun tokensChat() {
   // [START tokens_chat]
   val generativeModel =
       GenerativeModel(
-          // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
+          // Specify a Gemini model appropriate for your use case
           modelName = "gemini-1.5-flash",
           // Access your API key as a Build Configuration variable (see "Set up your API key" above)
           apiKey = BuildConfig.apiKey)
@@ -64,10 +64,10 @@ suspend fun tokensChat() {
 }
 
 suspend fun tokensMultimodalImageInline(context: Context) {
-  // [START tokens_multimodal-image_inline]
+  // [START tokens_multimodal_image_inline]
   val generativeModel =
       GenerativeModel(
-          // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
+          // Specify a Gemini model appropriate for your use case
           modelName = "gemini-1.5-flash",
           // Access your API key as a Build Configuration variable (see "Set up your API key" above)
           apiKey = BuildConfig.apiKey)
@@ -83,5 +83,5 @@ suspend fun tokensMultimodalImageInline(context: Context) {
 
   val (totalTokens) = generativeModel.countTokens(multiModalContent)
   print(totalTokens)
-  // [START tokens_multimodal-image_inline]
+  // [START tokens_multimodal_image_inline]
 }

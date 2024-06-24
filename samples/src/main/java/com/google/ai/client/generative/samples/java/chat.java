@@ -37,7 +37,7 @@ import org.reactivestreams.Subscription;
 class Chat {
   void chat() {
     // [START chat]
-    // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
+    // Specify a Gemini model appropriate for your use case
     GenerativeModel gm =
         new GenerativeModel(
             /* modelName */ "gemini-1.5-flash",
@@ -94,7 +94,7 @@ class Chat {
 
   void chatStreaming() {
     // [START chat_streaming]
-    // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
+    // Specify a Gemini model appropriate for your use case
     GenerativeModel gm =
         new GenerativeModel(
             /* modelName */ "gemini-1.5-flash",
@@ -159,8 +159,8 @@ class Chat {
   }
 
   void chatStreamingWithImages(Context context) {
-    // [START chat_with-images_streaming]
-    // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
+    // [START chat_streaming_with_images]
+    // Specify a Gemini model appropriate for your use case
     GenerativeModel gm =
         new GenerativeModel(
             /* modelName */ "gemini-1.5-flash",
@@ -223,6 +223,6 @@ class Chat {
           public void onError(Throwable t) {}
           // [END_EXCLUDE]
         });
-    // [END chat_with-images_streaming]
+    // [END chat_streaming_with_images]
   }
 }

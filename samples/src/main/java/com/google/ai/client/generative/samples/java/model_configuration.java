@@ -31,7 +31,7 @@ class ConfigureModel {
 
     GenerationConfig generationConfig = configBuilder.build();
 
-    // The Gemini 1.5 models are versatile and work with most use cases
+    // Specify a Gemini model appropriate for your use case
     GenerativeModel gm =
         new GenerativeModel("gemini-1.5-flash", BuildConfig.apiKey, generationConfig);
 

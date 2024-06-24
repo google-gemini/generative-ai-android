@@ -51,7 +51,7 @@ suspend fun chatStreaming() {
   // Use streaming with multi-turn conversations (like chat)
   val generativeModel =
       GenerativeModel(
-          // The Gemini 1.5 models are versatile and work with multi-turn conversations (like chat)
+          // Specify a Gemini model appropriate for your use case
           modelName = "gemini-1.5-flash",
           // Access your API key as a Build Configuration variable (see "Set up your API key" above)
           apiKey = BuildConfig.apiKey)
@@ -70,7 +70,7 @@ suspend fun chatStreaming() {
 }
 
 suspend fun chatStreamingWithImages(context: Context) {
-  // [START chat_with-images_streaming]
+  // [START chat_streaming_with_images]
   // Use streaming with multi-turn conversations (like chat)
   val generativeModel =
       GenerativeModel(
@@ -96,5 +96,5 @@ suspend fun chatStreamingWithImages(context: Context) {
   }
 
   chat.sendMessageStream(inputContent).collect { chunk -> print(chunk.text) }
-  // [END chat_with-images_streaming]
+  // [END chat_streaming_with_images]
 }

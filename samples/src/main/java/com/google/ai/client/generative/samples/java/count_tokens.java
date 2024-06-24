@@ -34,8 +34,8 @@ import java.util.concurrent.Executors;
 
 class CountTokens {
   void tokensTextOnly() {
-    // [START tokens_text-only]
-    // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
+    // [START tokens_text_only]
+    // Specify a Gemini model appropriate for your use case
     GenerativeModel gm =
         new GenerativeModel(
             /* modelName */ "gemini-1.5-flash",
@@ -68,12 +68,12 @@ class CountTokens {
           }
         },
         executor);
-    // [END tokens_text-only]
+    // [END tokens_text_only]
   }
 
   void tokensChat() {
     // [START tokens_chat]
-    // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
+    // Specify a Gemini model appropriate for your use case
     GenerativeModel gm =
         new GenerativeModel(
             /* modelName */ "gemini-1.5-flash",
@@ -127,8 +127,8 @@ class CountTokens {
   }
 
   void tokensMultimodalImageInline(Context context) {
-      // [START tokens_multimodal-image_inline]
-    // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
+      // [START tokens_multimodal_image_inline]
+    // Specify a Gemini model appropriate for your use case
     GenerativeModel gm =
         new GenerativeModel(
             /* modelName */ "gemini-1.5-flash",
@@ -170,7 +170,7 @@ class CountTokens {
           }
         },
         executor);
-    // [END tokens_multimodal-image_inline]
+    // [END tokens_multimodal_image_inline]
 
   }
 }
