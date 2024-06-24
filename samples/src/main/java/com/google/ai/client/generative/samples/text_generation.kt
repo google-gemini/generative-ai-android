@@ -20,10 +20,10 @@ import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
 
 suspend fun textGenTextOnlyPrompt() {
-  // [START text_gen_text-only-prompt]
+  // [START text_gen_text_only_prompt]
   val generativeModel =
       GenerativeModel(
-          // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
+          // Specify a Gemini model appropriate for your use case
           modelName = "gemini-1.5-flash",
           // Access your API key as a Build Configuration variable (see "Set up your API key" above)
           apiKey = BuildConfig.apiKey)
@@ -31,14 +31,14 @@ suspend fun textGenTextOnlyPrompt() {
   val prompt = "Write a story about a magic backpack."
   val response = generativeModel.generateContent(prompt)
   print(response.text)
-  // [END text_gen_text-only-prompt]
+  // [END text_gen_text_only_prompt]
 }
 
 suspend fun textGenTextOnlyPromptStreaming() {
-  // [START text_gen_text-only-prompt_streaming]
+  // [START text_gen_text_only_prompt_streaming]
   val generativeModel =
       GenerativeModel(
-          // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
+          // Specify a Gemini model appropriate for your use case
           modelName = "gemini-1.5-flash",
           // Access your API key as a Build Configuration variable (see "Set up your API key" above)
           apiKey = BuildConfig.apiKey)
@@ -47,14 +47,14 @@ suspend fun textGenTextOnlyPromptStreaming() {
   // Use streaming with text-only input
   generativeModel.generateContentStream(prompt).collect { chunk -> print(chunk.text) }
 
-  // [END text_gen_text-only-prompt_streaming]
+  // [END text_gen_text_only_prompt_streaming]
 }
 
 suspend fun textGenMultimodalOneImagePrompt() {
-  // [START text_gen_multimodal-one-image-prompt]
+  // [START text_gen_multimodal_one_image_prompt]
   val generativeModel =
       GenerativeModel(
-          // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
+          // Specify a Gemini model appropriate for your use case
           modelName = "gemini-1.5-flash",
           // Access your API key as a Build Configuration variable (see "Set up your API key" above)
           apiKey = BuildConfig.apiKey)
@@ -63,14 +63,14 @@ suspend fun textGenMultimodalOneImagePrompt() {
 
   val response = generativeModel.generateContent(inputContent)
   print(response.text)
-  // [END text_gen_multimodal-one-image-prompt]
+  // [END text_gen_multimodal_one_image_prompt]
 }
 
 suspend fun textGenMultimodalOneImagePromptStreaming() {
-  // [START text_gen_multimodal-one-image-prompt_streaming]
+  // [START text_gen_multimodal_one_image_prompt_streaming]
   val generativeModel =
       GenerativeModel(
-          // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
+          // Specify a Gemini model appropriate for your use case
           modelName = "gemini-1.5-flash",
           // Access your API key as a Build Configuration variable (see "Set up your API key" above)
           apiKey = BuildConfig.apiKey)
@@ -78,14 +78,14 @@ suspend fun textGenMultimodalOneImagePromptStreaming() {
   val inputContent = content { text("What's in this picture?") }
 
   generativeModel.generateContentStream(inputContent).collect { chunk -> print(chunk.text) }
-  // [END text_gen_multimodal-one-image-prompt_streaming]
+  // [END text_gen_multimodal_one_image_prompt_streaming]
 }
 
 suspend fun textGenMultimodalMultiImagePrompt() {
-  // [START text_gen_multimodal-multi-image-prompt]
+  // [START text_gen_multimodal_multi_image_prompt]
   val generativeModel =
       GenerativeModel(
-          // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
+          // Specify a Gemini model appropriate for your use case
           modelName = "gemini-1.5-flash",
           // Access your API key as a Build Configuration variable (see "Set up your API key" above)
           apiKey = BuildConfig.apiKey)
@@ -95,14 +95,14 @@ suspend fun textGenMultimodalMultiImagePrompt() {
   val response = generativeModel.generateContent(inputContent)
   print(response.text)
 
-  // [END text_gen_multimodal-multi-image-prompt]
+  // [END text_gen_multimodal_multi_image_prompt]
 }
 
 suspend fun textGenMultimodalMultiImagePromptStreaming() {
-  // [START text_gen_multimodal-multi-image-prompt_streaming]
+  // [START text_gen_multimodal_multi_image_prompt_streaming]
   val generativeModel =
       GenerativeModel(
-          // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
+          // Specify a Gemini model appropriate for your use case
           modelName = "gemini-1.5-flash",
           // Access your API key as a Build Configuration variable (see "Set up your API key" above)
           apiKey = BuildConfig.apiKey)
@@ -110,17 +110,17 @@ suspend fun textGenMultimodalMultiImagePromptStreaming() {
   val inputContent = content { text("What's different between these pictures?") }
 
   generativeModel.generateContentStream(inputContent).collect { chunk -> print(chunk.text) }
-  // [END text_gen_multimodal-multi-image-prompt_streaming]
+  // [END text_gen_multimodal_multi_image_prompt_streaming]
 }
 
 suspend fun textGenMultimodalVideoPrompt() {
-  // [START text_gen_multimodal-video-prompt]
+  // [START text_gen_multimodal_video_prompt]
   // TODO
-  // [END text_gen_multimodal-video-prompt]
+  // [END text_gen_multimodal_video_prompt]
 }
 
 suspend fun textGenMultimodalVideoPromptStreaming() {
-  // [START text_gen_multimodal-video-prompt_streaming]
+  // [START text_gen_multimodal_video_prompt_streaming]
   // TODO
-  // [END text_gen_multimodal-video-prompt_streaming]
+  // [END text_gen_multimodal_video_prompt_streaming]
 }
