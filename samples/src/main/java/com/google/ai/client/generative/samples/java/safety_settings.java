@@ -41,7 +41,7 @@ class SafetySettings {
   }
 
   void SafetySettingsMulti() {
-    // [START safety-settings_multi]
+    // [START safety_settings_multi]
     SafetySetting harassmentSafety =
         new SafetySetting(HarmCategory.HARASSMENT, BlockThreshold.ONLY_HIGH);
 
