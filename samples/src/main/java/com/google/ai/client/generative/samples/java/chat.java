@@ -148,11 +148,9 @@ class Chat {
             s.request(Long.MAX_VALUE);
           }
 
-          // ... other methods omitted for brevity
-          // [START_EXCLUDE]
           @Override
           public void onError(Throwable t) {}
-          // [END_EXCLUDE]
+
         });
 
     // [END chat_streaming]
@@ -217,11 +215,9 @@ class Chat {
             s.request(Long.MAX_VALUE);
           }
 
-          // ... other methods omitted for brevity
-          // [START_EXCLUDE]
           @Override
           public void onError(Throwable t) {}
-          // [END_EXCLUDE]
+
         });
     // [END chat_streaming_with_images]
   }
