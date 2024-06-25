@@ -18,6 +18,7 @@ package com.google.ai.client.generativeai.common.client
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 
 @Serializable
 data class GenerationConfig(
@@ -33,7 +34,11 @@ data class GenerationConfig(
   @SerialName("response_schema") val responseSchema: Schema? = null,
 )
 
-@Serializable data class Tool(val functionDeclarations: List<FunctionDeclaration>)
+@Serializable
+data class Tool(
+  val functionDeclarations: List<FunctionDeclaration>? = null,
+  val codeExecution: JsonObject? = null,
+)
 
 @Serializable
 data class ToolConfig(
