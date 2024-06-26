@@ -22,14 +22,14 @@ import com.google.ai.client.generativeai.type.HarmCategory
 import com.google.ai.client.generativeai.type.SafetySetting
 
 suspend fun safetySettings() {
-  // [START safety-settings]
+  // [START safety_settings]
   val generativeModel =
       GenerativeModel(
           // Specify a Gemini model appropriate for your use case
           modelName = "gemini-1.5-flash",
           apiKey = BuildConfig.apiKey,
           safetySettings = listOf(SafetySetting(HarmCategory.HARASSMENT, BlockThreshold.ONLY_HIGH)))
-  // [END safety-settings]
+  // [END safety_settings]
 }
 
 suspend fun SafetySettingsMulti() {
