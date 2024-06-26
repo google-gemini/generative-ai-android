@@ -18,12 +18,11 @@ import com.google.ai.client.generativeai.GenerativeModel;
 import com.google.ai.client.generativeai.type.Content;
 import com.google.ai.client.generativeai.type.RequestOptions;
 
-class SystemInstructions {
-  void systemInstructions() {
-    // [START system_instructions]
+class SystemInstruction {
+  void systemInstruction() {
+    // [START system_instruction]
     GenerativeModel model =
         new GenerativeModel(
-            // Specify a Gemini model appropriate for your use case
             // Specify a Gemini model appropriate for your use case
             /* modelName */ "gemini-1.5-flash",
             /* apiKey */ BuildConfig.apiKey,
@@ -35,6 +34,6 @@ class SystemInstructions {
             /* systemInstruction (optional) */ new Content.Builder()
                 .addText("You are a cat. Your name is Neko.")
                 .build());
-    // [END system_instructions]
+    // [END system_instruction]
   }
 }

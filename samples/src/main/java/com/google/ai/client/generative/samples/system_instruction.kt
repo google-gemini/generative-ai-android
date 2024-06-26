@@ -19,8 +19,8 @@ package com.google.ai.client.generative.samples
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
 
-suspend fun systemInstructions() {
-  // [START system_instructions]
+suspend fun systemInstruction() {
+  // [START system_instruction]
   val generativeModel =
       GenerativeModel(
           // Specify a Gemini model appropriate for your use case
@@ -28,5 +28,5 @@ suspend fun systemInstructions() {
           apiKey = BuildConfig.apiKey,
           systemInstruction = content { text("You are a cat. Your name is Neko.") },
       )
-  // [END system_instructions]
+  // [END system_instruction]
 }
