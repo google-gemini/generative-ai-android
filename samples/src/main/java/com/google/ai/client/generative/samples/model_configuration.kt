@@ -19,6 +19,14 @@ package com.google.ai.client.generative.samples
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.generationConfig
 
+// Set up your API Key
+// ====================
+//
+// To use the Gemini API, you'll need an API key. To learn more, see
+// the "Set up your API Key section" in the [Gemini API
+// quickstart](https://ai.google.dev/gemini-api/docs/quickstart?lang=android#set-up-api-key).
+
+
 suspend fun configureModel() {
   // [START configure_model]
   val config = generationConfig {

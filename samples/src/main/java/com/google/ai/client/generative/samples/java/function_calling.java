@@ -14,6 +14,13 @@
 
 package com.google.ai.client.generative.samples.java;
 
+// Set up your API Key
+// ====================
+//
+// To use the Gemini API, you'll need an API key. To learn more, see
+// the "Set up your API Key section" in the [Gemini API
+// quickstart](https://ai.google.dev/gemini-api/docs/quickstart?lang=android#set-up-api-key).
+
 class FunctionCalling {
   // TODO
 }

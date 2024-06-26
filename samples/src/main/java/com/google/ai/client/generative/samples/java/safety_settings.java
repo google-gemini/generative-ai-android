@@ -22,6 +22,13 @@ import com.google.ai.client.generativeai.type.SafetySetting;
 import java.util.Arrays;
 import java.util.Collections;
 
+// Set up your API Key
+// ====================
+//
+// To use the Gemini API, you'll need an API key. To learn more, see
+// the "Set up your API Key section" in the [Gemini API
+// quickstart](https://ai.google.dev/gemini-api/docs/quickstart?lang=android#set-up-api-key).
+
 class SafetySettings {
   void safetySettings() {
     // [START safety_settings]

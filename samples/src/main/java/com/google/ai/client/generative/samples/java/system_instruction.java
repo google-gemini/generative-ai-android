@@ -18,6 +18,13 @@ import com.google.ai.client.generativeai.GenerativeModel;
 import com.google.ai.client.generativeai.type.Content;
 import com.google.ai.client.generativeai.type.RequestOptions;
 
+// Set up your API Key
+// ====================
+//
+// To use the Gemini API, you'll need an API key. To learn more, see
+// the "Set up your API Key section" in the [Gemini API
+// quickstart](https://ai.google.dev/gemini-api/docs/quickstart?lang=android#set-up-api-key).
+
 class SystemInstruction {
   void systemInstruction() {
     // [START system_instruction]

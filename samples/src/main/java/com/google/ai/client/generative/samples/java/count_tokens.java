@@ -32,6 +32,13 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+// Set up your API Key
+// ====================
+//
+// To use the Gemini API, you'll need an API key. To learn more, see
+// the "Set up your API Key section" in the [Gemini API
+// quickstart](https://ai.google.dev/gemini-api/docs/quickstart?lang=android#set-up-api-key).
+
 class CountTokens {
   void tokensTextOnly() {
     // [START tokens_text_only]
