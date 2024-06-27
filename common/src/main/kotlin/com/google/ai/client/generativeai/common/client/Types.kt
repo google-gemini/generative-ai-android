@@ -37,6 +37,7 @@ data class GenerationConfig(
 @Serializable
 data class Tool(
   val functionDeclarations: List<FunctionDeclaration>? = null,
+  // This is a json object because it is not possible to make a data class with no parameters.
   val codeExecution: JsonObject? = null,
 )
 
