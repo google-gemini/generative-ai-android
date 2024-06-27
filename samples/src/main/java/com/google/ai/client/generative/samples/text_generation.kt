@@ -57,7 +57,7 @@ suspend fun textGenTextOnlyPromptStreaming() {
   // [END text_gen_text_only_prompt_streaming]
 }
 
-suspend fun textGenMultimodalOneImagePrompt() {
+suspend fun textGenMultimodalOneImagePrompt(context: Context) {
   // [START text_gen_multimodal_one_image_prompt]
   val generativeModel =
       GenerativeModel(
@@ -66,14 +66,18 @@ suspend fun textGenMultimodalOneImagePrompt() {
           // Access your API key as a Build Configuration variable (see "Set up your API key" above)
           apiKey = BuildConfig.apiKey)
 
-  val inputContent = content { text("What's in this picture?") }
+  val image: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.image)
+  val inputContent = content {
+    image(image)
+    text("What's in this picture?")
+  }
 
   val response = generativeModel.generateContent(inputContent)
   print(response.text)
   // [END text_gen_multimodal_one_image_prompt]
 }
 
-suspend fun textGenMultimodalOneImagePromptStreaming() {
+suspend fun textGenMultimodalOneImagePromptStreaming(context: Context) {
   // [START text_gen_multimodal_one_image_prompt_streaming]
   val generativeModel =
       GenerativeModel(
@@ -82,13 +86,17 @@ suspend fun textGenMultimodalOneImagePromptStreaming() {
           // Access your API key as a Build Configuration variable (see "Set up your API key" above)
           apiKey = BuildConfig.apiKey)
 
-  val inputContent = content { text("What's in this picture?") }
+  val image: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.image)
+  val inputContent = content {
+    image(image)
+    text("What's in this picture?")
+  }
 
   generativeModel.generateContentStream(inputContent).collect { chunk -> print(chunk.text) }
   // [END text_gen_multimodal_one_image_prompt_streaming]
 }
 
-suspend fun textGenMultimodalMultiImagePrompt() {
+suspend fun textGenMultimodalMultiImagePrompt(context: Context) {
   // [START text_gen_multimodal_multi_image_prompt]
   val generativeModel =
       GenerativeModel(
@@ -97,7 +105,13 @@ suspend fun textGenMultimodalMultiImagePrompt() {
           // Access your API key as a Build Configuration variable (see "Set up your API key" above)
           apiKey = BuildConfig.apiKey)
 
-  val inputContent = content { text("What's different between these pictures?") }
+  val image1: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.image1)
+  val image2: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.image2)
+  val inputContent = content {
+    image(image1)
+    image(image2)
+    text("What's the difference between these pictures?")
+  }
 
   val response = generativeModel.generateContent(inputContent)
   print(response.text)
@@ -105,7 +119,7 @@ suspend fun textGenMultimodalMultiImagePrompt() {
   // [END text_gen_multimodal_multi_image_prompt]
 }
 
-suspend fun textGenMultimodalMultiImagePromptStreaming() {
+suspend fun textGenMultimodalMultiImagePromptStreaming(context: Context) {
   // [START text_gen_multimodal_multi_image_prompt_streaming]
   val generativeModel =
       GenerativeModel(
@@ -114,7 +128,13 @@ suspend fun textGenMultimodalMultiImagePromptStreaming() {
           // Access your API key as a Build Configuration variable (see "Set up your API key" above)
           apiKey = BuildConfig.apiKey)
 
-  val inputContent = content { text("What's different between these pictures?") }
+  val image1: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.image1)
+  val image2: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.image2)
+  val inputContent = content {
+    image(image1)
+    image(image2)
+    text("What's the difference between these pictures?")
+  }
 
   generativeModel.generateContentStream(inputContent).collect { chunk -> print(chunk.text) }
   // [END text_gen_multimodal_multi_image_prompt_streaming]
