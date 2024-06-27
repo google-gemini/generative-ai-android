@@ -5,7 +5,7 @@
         "parts": [
           {
             "executableCode": {
-              "language": "python",
+              "language": "PYTHON",
               "code": "print(\"Hello World\")"
             }
           },

@@ -348,7 +348,7 @@ internal class UnarySnapshotTests {
         val codeExecutionResult = content.parts[1]
 
         executableCodePart.shouldBe(
-          ExecutableCodePart(ExecutableCode("python", "print(\"Hello World\")"))
+          ExecutableCodePart(ExecutableCode("PYTHON", "print(\"Hello World\")"))
         )
         codeExecutionResult.shouldBe(
           CodeExecutionResultPart(CodeExecutionResult(Outcome.OUTCOME_OK, "Hello World"))
