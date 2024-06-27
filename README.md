@@ -1,6 +1,6 @@
 # Google AI SDK for Android
 
-The Google AI Android SDK is the easiest way for Android developers to build with the Gemini API. The Gemini API gives you access to Gemini [models](https://ai.google.dev/models/gemini) created by [Google DeepMind](https://deepmind.google/technologies/gemini/#introduction). Gemini models are built from the ground up to be multimodal, so you can reason seamlessly across text, images, and code. 
+The Google AI Android SDK is the easiest way for Android developers to build with the Gemini API. The Gemini API gives you access to Gemini [models](https://ai.google.dev/models/gemini) created by [Google DeepMind](https://deepmind.google/technologies/gemini/#introduction). Gemini models are built from the ground up to be multimodal, so you can reason seamlessly across text, images, and code.
 
 > [!CAUTION]
 > **The Google AI SDK for Android is recommended for prototyping only.** If you plan to enable billing, we strongly recommend that you use a backend SDK to access the Google AI Gemini API. You risk
@@ -8,7 +8,6 @@ The Google AI Android SDK is the easiest way for Android developers to build wit
 
 > [!NOTE]
 > If you want to access Gemini on-device (Gemini Nano), check out the [Google AI Edge SDK for Android](https://ai.google.dev/tutorials/android_aicore), which is enabled via Android AICore.
-
 
 ## Get started with the Gemini API
 
@@ -25,7 +24,7 @@ via **File > New > Import Sample** and searching for *Generative AI Sample* or f
 5. Open and build the sample app in the `generativeai-android-sample` folder of this repo.
 6. Paste your API key into the `apiKey` property in the `local.properties` file.
 7. Run the app
-5. For detailed instructions, try the 
+5. For detailed instructions, try the
 [Android SDK tutorial](https://ai.google.dev/tutorials/android_quickstart) on [ai.google.dev](https://ai.google.dev).
 
 ## Usage example
