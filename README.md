@@ -29,9 +29,9 @@ via **File > New > Import Sample** and searching for *Generative AI Sample* or f
 
 ## Usage example
 
-Add the dependency `implementation("com.google.ai.client.generativeai:generativeai:<version>"`) to your Android project.
+1. Add the dependency `implementation("com.google.ai.client.generativeai:generativeai:<version>"`) to your Android project.
 
-Initialize the model
+2. Initialize the model
 
 ```kotlin
 val generativeModel = GenerativeModel(
@@ -40,7 +40,7 @@ val generativeModel = GenerativeModel(
 )
 ```
 
-Run a prompt.
+3. Run a prompt.
 
 ```kotlin
 val cookieImage: Bitmap = // ...
