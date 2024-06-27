@@ -16,8 +16,12 @@
 
 package com.google.ai.client.generative.samples
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
+import com.google.ai.sample.R
 
 // Set up your API Key
 // ====================

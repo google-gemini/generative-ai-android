@@ -38,6 +38,9 @@ suspend fun safetySettings() {
           apiKey = BuildConfig.apiKey,
           safetySettings = listOf(SafetySetting(HarmCategory.HARASSMENT, BlockThreshold.ONLY_HIGH)))
   // [END safety_settings]
+
+  // Added to silence the compiler warning about unused variable.
+  print(generativeModel)
 }
 
 suspend fun SafetySettingsMulti() {
@@ -53,4 +56,7 @@ suspend fun SafetySettingsMulti() {
           apiKey = BuildConfig.apiKey,
           safetySettings = listOf(harassmentSafety, hateSpeechSafety))
   // [END safety_settings_multi]
+
+  // Added to silence the compiler warning about unused variable.
+  print(generativeModel)
 }

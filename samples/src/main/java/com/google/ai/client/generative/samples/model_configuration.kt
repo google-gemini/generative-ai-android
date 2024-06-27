@@ -44,4 +44,7 @@ suspend fun configureModel() {
           apiKey = BuildConfig.apiKey,
           generationConfig = config)
   // [END configure_model]
+
+  // Added to silence the compiler warning about unused variable.
+  print(generativeModel)
 }
