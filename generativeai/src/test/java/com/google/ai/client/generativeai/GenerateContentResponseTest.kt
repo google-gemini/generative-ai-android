@@ -17,6 +17,9 @@
 package com.google.ai.client.generativeai
 
 import com.google.ai.client.generativeai.type.Candidate
+import com.google.ai.client.generativeai.type.CodeExecutionResultPart
+import com.google.ai.client.generativeai.type.ExecutableCodePart
+import com.google.ai.client.generativeai.type.ExecutionOutcome
 import com.google.ai.client.generativeai.type.FunctionCallPart
 import com.google.ai.client.generativeai.type.GenerateContentResponse
 import com.google.ai.client.generativeai.type.content
@@ -72,6 +75,38 @@ internal class GenerateContentResponseTest {
       )
 
     response.text shouldBe "This is a textPart"
+  }
+
+  @Test
+  fun `generate response should add generated code to the response`() {
+    val response =
+      GenerateContentResponse(
+        candidates =
+          listOf(
+            Candidate(
+              content {
+                text("I can calculate that for you!")
+                part(ExecutableCodePart("python", "print(\"hello world\")"))
+                part(CodeExecutionResultPart(ExecutionOutcome.OK, "hello world"))
+              },
+              listOf(),
+              listOf(),
+              null,
+            )
+          ),
+        null,
+        null,
+      )
+
+    response.text shouldBe """
+        I can calculate that for you! 
+        ```python
+        print("hello world")
+        ``` 
+        ```
+        hello world
+        ```
+      """.trimIndent()
   }
 
   @Test
