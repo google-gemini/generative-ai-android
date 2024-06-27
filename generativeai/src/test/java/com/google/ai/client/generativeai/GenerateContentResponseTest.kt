@@ -98,7 +98,8 @@ internal class GenerateContentResponseTest {
         null,
       )
 
-    response.text shouldBe """
+    response.text shouldBe
+      """
         I can calculate that for you! 
         ```python
         print("hello world")
@@ -106,7 +107,8 @@ internal class GenerateContentResponseTest {
         ```
         hello world
         ```
-      """.trimIndent()
+      """
+        .trimIndent()
   }
 
   @Test
