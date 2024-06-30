@@ -33,7 +33,11 @@ import com.google.ai.client.generativeai.common.server.PromptFeedback
 import com.google.ai.client.generativeai.common.server.SafetyRating
 import com.google.ai.client.generativeai.common.shared.Blob
 import com.google.ai.client.generativeai.common.shared.BlobPart
+import com.google.ai.client.generativeai.common.shared.CodeExecutionResult
+import com.google.ai.client.generativeai.common.shared.CodeExecutionResultPart
 import com.google.ai.client.generativeai.common.shared.Content
+import com.google.ai.client.generativeai.common.shared.ExecutableCode
+import com.google.ai.client.generativeai.common.shared.ExecutableCodePart
 import com.google.ai.client.generativeai.common.shared.FileData
 import com.google.ai.client.generativeai.common.shared.FileDataPart
 import com.google.ai.client.generativeai.common.shared.FunctionCall
@@ -42,11 +46,13 @@ import com.google.ai.client.generativeai.common.shared.FunctionResponse
 import com.google.ai.client.generativeai.common.shared.FunctionResponsePart
 import com.google.ai.client.generativeai.common.shared.HarmBlockThreshold
 import com.google.ai.client.generativeai.common.shared.HarmCategory
+import com.google.ai.client.generativeai.common.shared.Outcome
 import com.google.ai.client.generativeai.common.shared.Part
 import com.google.ai.client.generativeai.common.shared.SafetySetting
 import com.google.ai.client.generativeai.common.shared.TextPart
 import com.google.ai.client.generativeai.type.BlockThreshold
 import com.google.ai.client.generativeai.type.CitationMetadata
+import com.google.ai.client.generativeai.type.ExecutionOutcome
 import com.google.ai.client.generativeai.type.FunctionCallingConfig
 import com.google.ai.client.generativeai.type.FunctionDeclaration
 import com.google.ai.client.generativeai.type.ImagePart
@@ -80,6 +86,10 @@ internal fun com.google.ai.client.generativeai.type.Part.toInternal(): Part {
       FunctionResponsePart(FunctionResponse(name, response.toInternal()))
     is com.google.ai.client.generativeai.type.FileDataPart ->
       FileDataPart(FileData(fileUri = uri, mimeType = mimeType))
+    is com.google.ai.client.generativeai.type.ExecutableCodePart ->
+      ExecutableCodePart(ExecutableCode(language, code))
+    is com.google.ai.client.generativeai.type.CodeExecutionResultPart ->
+      CodeExecutionResultPart(CodeExecutionResult(outcome.toInternal(), output))
     else ->
       throw SerializationException(
         "The given subclass of Part (${javaClass.simpleName}) is not supported in the serialization yet."
@@ -122,8 +132,19 @@ internal fun BlockThreshold.toInternal() =
     BlockThreshold.UNSPECIFIED -> HarmBlockThreshold.UNSPECIFIED
   }
 
+internal fun ExecutionOutcome.toInternal() =
+  when (this) {
+    ExecutionOutcome.UNSPECIFIED -> Outcome.UNSPECIFIED
+    ExecutionOutcome.OK -> Outcome.OUTCOME_OK
+    ExecutionOutcome.FAILED -> Outcome.OUTCOME_FAILED
+    ExecutionOutcome.DEADLINE_EXCEEDED -> Outcome.OUTCOME_DEADLINE_EXCEEDED
+  }
+
 internal fun Tool.toInternal() =
-  com.google.ai.client.generativeai.common.client.Tool(functionDeclarations.map { it.toInternal() })
+  com.google.ai.client.generativeai.common.client.Tool(
+    functionDeclarations?.map { it.toInternal() },
+    codeExecution = codeExecution?.toInternal(),
+  )
 
 internal fun ToolConfig.toInternal() =
   com.google.ai.client.generativeai.common.client.ToolConfig(
@@ -204,6 +225,16 @@ internal fun Part.toPublic(): com.google.ai.client.generativeai.type.Part {
       )
     is FileDataPart ->
       com.google.ai.client.generativeai.type.FileDataPart(fileData.fileUri, fileData.mimeType)
+    is ExecutableCodePart ->
+      com.google.ai.client.generativeai.type.ExecutableCodePart(
+        executableCode.language,
+        executableCode.code,
+      )
+    is CodeExecutionResultPart ->
+      com.google.ai.client.generativeai.type.CodeExecutionResultPart(
+        codeExecutionResult.outcome.toPublic(),
+        codeExecutionResult.output,
+      )
     else ->
       throw SerializationException(
         "Unsupported part type \"${javaClass.simpleName}\" provided. This model may not be supported by this SDK."
@@ -265,6 +296,14 @@ internal fun BlockReason.toPublic() =
     BlockReason.SAFETY -> com.google.ai.client.generativeai.type.BlockReason.SAFETY
     BlockReason.OTHER -> com.google.ai.client.generativeai.type.BlockReason.OTHER
     BlockReason.UNKNOWN -> com.google.ai.client.generativeai.type.BlockReason.UNKNOWN
+  }
+
+internal fun Outcome.toPublic() =
+  when (this) {
+    Outcome.UNSPECIFIED -> ExecutionOutcome.UNSPECIFIED
+    Outcome.OUTCOME_OK -> ExecutionOutcome.OK
+    Outcome.OUTCOME_FAILED -> ExecutionOutcome.FAILED
+    Outcome.OUTCOME_DEADLINE_EXCEEDED -> ExecutionOutcome.DEADLINE_EXCEEDED
   }
 
 internal fun GenerateContentResponse.toPublic() =

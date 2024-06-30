@@ -32,7 +32,19 @@ class GenerateContentResponse(
 ) {
   /** Convenience field representing all the text parts in the response, if they exists. */
   val text: String? by lazy {
-    candidates.first().content.parts.filterIsInstance<TextPart>().joinToString(" ") { it.text }
+    candidates
+      .first()
+      .content
+      .parts
+      .filter { it is TextPart || it is ExecutableCodePart || it is CodeExecutionResultPart }
+      .joinToString(" ") {
+        when (it) {
+          is TextPart -> it.text
+          is ExecutableCodePart -> "\n```${it.language.lowercase()}\n${it.code}\n```"
+          is CodeExecutionResultPart -> "\n```\n${it.output}\n```"
+          else -> throw RuntimeException("unreachable")
+        }
+      }
   }
 
   /** Convenience field representing the first function call part in the request, if it exists */
