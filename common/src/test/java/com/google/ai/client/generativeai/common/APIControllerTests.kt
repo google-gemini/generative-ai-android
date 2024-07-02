@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalSerializationApi::class, ExperimentalSerializationApi::class)
+
 package com.google.ai.client.generativeai.common
 
 import com.google.ai.client.generativeai.common.client.FunctionCallingConfig
@@ -43,6 +45,7 @@ import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withTimeout
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.JsonObject
 import org.junit.Test
@@ -64,7 +67,7 @@ internal class APIControllerTests {
 
     withTimeout(testTimeout) {
       responses.collect {
-        it.candidates?.isEmpty() shouldBe false
+        it.candidates.isEmpty() shouldBe false
         channel.close()
       }
     }
@@ -101,7 +104,7 @@ internal class RequestFormatTests {
 
     withTimeout(5.seconds) {
       controller.generateContentStream(textGenerateContentRequest("cats")).collect {
-        it.candidates?.isEmpty() shouldBe false
+        it.candidates.isEmpty() shouldBe false
         channel.close()
       }
     }
@@ -128,7 +131,7 @@ internal class RequestFormatTests {
 
     withTimeout(5.seconds) {
       controller.generateContentStream(textGenerateContentRequest("cats")).collect {
-        it.candidates?.isEmpty() shouldBe false
+        it.candidates.isEmpty() shouldBe false
         channel.close()
       }
     }
@@ -193,8 +196,7 @@ internal class RequestFormatTests {
     }
 
     val requestBodyAsText = (mockEngine.requestHistory.first().body as TextContent).text
-
-    requestBodyAsText shouldContainJsonKey "tool_config.function_calling_config.mode"
+    requestBodyAsText shouldContainJsonKey "toolConfig.functionCallingConfig.mode"
   }
 
   @Test
@@ -320,7 +322,7 @@ internal class ModelNamingTests(private val modelName: String, private val actua
 
     withTimeout(5.seconds) {
       controller.generateContentStream(textGenerateContentRequest("cats")).collect {
-        it.candidates?.isEmpty() shouldBe false
+        it.candidates.isEmpty() shouldBe false
         channel.close()
       }
     }
@@ -349,4 +351,4 @@ fun textGenerateContentRequest(prompt: String) =
   )
 
 fun textCountTokenRequest(prompt: String) =
-  CountTokensRequest(generateContentRequest = textGenerateContentRequest(prompt))
+  CountTokensRequest("", generateContentRequest = textGenerateContentRequest(prompt))

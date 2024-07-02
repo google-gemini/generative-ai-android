@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalSerializationApi::class)
+
 package com.google.ai.client.generativeai.internal.util
 
 import android.graphics.Bitmap
@@ -62,6 +64,7 @@ import com.google.ai.client.generativeai.type.ToolConfig
 import com.google.ai.client.generativeai.type.UsageMetadata
 import com.google.ai.client.generativeai.type.content
 import java.io.ByteArrayOutputStream
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import org.json.JSONObject
@@ -142,7 +145,7 @@ internal fun ExecutionOutcome.toInternal() =
 
 internal fun Tool.toInternal() =
   com.google.ai.client.generativeai.common.client.Tool(
-    functionDeclarations?.map { it.toInternal() },
+    functionDeclarations?.map { it.toInternal() }.orEmpty(),
     codeExecution = codeExecution?.toInternal(),
   )
 
@@ -161,7 +164,7 @@ internal fun ToolConfig.toInternal() =
   )
 
 internal fun com.google.ai.client.generativeai.common.UsageMetadata.toPublic(): UsageMetadata =
-  UsageMetadata(promptTokenCount ?: 0, candidatesTokenCount ?: 0, totalTokenCount ?: 0)
+  UsageMetadata(promptTokenCount, candidatesTokenCount, totalTokenCount)
 
 internal fun FunctionDeclaration.toInternal() =
   com.google.ai.client.generativeai.common.client.FunctionDeclaration(
@@ -182,7 +185,7 @@ internal fun <T> com.google.ai.client.generativeai.type.Schema<T>.toInternal(): 
     format,
     nullable,
     enum,
-    properties?.mapValues { it.value.toInternal() },
+    properties.mapValues { it.value.toInternal() },
     required,
     items?.toInternal(),
   )
@@ -190,9 +193,9 @@ internal fun <T> com.google.ai.client.generativeai.type.Schema<T>.toInternal(): 
 internal fun JSONObject.toInternal() = Json.decodeFromString<JsonObject>(toString())
 
 internal fun Candidate.toPublic(): com.google.ai.client.generativeai.type.Candidate {
-  val safetyRatings = safetyRatings?.map { it.toPublic() }.orEmpty()
+  val safetyRatings = safetyRatings.map { it.toPublic() }
   val citations = citationMetadata?.citationSources?.map { it.toPublic() }.orEmpty()
-  val finishReason = finishReason.toPublic()
+  val finishReason = finishReason?.toPublic()
 
   return com.google.ai.client.generativeai.type.Candidate(
     this.content?.toPublic() ?: content("model") {},
@@ -249,16 +252,15 @@ internal fun SafetyRating.toPublic() =
   com.google.ai.client.generativeai.type.SafetyRating(category.toPublic(), probability.toPublic())
 
 internal fun PromptFeedback.toPublic(): com.google.ai.client.generativeai.type.PromptFeedback {
-  val safetyRatings = safetyRatings?.map { it.toPublic() }.orEmpty()
+  val safetyRatings = safetyRatings.map { it.toPublic() }
   return com.google.ai.client.generativeai.type.PromptFeedback(
     blockReason?.toPublic(),
     safetyRatings,
   )
 }
 
-internal fun FinishReason?.toPublic() =
+internal fun FinishReason.toPublic() =
   when (this) {
-    null -> null
     FinishReason.MAX_TOKENS -> com.google.ai.client.generativeai.type.FinishReason.MAX_TOKENS
     FinishReason.RECITATION -> com.google.ai.client.generativeai.type.FinishReason.RECITATION
     FinishReason.SAFETY -> com.google.ai.client.generativeai.type.FinishReason.SAFETY
@@ -308,9 +310,9 @@ internal fun Outcome.toPublic() =
 
 internal fun GenerateContentResponse.toPublic() =
   com.google.ai.client.generativeai.type.GenerateContentResponse(
-    candidates?.map { it.toPublic() }.orEmpty(),
-    promptFeedback?.toPublic(),
-    usageMetadata?.toPublic(),
+    candidates.map { it.toPublic() },
+    promptFeedback?.toPublic() ?: com.google.ai.client.generativeai.type.PromptFeedback(),
+    usageMetadata?.toPublic() ?: UsageMetadata(0, 0, 0),
   )
 
 internal fun CountTokensResponse.toPublic() =

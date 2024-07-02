@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalSerializationApi::class)
+
 package com.google.ai.client.generativeai.common
 
 import com.google.ai.client.generativeai.common.server.BlockReason
@@ -31,6 +33,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.withTimeout
+import kotlinx.serialization.ExperimentalSerializationApi
 import org.junit.Test
 
 internal class StreamingSnapshotTests {
@@ -44,9 +47,9 @@ internal class StreamingSnapshotTests {
       withTimeout(testTimeout) {
         val responseList = responses.toList()
         responseList.isEmpty() shouldBe false
-        responseList.first().candidates?.first()?.finishReason shouldBe FinishReason.STOP
-        responseList.first().candidates?.first()?.content?.parts?.isEmpty() shouldBe false
-        responseList.first().candidates?.first()?.safetyRatings?.isEmpty() shouldBe false
+        responseList.first().candidates.first().finishReason shouldBe FinishReason.STOP
+        responseList.first().candidates.first().content?.parts?.isEmpty() shouldBe false
+        responseList.first().candidates.first().safetyRatings.isEmpty() shouldBe false
       }
     }
 
@@ -59,9 +62,9 @@ internal class StreamingSnapshotTests {
         val responseList = responses.toList()
         responseList.isEmpty() shouldBe false
         responseList.forEach {
-          it.candidates?.first()?.finishReason shouldBe FinishReason.STOP
-          it.candidates?.first()?.content?.parts?.isEmpty() shouldBe false
-          it.candidates?.first()?.safetyRatings?.isEmpty() shouldBe false
+          it.candidates.first().finishReason shouldBe FinishReason.STOP
+          it.candidates.first().content?.parts?.isEmpty() shouldBe false
+          it.candidates.first().safetyRatings.isEmpty() shouldBe false
         }
       }
     }
@@ -73,9 +76,7 @@ internal class StreamingSnapshotTests {
 
       withTimeout(testTimeout) {
         responses.first {
-          it.candidates?.any {
-            it.safetyRatings?.any { it.category == HarmCategory.UNKNOWN } ?: false
-          } ?: false
+          it.candidates.any { it.safetyRatings.any { it.category == HarmCategory.UNKNOWN } }
         }
       }
     }
@@ -89,7 +90,7 @@ internal class StreamingSnapshotTests {
         val responseList = responses.toList()
 
         responseList.isEmpty() shouldBe false
-        val part = responseList.first().candidates?.first()?.content?.parts?.first() as? TextPart
+        val part = responseList.first().candidates.first().content?.parts?.first() as? TextPart
         part.shouldNotBeNull()
         part.text shouldContain "\""
       }
@@ -129,7 +130,7 @@ internal class StreamingSnapshotTests {
 
       withTimeout(testTimeout) {
         val exception = shouldThrow<ResponseStoppedException> { responses.collect() }
-        exception.response.candidates?.first()?.finishReason shouldBe FinishReason.SAFETY
+        exception.response.candidates.first().finishReason shouldBe FinishReason.SAFETY
       }
     }
 
@@ -141,8 +142,7 @@ internal class StreamingSnapshotTests {
       withTimeout(testTimeout) {
         val responseList = responses.toList()
         responseList.any {
-          it.candidates?.any { it.citationMetadata?.citationSources?.isNotEmpty() ?: false }
-            ?: false
+          it.candidates.any { it.citationMetadata?.citationSources?.isNotEmpty() ?: false }
         } shouldBe true
       }
     }
@@ -155,8 +155,7 @@ internal class StreamingSnapshotTests {
       withTimeout(testTimeout) {
         val responseList = responses.toList()
         responseList.any {
-          it.candidates?.any { it.citationMetadata?.citationSources?.isNotEmpty() ?: false }
-            ?: false
+          it.candidates.any { it.citationMetadata?.citationSources?.isNotEmpty() ?: false }
         } shouldBe true
       }
     }
@@ -168,7 +167,7 @@ internal class StreamingSnapshotTests {
 
       withTimeout(testTimeout) {
         val exception = shouldThrow<ResponseStoppedException> { responses.collect() }
-        exception.response.candidates?.first()?.finishReason shouldBe FinishReason.RECITATION
+        exception.response.candidates.first().finishReason shouldBe FinishReason.RECITATION
       }
     }
 

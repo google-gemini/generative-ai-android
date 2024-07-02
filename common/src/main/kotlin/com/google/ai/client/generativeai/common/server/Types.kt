@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalSerializationApi::class)
+
 package com.google.ai.client.generativeai.common.server
 
 import com.google.ai.client.generativeai.common.shared.Content
@@ -37,7 +39,7 @@ object FinishReasonSerializer :
 @Serializable
 data class PromptFeedback(
   val blockReason: BlockReason? = null,
-  val safetyRatings: List<SafetyRating>? = null,
+  val safetyRatings: List<SafetyRating> = emptyList(),
 )
 
 @Serializable(BlockReasonSerializer::class)
@@ -52,59 +54,51 @@ enum class BlockReason {
 data class Candidate(
   val content: Content? = null,
   val finishReason: FinishReason? = null,
-  val safetyRatings: List<SafetyRating>? = null,
+  val safetyRatings: List<SafetyRating> = emptyList(),
   val citationMetadata: CitationMetadata? = null,
   val groundingMetadata: GroundingMetadata? = null,
 )
 
 @Serializable
-data class CitationMetadata
-@OptIn(ExperimentalSerializationApi::class)
-constructor(@JsonNames("citations") val citationSources: List<CitationSources>)
+data class CitationMetadata(
+  @JsonNames("citations") val citationSources: List<CitationSources> = emptyList()
+)
 
 @Serializable
 data class CitationSources(
   val startIndex: Int = 0,
-  val endIndex: Int,
-  val uri: String,
-  val license: String? = null,
+  val endIndex: Int = 0,
+  val uri: String = "",
+  val license: String = "",
 )
 
 @Serializable
 data class SafetyRating(
   val category: HarmCategory,
   val probability: HarmProbability,
-  val blocked: Boolean? = null, // TODO(): any reason not to default to false?
-  val probabilityScore: Float? = null,
+  val blocked: Boolean = false,
+  val probabilityScore: Float = 0f,
   val severity: HarmSeverity? = null,
-  val severityScore: Float? = null,
+  val severityScore: Float = 0f,
 )
 
 @Serializable
 data class GroundingMetadata(
-  @SerialName("web_search_queries") val webSearchQueries: List<String>?,
-  @SerialName("search_entry_point") val searchEntryPoint: SearchEntryPoint?,
-  @SerialName("retrieval_queries") val retrievalQueries: List<String>?,
-  @SerialName("grounding_attribution") val groundingAttribution: List<GroundingAttribution>?,
+  val webSearchQueries: List<String> = emptyList(),
+  val searchEntryPoint: SearchEntryPoint? = null,
+  val retrievalQueries: List<String> = emptyList(),
+  val groundingAttribution: List<GroundingAttribution> = emptyList(),
 )
 
 @Serializable
-data class SearchEntryPoint(
-  @SerialName("rendered_content") val renderedContent: String?,
-  @SerialName("sdk_blob") val sdkBlob: String?,
-)
+data class SearchEntryPoint(val renderedContent: String = "", val sdkBlob: String = "")
 
+// TODO() Has a different definition for labs vs vertex. May need to split into diff types in future
+// (when labs supports it)
 @Serializable
-data class GroundingAttribution(
-  val segment: Segment,
-  @SerialName("confidence_score") val confidenceScore: Float?,
-)
+data class GroundingAttribution(val segment: Segment, val confidenceScore: Float = 0f)
 
-@Serializable
-data class Segment(
-  @SerialName("start_index") val startIndex: Int,
-  @SerialName("end_index") val endIndex: Int,
-)
+@Serializable data class Segment(val startIndex: Int = 0, val endIndex: Int = 0)
 
 @Serializable(HarmProbabilitySerializer::class)
 enum class HarmProbability {

@@ -52,11 +52,11 @@ class FunctionDeclaration(
 class Schema<T>(
   val name: String,
   val description: String,
-  val format: String? = null,
-  val nullable: Boolean? = null,
-  val enum: List<String>? = null,
-  val properties: Map<String, Schema<out Any>>? = null,
-  val required: List<String>? = null,
+  val format: String = "",
+  val nullable: Boolean = false,
+  val enum: List<String> = emptyList(),
+  val properties: Map<String, Schema<out Any>> = emptyMap(),
+  val required: List<String> = emptyList(),
   val items: Schema<out Any>? = null,
   val type: FunctionType<T>,
 ) {

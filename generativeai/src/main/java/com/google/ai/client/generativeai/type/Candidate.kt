@@ -44,7 +44,7 @@ class CitationMetadata(
   val startIndex: Int = 0,
   val endIndex: Int,
   val uri: String,
-  val license: String? = null,
+  val license: String,
 )
 
 /** The reason for content finishing. */

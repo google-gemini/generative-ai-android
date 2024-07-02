@@ -195,9 +195,9 @@ internal constructor(
     GenerateContentRequest(
       modelName,
       prompt.map { it.toInternal() },
-      safetySettings?.map { it.toInternal() },
+      safetySettings?.map { it.toInternal() }.orEmpty(),
       generationConfig?.toInternal(),
-      tools?.map { it.toInternal() },
+      tools?.map { it.toInternal() }.orEmpty(),
       toolConfig?.toInternal(),
       systemInstruction?.toInternal(),
     )
@@ -206,12 +206,12 @@ internal constructor(
     CountTokensRequest.forGenAI(constructRequest(*prompt))
 
   private fun GenerateContentResponse.validate() = apply {
-    if (candidates.isEmpty() && promptFeedback == null) {
+    if (candidates.isEmpty() && promptFeedback?.blockReason == null) {
       throw SerializationException("Error deserializing response, found no valid fields")
     }
     promptFeedback?.blockReason?.let { throw PromptBlockedException(this) }
     candidates
-      .mapNotNull { it.finishReason }
+      .map { it.finishReason }
       .firstOrNull { it != FinishReason.STOP }
       ?.let { throw ResponseStoppedException(this) }
   }

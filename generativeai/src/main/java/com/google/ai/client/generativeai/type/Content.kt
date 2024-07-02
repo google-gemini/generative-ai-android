@@ -25,12 +25,11 @@ import android.graphics.Bitmap
  *
  * @see content
  */
-class Content @JvmOverloads constructor(val role: String? = "user", val parts: List<Part>) {
+class Content @JvmOverloads constructor(val role: String = "user", val parts: List<Part>) {
 
   class Builder {
-    var role: String? = "user"
-
-    var parts: MutableList<Part> = arrayListOf()
+    var role: String = "user"
+    val parts: MutableList<Part> = arrayListOf()
 
     @JvmName("addPart") fun <T : Part> part(data: T) = apply { parts.add(data) }
 
@@ -59,7 +58,7 @@ class Content @JvmOverloads constructor(val role: String? = "user", val parts: L
  * )
  * ```
  */
-fun content(role: String? = "user", init: Content.Builder.() -> Unit): Content {
+fun content(role: String = "user", init: Content.Builder.() -> Unit): Content {
   val builder = Content.Builder()
   builder.role = role
   builder.init()
