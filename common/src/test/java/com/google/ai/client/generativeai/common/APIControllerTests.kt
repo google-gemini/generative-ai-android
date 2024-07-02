@@ -17,6 +17,7 @@
 package com.google.ai.client.generativeai.common
 
 import com.google.ai.client.generativeai.common.client.FunctionCallingConfig
+import com.google.ai.client.generativeai.common.client.Tool
 import com.google.ai.client.generativeai.common.client.ToolConfig
 import com.google.ai.client.generativeai.common.shared.Content
 import com.google.ai.client.generativeai.common.shared.TextPart
@@ -43,6 +44,7 @@ import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.JsonObject
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -258,6 +260,41 @@ internal class RequestFormatTests {
     withTimeout(5.seconds) { controller.countTokens(textCountTokenRequest("cats")) }
 
     mockEngine.requestHistory.first().headers.contains("header1") shouldBe false
+  }
+
+  @Test
+  fun `code execution tool serialization contains correct keys`() = doBlocking {
+    val channel = ByteChannel(autoFlush = true)
+    val mockEngine = MockEngine {
+      respond(channel, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
+    }
+    prepareStreamingResponse(createResponses("Random")).forEach { channel.writeFully(it) }
+
+    val controller =
+      APIController(
+        "super_cool_test_key",
+        "gemini-pro-1.0",
+        RequestOptions(),
+        mockEngine,
+        TEST_CLIENT_ID,
+        null,
+      )
+
+    withTimeout(5.seconds) {
+      controller
+        .generateContentStream(
+          GenerateContentRequest(
+            model = "unused",
+            contents = listOf(Content(parts = listOf(TextPart("Arbitrary")))),
+            tools = listOf(Tool(codeExecution = JsonObject(emptyMap()))),
+          )
+        )
+        .collect { channel.close() }
+    }
+
+    val requestBodyAsText = (mockEngine.requestHistory.first().body as TextContent).text
+
+    requestBodyAsText shouldContainJsonKey "tools[0].codeExecution"
   }
 }
 

@@ -20,8 +20,13 @@ import com.google.ai.client.generativeai.common.server.BlockReason
 import com.google.ai.client.generativeai.common.server.FinishReason
 import com.google.ai.client.generativeai.common.server.HarmProbability
 import com.google.ai.client.generativeai.common.server.HarmSeverity
+import com.google.ai.client.generativeai.common.shared.CodeExecutionResult
+import com.google.ai.client.generativeai.common.shared.CodeExecutionResultPart
+import com.google.ai.client.generativeai.common.shared.ExecutableCode
+import com.google.ai.client.generativeai.common.shared.ExecutableCodePart
 import com.google.ai.client.generativeai.common.shared.FunctionCallPart
 import com.google.ai.client.generativeai.common.shared.HarmCategory
+import com.google.ai.client.generativeai.common.shared.Outcome
 import com.google.ai.client.generativeai.common.shared.TextPart
 import com.google.ai.client.generativeai.common.util.goldenUnaryFile
 import com.google.ai.client.generativeai.common.util.shouldNotBeNullOrEmpty
@@ -329,6 +334,25 @@ internal class UnarySnapshotTests {
           }
 
         callPart.functionCall.args["current"] shouldBe "true"
+      }
+    }
+
+  @Test
+  fun `code execution parses correctly`() =
+    goldenUnaryFile("success-code-execution.json") {
+      withTimeout(testTimeout) {
+        val response = apiController.generateContent(textGenerateContentRequest("prompt"))
+        val content = response.candidates.shouldNotBeNullOrEmpty().first().content
+        content.shouldNotBeNull()
+        val executableCodePart = content.parts[0]
+        val codeExecutionResult = content.parts[1]
+
+        executableCodePart.shouldBe(
+          ExecutableCodePart(ExecutableCode("PYTHON", "print(\"Hello World\")"))
+        )
+        codeExecutionResult.shouldBe(
+          CodeExecutionResultPart(CodeExecutionResult(Outcome.OUTCOME_OK, "Hello World"))
+        )
       }
     }
 }
