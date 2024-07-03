@@ -117,6 +117,7 @@ internal fun com.google.ai.client.generativeai.type.GenerationConfig.toInternal(
 
 internal fun com.google.ai.client.generativeai.type.HarmCategory.toInternal() =
   when (this) {
+    com.google.ai.client.generativeai.type.HarmCategory.UNSPECIFIED -> HarmCategory.UNSPECIFIED
     com.google.ai.client.generativeai.type.HarmCategory.HARASSMENT -> HarmCategory.HARASSMENT
     com.google.ai.client.generativeai.type.HarmCategory.HATE_SPEECH -> HarmCategory.HATE_SPEECH
     com.google.ai.client.generativeai.type.HarmCategory.SEXUALLY_EXPLICIT ->
@@ -246,7 +247,12 @@ internal fun Part.toPublic(): com.google.ai.client.generativeai.type.Part {
 }
 
 internal fun CitationSources.toPublic() =
-  CitationMetadata(startIndex = startIndex, endIndex = endIndex, uri = uri, license = license)
+  CitationMetadata(
+    startIndex = startIndex ?: 0,
+    endIndex = endIndex ?: 0,
+    uri = uri ?: "",
+    license = license ?: "",
+  )
 
 internal fun SafetyRating.toPublic() =
   com.google.ai.client.generativeai.type.SafetyRating(category.toPublic(), probability.toPublic())
@@ -272,6 +278,7 @@ internal fun FinishReason.toPublic() =
 
 internal fun HarmCategory.toPublic() =
   when (this) {
+    HarmCategory.UNSPECIFIED -> com.google.ai.client.generativeai.type.HarmCategory.UNSPECIFIED
     HarmCategory.HARASSMENT -> com.google.ai.client.generativeai.type.HarmCategory.HARASSMENT
     HarmCategory.HATE_SPEECH -> com.google.ai.client.generativeai.type.HarmCategory.HATE_SPEECH
     HarmCategory.SEXUALLY_EXPLICIT ->

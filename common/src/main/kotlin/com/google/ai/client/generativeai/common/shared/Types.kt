@@ -35,6 +35,7 @@ object HarmCategorySerializer :
 @Serializable(HarmCategorySerializer::class)
 enum class HarmCategory {
   UNKNOWN,
+  @SerialName("HARM_CATEGORY_UNSPECIFIED") UNSPECIFIED,
   @SerialName("HARM_CATEGORY_HARASSMENT") HARASSMENT,
   @SerialName("HARM_CATEGORY_HATE_SPEECH") HATE_SPEECH,
   @SerialName("HARM_CATEGORY_SEXUALLY_EXPLICIT") SEXUALLY_EXPLICIT,
@@ -45,7 +46,7 @@ typealias Base64 = String
 
 @ExperimentalSerializationApi
 @Serializable
-data class Content(@EncodeDefault val role: String = "", val parts: List<Part>)
+data class Content(@EncodeDefault val role: String = "user", val parts: List<Part>)
 
 @Serializable(PartSerializer::class) sealed interface Part
 
@@ -75,7 +76,7 @@ data class FunctionCall(val name: String, val args: Map<String, String?> = empty
 
 @Serializable data class ExecutableCode(val language: String, val code: String)
 
-@Serializable data class CodeExecutionResult(val outcome: Outcome, val output: String)
+@Serializable data class CodeExecutionResult(val outcome: Outcome, val output: String = "")
 
 @Serializable
 enum class Outcome {
@@ -85,11 +86,13 @@ enum class Outcome {
   OUTCOME_DEADLINE_EXCEEDED,
 }
 
+// TODO() Move SafetySettings, HarmBlockThreshold and HarmBlockMethod to `client` as they're client
+// only types
 @Serializable
 data class SafetySetting(
   val category: HarmCategory,
   val threshold: HarmBlockThreshold,
-  val method: HarmBlockMethod? = null,
+  val method: HarmBlockMethod = HarmBlockMethod.UNSPECIFIED,
 )
 
 @Serializable

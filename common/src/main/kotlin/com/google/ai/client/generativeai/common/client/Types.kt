@@ -22,15 +22,15 @@ import kotlinx.serialization.json.JsonObject
 
 @Serializable
 data class GenerationConfig(
-  val temperature: Float = 0f,
-  val topP: Float = 0f,
-  val topK: Int = 0,
-  val candidateCount: Int = 0,
-  val maxOutputTokens: Int = 0,
+  val temperature: Float? = null,
+  val topP: Float? = null,
+  val topK: Int? = null,
+  val candidateCount: Int? = null,
+  val maxOutputTokens: Int? = null,
   val stopSequences: List<String> = emptyList(),
-  val responseMimeType: String = "",
-  val presencePenalty: Float = 0f,
-  val frequencyPenalty: Float = 0f,
+  val responseMimeType: String? = null,
+  val presencePenalty: Float? = null,
+  val frequencyPenalty: Float? = null,
   val responseSchema: Schema? = null,
 )
 
@@ -41,11 +41,10 @@ data class Tool(
   val codeExecution: JsonObject? = null,
 )
 
-@Serializable
-data class ToolConfig(val functionCallingConfig: FunctionCallingConfig = FunctionCallingConfig())
+@Serializable data class ToolConfig(val functionCallingConfig: FunctionCallingConfig? = null)
 
 @Serializable
-data class FunctionCallingConfig(val mode: Mode? = null) {
+data class FunctionCallingConfig(val mode: Mode = Mode.UNSPECIFIED) {
   @Serializable
   enum class Mode {
     @SerialName("MODE_UNSPECIFIED") UNSPECIFIED,

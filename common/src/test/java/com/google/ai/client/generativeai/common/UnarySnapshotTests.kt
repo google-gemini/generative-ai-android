@@ -34,11 +34,11 @@ import com.google.ai.client.generativeai.common.util.goldenUnaryFile
 import com.google.ai.client.generativeai.common.util.shouldNotBeNullOrEmpty
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.collections.shouldNotBeEmpty
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import io.kotest.matchers.string.shouldBeEmpty
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.ktor.http.HttpStatusCode
 import kotlin.time.Duration.Companion.seconds
@@ -179,9 +179,9 @@ internal class UnarySnapshotTests {
         response.candidates.isEmpty() shouldBe false
         response.candidates.first().citationMetadata?.citationSources?.isNotEmpty() shouldBe true
         // Verify the values in the citation source
-        with(response.candidates.first().citationMetadata?.citationSources?.first()!!) {
-          license.shouldBeEmpty()
-          startIndex shouldBe 0
+        response.candidates.first().citationMetadata?.citationSources?.first().let {
+          it.shouldNotBeNull()
+          it.startIndex.shouldBeNull()
         }
       }
     }

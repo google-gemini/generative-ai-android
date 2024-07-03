@@ -38,6 +38,8 @@ object FinishReasonSerializer :
 
 @Serializable
 data class PromptFeedback(
+  // TODO() should default to UNSPECIFIED, but that would be an unexpected change for consumers null
+  // checking block reason to see if their prompt was blocked
   val blockReason: BlockReason? = null,
   val safetyRatings: List<SafetyRating> = emptyList(),
 )
@@ -53,6 +55,8 @@ enum class BlockReason {
 @Serializable
 data class Candidate(
   val content: Content? = null,
+  // TODO() should default to UNSPECIFIED, but that would be an unexpected change for consumers
+  // checking if their finish reason is anything other than STOP
   val finishReason: FinishReason? = null,
   val safetyRatings: List<SafetyRating> = emptyList(),
   val citationMetadata: CitationMetadata? = null,
@@ -66,19 +70,19 @@ data class CitationMetadata(
 
 @Serializable
 data class CitationSources(
-  val startIndex: Int = 0,
-  val endIndex: Int = 0,
-  val uri: String = "",
-  val license: String = "",
+  val startIndex: Int? = null,
+  val endIndex: Int? = null,
+  val uri: String? = null,
+  val license: String? = null,
 )
 
 @Serializable
 data class SafetyRating(
-  val category: HarmCategory,
-  val probability: HarmProbability,
+  val category: HarmCategory = HarmCategory.UNSPECIFIED,
+  val probability: HarmProbability = HarmProbability.UNSPECIFIED,
   val blocked: Boolean = false,
   val probabilityScore: Float = 0f,
-  val severity: HarmSeverity? = null,
+  val severity: HarmSeverity = HarmSeverity.UNSPECIFIED,
   val severityScore: Float = 0f,
 )
 
@@ -96,7 +100,7 @@ data class SearchEntryPoint(val renderedContent: String = "", val sdkBlob: Strin
 // TODO() Has a different definition for labs vs vertex. May need to split into diff types in future
 // (when labs supports it)
 @Serializable
-data class GroundingAttribution(val segment: Segment, val confidenceScore: Float = 0f)
+data class GroundingAttribution(val segment: Segment? = null, val confidenceScore: Float? = null)
 
 @Serializable data class Segment(val startIndex: Int = 0, val endIndex: Int = 0)
 
