@@ -80,9 +80,9 @@ internal class UnarySnapshotTests {
       withTimeout(testTimeout) {
         val response = apiController.generateContent(textGenerateContentRequest("prompt"))
 
-        response.candidates?.first {
-          it.safetyRatings?.any { it.category == HarmCategory.UNKNOWN } ?: false
-        }
+        response.candidates?.isNullOrEmpty() shouldBe false
+        val candidate = response.candidates?.first()
+        candidate?.safetyRatings?.any { it.category == HarmCategory.UNKNOWN } shouldBe true
       }
     }
 
