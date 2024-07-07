@@ -26,11 +26,29 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
           cache: gradle
-      - name: Perform a Gradle build
+      - name: Build the generativeai release artifacts
         run: ./gradlew generativeai:publishAllPublicationsToMavenRepository
+
       - name: Upload generated artifacts
         uses: actions/upload-artifact@v4
+
         with:
           name: generative-ai-android
           path: generativeai/m2
+          retention-days: 5
+      - name: Build the common release artifacts
+        run: ./gradlew common:publishAllPublicationsToMavenRepository
+      - name: Upload the common artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: common-artifacts
+          path: common/m2
+          retention-days: 5
+      - name: Build the release artifacts for all sdks
+        run: ./gradlew publishAllPublicationsToMavenRepository
+      - name: Upload the generated artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-artifacts
+          path: m2
           retention-days: 5

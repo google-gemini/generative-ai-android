@@ -57,26 +57,43 @@ data class Content(@EncodeDefault val role: String? = "user", val parts: List<Pa
 
 @Serializable data class FunctionResponsePart(val functionResponse: FunctionResponse) : Part
 
+@Serializable data class ExecutableCodePart(val executableCode: ExecutableCode) : Part
+
+@Serializable
+data class CodeExecutionResultPart(val codeExecutionResult: CodeExecutionResult) : Part
+
 @Serializable data class FunctionResponse(val name: String, val response: JsonObject)
 
-@Serializable data class FunctionCall(val name: String, val args: Map<String, String>)
+@Serializable data class FunctionCall(val name: String, val args: Map<String, String?>)
 
 @Serializable data class FileDataPart(@SerialName("file_data") val fileData: FileData) : Part
 
 @Serializable
 data class FileData(
   @SerialName("mime_type") val mimeType: String,
-  @SerialName("file_uri") val fileUri: String
+  @SerialName("file_uri") val fileUri: String,
 )
 
-@Serializable
-data class Blob(
-  @SerialName("mime_type") val mimeType: String,
-  val data: Base64,
-)
+@Serializable data class Blob(@SerialName("mime_type") val mimeType: String, val data: Base64)
+
+@Serializable data class ExecutableCode(val language: String, val code: String)
+
+@Serializable data class CodeExecutionResult(val outcome: Outcome, val output: String)
 
 @Serializable
-data class SafetySetting(val category: HarmCategory, val threshold: HarmBlockThreshold)
+enum class Outcome {
+  @SerialName("OUTCOME_UNSPECIFIED") UNSPECIFIED,
+  OUTCOME_OK,
+  OUTCOME_FAILED,
+  OUTCOME_DEADLINE_EXCEEDED,
+}
+
+@Serializable
+data class SafetySetting(
+  val category: HarmCategory,
+  val threshold: HarmBlockThreshold,
+  val method: HarmBlockMethod? = null,
+)
 
 @Serializable
 enum class HarmBlockThreshold {
@@ -87,6 +104,13 @@ enum class HarmBlockThreshold {
   BLOCK_NONE,
 }
 
+@Serializable
+enum class HarmBlockMethod {
+  @SerialName("HARM_BLOCK_METHOD_UNSPECIFIED") UNSPECIFIED,
+  SEVERITY,
+  PROBABILITY,
+}
+
 object PartSerializer : JsonContentPolymorphicSerializer<Part>(Part::class) {
   override fun selectDeserializer(element: JsonElement): DeserializationStrategy<Part> {
     val jsonObject = element.jsonObject
@@ -94,8 +118,10 @@ object PartSerializer : JsonContentPolymorphicSerializer<Part>(Part::class) {
       "text" in jsonObject -> TextPart.serializer()
       "functionCall" in jsonObject -> FunctionCallPart.serializer()
       "functionResponse" in jsonObject -> FunctionResponsePart.serializer()
-      "inline_data" in jsonObject -> BlobPart.serializer()
-      "file_data" in jsonObject -> FileDataPart.serializer()
+      "inlineData" in jsonObject -> BlobPart.serializer()
+      "fileData" in jsonObject -> FileDataPart.serializer()
+      "executableCode" in jsonObject -> ExecutableCodePart.serializer()
+      "codeExecutionResult" in jsonObject -> CodeExecutionResultPart.serializer()
       else -> throw SerializationException("Unknown Part type")
     }
   }

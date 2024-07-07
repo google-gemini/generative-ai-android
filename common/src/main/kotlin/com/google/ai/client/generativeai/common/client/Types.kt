@@ -18,6 +18,7 @@ package com.google.ai.client.generativeai.common.client
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 
 @Serializable
 data class GenerationConfig(
@@ -27,22 +28,44 @@ data class GenerationConfig(
   @SerialName("candidate_count") val candidateCount: Int?,
   @SerialName("max_output_tokens") val maxOutputTokens: Int?,
   @SerialName("stop_sequences") val stopSequences: List<String>?,
+  @SerialName("response_mime_type") val responseMimeType: String? = null,
+  @SerialName("presence_penalty") val presencePenalty: Float? = null,
+  @SerialName("frequency_penalty") val frequencyPenalty: Float? = null,
+  @SerialName("response_schema") val responseSchema: Schema? = null,
 )
-
-@Serializable data class Tool(val functionDeclarations: List<FunctionDeclaration>)
 
 @Serializable
-data class FunctionDeclaration(
-  val name: String,
-  val description: String,
-  val parameters: Schema,
+data class Tool(
+  val functionDeclarations: List<FunctionDeclaration>? = null,
+  // This is a json object because it is not possible to make a data class with no parameters.
+  val codeExecution: JsonObject? = null,
 )
+
+@Serializable
+data class ToolConfig(
+  @SerialName("function_calling_config") val functionCallingConfig: FunctionCallingConfig
+)
+
+@Serializable
+data class FunctionCallingConfig(val mode: Mode) {
+  @Serializable
+  enum class Mode {
+    @SerialName("MODE_UNSPECIFIED") UNSPECIFIED,
+    AUTO,
+    ANY,
+    NONE
+  }
+}
+
+@Serializable
+data class FunctionDeclaration(val name: String, val description: String, val parameters: Schema)
 
 @Serializable
 data class Schema(
   val type: String,
   val description: String? = null,
   val format: String? = null,
+  val nullable: Boolean? = false,
   val enum: List<String>? = null,
   val properties: Map<String, Schema>? = null,
   val required: List<String>? = null,

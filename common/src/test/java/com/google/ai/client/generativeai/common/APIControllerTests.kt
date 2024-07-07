@@ -16,6 +16,9 @@
 
 package com.google.ai.client.generativeai.common
 
+import com.google.ai.client.generativeai.common.client.FunctionCallingConfig
+import com.google.ai.client.generativeai.common.client.Tool
+import com.google.ai.client.generativeai.common.client.ToolConfig
 import com.google.ai.client.generativeai.common.shared.Content
 import com.google.ai.client.generativeai.common.shared.TextPart
 import com.google.ai.client.generativeai.common.util.commonTest
@@ -23,7 +26,6 @@ import com.google.ai.client.generativeai.common.util.createResponses
 import com.google.ai.client.generativeai.common.util.doBlocking
 import com.google.ai.client.generativeai.common.util.prepareStreamingResponse
 import io.kotest.assertions.json.shouldContainJsonKey
-import io.kotest.assertions.json.shouldNotContainJsonKey
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
@@ -36,12 +38,18 @@ import io.ktor.http.headersOf
 import io.ktor.utils.io.ByteChannel
 import io.ktor.utils.io.close
 import io.ktor.utils.io.writeFully
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.JsonObject
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
+
+private val TEST_CLIENT_ID = "genai-android/test"
 
 internal class APIControllerTests {
   private val testTimeout = 5.seconds
@@ -82,7 +90,14 @@ internal class RequestFormatTests {
     }
     prepareStreamingResponse(createResponses("Random")).forEach { channel.writeFully(it) }
     val controller =
-      APIController("super_cool_test_key", "gemini-pro-1.0", RequestOptions(), mockEngine)
+      APIController(
+        "super_cool_test_key",
+        "gemini-pro-1.0",
+        RequestOptions(),
+        mockEngine,
+        "genai-android/${BuildConfig.VERSION_NAME}",
+        null,
+      )
 
     withTimeout(5.seconds) {
       controller.generateContentStream(textGenerateContentRequest("cats")).collect {
@@ -106,7 +121,9 @@ internal class RequestFormatTests {
         "super_cool_test_key",
         "gemini-pro-1.0",
         RequestOptions(endpoint = "https://my.custom.endpoint"),
-        mockEngine
+        mockEngine,
+        TEST_CLIENT_ID,
+        null,
       )
 
     withTimeout(5.seconds) {
@@ -120,42 +137,164 @@ internal class RequestFormatTests {
   }
 
   @Test
-  fun `generateContentRequest doesn't include the model name`() = doBlocking {
-    val channel = ByteChannel(autoFlush = true)
-    val mockEngine = MockEngine {
-      respond(channel, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
-    }
-    prepareStreamingResponse(createResponses("Random")).forEach { channel.writeFully(it) }
-    val controller =
-      APIController("super_cool_test_key", "gemini-pro-1.0", RequestOptions(), mockEngine)
-
-    withTimeout(5.seconds) {
-      controller.generateContentStream(textGenerateContentRequest("cats")).collect {
-        it.candidates?.isEmpty() shouldBe false
-        channel.close()
-      }
-    }
-
-    val requestBodyAsText = (mockEngine.requestHistory.first().body as TextContent).text
-    requestBodyAsText shouldContainJsonKey "contents"
-    requestBodyAsText shouldNotContainJsonKey "model"
-  }
-
-  @Test
-  fun `countTokenRequest doesn't include the model name`() = doBlocking {
+  fun `client id header is set correctly in the request`() = doBlocking {
     val response = JSON.encodeToString(CountTokensResponse(totalTokens = 10))
     val mockEngine = MockEngine {
       respond(response, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
     }
 
     val controller =
-      APIController("super_cool_test_key", "gemini-pro-1.0", RequestOptions(), mockEngine)
+      APIController(
+        "super_cool_test_key",
+        "gemini-pro-1.0",
+        RequestOptions(),
+        mockEngine,
+        TEST_CLIENT_ID,
+        null,
+      )
 
     withTimeout(5.seconds) { controller.countTokens(textCountTokenRequest("cats")) }
 
+    mockEngine.requestHistory.first().headers["x-goog-api-client"] shouldBe TEST_CLIENT_ID
+  }
+
+  @Test
+  fun `ToolConfig serialization contains correct keys`() = doBlocking {
+    val channel = ByteChannel(autoFlush = true)
+    val mockEngine = MockEngine {
+      respond(channel, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
+    }
+    prepareStreamingResponse(createResponses("Random")).forEach { channel.writeFully(it) }
+
+    val controller =
+      APIController(
+        "super_cool_test_key",
+        "gemini-pro-1.0",
+        RequestOptions(),
+        mockEngine,
+        TEST_CLIENT_ID,
+        null,
+      )
+
+    withTimeout(5.seconds) {
+      controller
+        .generateContentStream(
+          GenerateContentRequest(
+            model = "unused",
+            contents = listOf(Content(parts = listOf(TextPart("Arbitrary")))),
+            toolConfig =
+              ToolConfig(
+                functionCallingConfig =
+                  FunctionCallingConfig(mode = FunctionCallingConfig.Mode.AUTO)
+              ),
+          )
+        )
+        .collect { channel.close() }
+    }
+
     val requestBodyAsText = (mockEngine.requestHistory.first().body as TextContent).text
-    requestBodyAsText shouldContainJsonKey "contents"
-    requestBodyAsText shouldNotContainJsonKey "model"
+
+    requestBodyAsText shouldContainJsonKey "tool_config.function_calling_config.mode"
+  }
+
+  @Test
+  fun `headers from HeaderProvider are added to the request`() = doBlocking {
+    val response = JSON.encodeToString(CountTokensResponse(totalTokens = 10))
+    val mockEngine = MockEngine {
+      respond(response, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
+    }
+
+    val testHeaderProvider =
+      object : HeaderProvider {
+        override val timeout: Duration
+          get() = 5.seconds
+
+        override suspend fun generateHeaders(): Map<String, String> =
+          mapOf("header1" to "value1", "header2" to "value2")
+      }
+
+    val controller =
+      APIController(
+        "super_cool_test_key",
+        "gemini-pro-1.0",
+        RequestOptions(),
+        mockEngine,
+        TEST_CLIENT_ID,
+        testHeaderProvider,
+      )
+
+    withTimeout(5.seconds) { controller.countTokens(textCountTokenRequest("cats")) }
+
+    mockEngine.requestHistory.first().headers["header1"] shouldBe "value1"
+    mockEngine.requestHistory.first().headers["header2"] shouldBe "value2"
+  }
+
+  @Test
+  fun `headers from HeaderProvider are ignored if timeout`() = doBlocking {
+    val response = JSON.encodeToString(CountTokensResponse(totalTokens = 10))
+    val mockEngine = MockEngine {
+      respond(response, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
+    }
+
+    val testHeaderProvider =
+      object : HeaderProvider {
+        override val timeout: Duration
+          get() = 5.milliseconds
+
+        override suspend fun generateHeaders(): Map<String, String> {
+          delay(10.milliseconds)
+          return mapOf("header1" to "value1")
+        }
+      }
+
+    val controller =
+      APIController(
+        "super_cool_test_key",
+        "gemini-pro-1.0",
+        RequestOptions(),
+        mockEngine,
+        TEST_CLIENT_ID,
+        testHeaderProvider,
+      )
+
+    withTimeout(5.seconds) { controller.countTokens(textCountTokenRequest("cats")) }
+
+    mockEngine.requestHistory.first().headers.contains("header1") shouldBe false
+  }
+
+  @Test
+  fun `code execution tool serialization contains correct keys`() = doBlocking {
+    val channel = ByteChannel(autoFlush = true)
+    val mockEngine = MockEngine {
+      respond(channel, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
+    }
+    prepareStreamingResponse(createResponses("Random")).forEach { channel.writeFully(it) }
+
+    val controller =
+      APIController(
+        "super_cool_test_key",
+        "gemini-pro-1.0",
+        RequestOptions(),
+        mockEngine,
+        TEST_CLIENT_ID,
+        null,
+      )
+
+    withTimeout(5.seconds) {
+      controller
+        .generateContentStream(
+          GenerateContentRequest(
+            model = "unused",
+            contents = listOf(Content(parts = listOf(TextPart("Arbitrary")))),
+            tools = listOf(Tool(codeExecution = JsonObject(emptyMap()))),
+          )
+        )
+        .collect { channel.close() }
+    }
+
+    val requestBodyAsText = (mockEngine.requestHistory.first().body as TextContent).text
+
+    requestBodyAsText shouldContainJsonKey "tools[0].codeExecution"
   }
 }
 
@@ -169,7 +308,15 @@ internal class ModelNamingTests(private val modelName: String, private val actua
       respond(channel, HttpStatusCode.OK, headersOf(HttpHeaders.ContentType, "application/json"))
     }
     prepareStreamingResponse(createResponses("Random")).forEach { channel.writeFully(it) }
-    val controller = APIController("super_cool_test_key", modelName, RequestOptions(), mockEngine)
+    val controller =
+      APIController(
+        "super_cool_test_key",
+        modelName,
+        RequestOptions(),
+        mockEngine,
+        TEST_CLIENT_ID,
+        null,
+      )
 
     withTimeout(5.seconds) {
       controller.generateContentStream(textGenerateContentRequest("cats")).collect {
@@ -198,8 +345,8 @@ internal class ModelNamingTests(private val modelName: String, private val actua
 fun textGenerateContentRequest(prompt: String) =
   GenerateContentRequest(
     model = "unused",
-    contents = listOf(Content(parts = listOf(TextPart(prompt))))
+    contents = listOf(Content(parts = listOf(TextPart(prompt)))),
   )
 
 fun textCountTokenRequest(prompt: String) =
-  CountTokensRequest(model = "unused", contents = listOf(Content(parts = listOf(TextPart(prompt)))))
+  CountTokensRequest(generateContentRequest = textGenerateContentRequest(prompt))

@@ -25,7 +25,7 @@ internal constructor(
   val content: Content,
   val safetyRatings: List<SafetyRating>,
   val citationMetadata: List<CitationMetadata>,
-  val finishReason: FinishReason?
+  val finishReason: FinishReason?,
 )
 
 /** Rating for a particular [HarmCategory] with a provided [HarmProbability]. */
@@ -41,10 +41,10 @@ class SafetyRating(val category: HarmCategory, val probability: HarmProbability)
  * @property license The license under which the cited work is distributed.
  */
 class CitationMetadata(
-  val startIndex: Int,
+  val startIndex: Int = 0,
   val endIndex: Int,
   val uri: String,
-  val license: String
+  val license: String? = null,
 )
 
 /** The reason for content finishing. */

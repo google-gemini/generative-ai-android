@@ -19,7 +19,7 @@ plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
     kotlin("jvm") version "1.8.22"
-    id("com.ncorti.ktfmt.gradle") version "0.16.0"
+    id("com.ncorti.ktfmt.gradle") version "0.18.0"
     id("org.jetbrains.kotlinx.binary-compatibility-validator") version "0.13.2"
     kotlin("plugin.serialization") version "1.8.22"
 }
@@ -48,6 +48,10 @@ gradlePlugin {
         register("release-plugin") {
             id = "release-plugin"
             implementationClass = "com.google.gradle.plugins.ReleasePlugin"
+        }
+        register("multi-project-plugin") {
+            id = "multi-project-plugin"
+            implementationClass = "com.google.gradle.plugins.MultiProjectPlugin"
         }
     }
 }

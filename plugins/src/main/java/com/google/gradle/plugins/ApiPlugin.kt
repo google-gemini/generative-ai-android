@@ -18,17 +18,18 @@ package com.google.gradle.plugins
 
 import com.google.gradle.tasks.CopyFileTask
 import com.google.gradle.util.android
-import com.google.gradle.util.outputFile
+import com.google.gradle.util.apply
+import com.google.gradle.util.file
+import com.google.gradle.util.regularOutputFile
 import com.google.gradle.util.release
 import com.google.gradle.util.tempFile
-import java.io.File
 import kotlinx.validation.KotlinApiBuildTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.provider.Property
-import org.gradle.api.tasks.Copy
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.Optional
 import org.gradle.kotlin.dsl.create
+import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.register
 
 typealias BuildApiTask = KotlinApiBuildTask
@@ -47,13 +48,13 @@ typealias BuildApiTask = KotlinApiBuildTask
 abstract class ApiPlugin : Plugin<Project> {
   override fun apply(project: Project) {
     with(project) {
-      extensions.create<ApiPluginExtension>("api").apply { commonConfiguration() }
+      val extension = extensions.create<ApiPluginExtension>("api").apply { commonConfiguration() }
 
       val buildApi = registerBuildApiTask()
 
       tasks.register<CopyFileTask>("exportApi") {
-        source.set(buildApi.outputFile)
-        dest.set(project.file("public.api"))
+        source.set(buildApi.regularOutputFile)
+        dest.set(extension.exportFile)
       }
     }
   }
@@ -64,14 +65,15 @@ abstract class ApiPlugin : Plugin<Project> {
 
       inputClassesDirs = files(classes)
       inputDependencies = files(classes)
-      outputApiDir = tempFile("api").get()
+      outputApiDir = tempFile("api").get().asFile
     }
 
   context(Project)
   private fun ApiPluginExtension.commonConfiguration() {
-    val latestApiFile = rootProject.file("api/${project.version}.api")
+    val latestApiFile = rootProject.layout.file("api/${project.name}/${project.version}.api")
 
     apiFile.convention(latestApiFile)
+    exportFile.convention(project.layout.file("public.api"))
   }
 }
 
@@ -79,7 +81,20 @@ abstract class ApiPlugin : Plugin<Project> {
  * Extension properties for the [ApiPlugin].
  *
  * @property apiFile The file to reference to for the publicly released api.
+ * @property exportFile The file to export the api to when running exportApi.
  */
 abstract class ApiPluginExtension {
-  @get:Optional abstract val apiFile: Property<File>
+  @get:Optional abstract val apiFile: RegularFileProperty
+  @get:Optional abstract val exportFile: RegularFileProperty
 }
+
+/**
+ * Helper mapping to the [ApiPluginExtension].
+ *
+ * Automatically applies the [ApiPlugin] if not already present.
+ */
+val Project.apiPlugin: ApiPluginExtension
+  get() {
+    plugins.apply<ApiPlugin>()
+    return extensions.getByType()
+  }

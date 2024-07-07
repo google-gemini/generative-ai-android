@@ -17,9 +17,11 @@
 package com.google.gradle.tasks
 
 import com.google.gradle.types.ModuleVersion
+import com.google.gradle.util.file
 import com.google.gradle.util.rewriteLines
 import java.io.File
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
@@ -38,7 +40,7 @@ import org.gradle.kotlin.dsl.provideDelegate
  */
 abstract class VersionBumpTask : DefaultTask() {
   @get:[Optional InputFile]
-  abstract val versionFile: Property<File>
+  abstract val versionFile: RegularFileProperty
 
   @get:[Optional Input]
   abstract val newVersion: Property<ModuleVersion>
@@ -49,10 +51,10 @@ abstract class VersionBumpTask : DefaultTask() {
 
   @TaskAction
   fun build() {
-    if(newVersion.get().major > 0)
+    if (newVersion.get().major > 0)
       throw RuntimeException("You're trying to bump the major version. This is a no 1.0+ zone!!")
 
-    versionFile.get().rewriteLines {
+    versionFile.get().asFile.rewriteLines {
       when {
         it.startsWith("version=") -> "version=${newVersion.get()}"
         else -> it
@@ -61,8 +63,10 @@ abstract class VersionBumpTask : DefaultTask() {
   }
 
   private fun configure() {
-    versionFile.convention(project.file("gradle.properties"))
-    newVersion.convention(computeVersionBump())
+    with(project) {
+      versionFile.convention(layout.file("gradle.properties"))
+      newVersion.convention(computeVersionBump())
+    }
   }
 
   private fun computeVersionBump(): ModuleVersion? {

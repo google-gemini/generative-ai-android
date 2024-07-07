@@ -33,23 +33,33 @@ import com.google.ai.client.generativeai.common.server.PromptFeedback
 import com.google.ai.client.generativeai.common.server.SafetyRating
 import com.google.ai.client.generativeai.common.shared.Blob
 import com.google.ai.client.generativeai.common.shared.BlobPart
+import com.google.ai.client.generativeai.common.shared.CodeExecutionResult
+import com.google.ai.client.generativeai.common.shared.CodeExecutionResultPart
 import com.google.ai.client.generativeai.common.shared.Content
+import com.google.ai.client.generativeai.common.shared.ExecutableCode
+import com.google.ai.client.generativeai.common.shared.ExecutableCodePart
+import com.google.ai.client.generativeai.common.shared.FileData
+import com.google.ai.client.generativeai.common.shared.FileDataPart
 import com.google.ai.client.generativeai.common.shared.FunctionCall
 import com.google.ai.client.generativeai.common.shared.FunctionCallPart
 import com.google.ai.client.generativeai.common.shared.FunctionResponse
 import com.google.ai.client.generativeai.common.shared.FunctionResponsePart
 import com.google.ai.client.generativeai.common.shared.HarmBlockThreshold
 import com.google.ai.client.generativeai.common.shared.HarmCategory
+import com.google.ai.client.generativeai.common.shared.Outcome
 import com.google.ai.client.generativeai.common.shared.Part
 import com.google.ai.client.generativeai.common.shared.SafetySetting
 import com.google.ai.client.generativeai.common.shared.TextPart
 import com.google.ai.client.generativeai.type.BlockThreshold
 import com.google.ai.client.generativeai.type.CitationMetadata
+import com.google.ai.client.generativeai.type.ExecutionOutcome
+import com.google.ai.client.generativeai.type.FunctionCallingConfig
 import com.google.ai.client.generativeai.type.FunctionDeclaration
-import com.google.ai.client.generativeai.type.GenerativeBeta
 import com.google.ai.client.generativeai.type.ImagePart
 import com.google.ai.client.generativeai.type.SerializationException
 import com.google.ai.client.generativeai.type.Tool
+import com.google.ai.client.generativeai.type.ToolConfig
+import com.google.ai.client.generativeai.type.UsageMetadata
 import com.google.ai.client.generativeai.type.content
 import java.io.ByteArrayOutputStream
 import kotlinx.serialization.json.Json
@@ -71,9 +81,15 @@ internal fun com.google.ai.client.generativeai.type.Part.toInternal(): Part {
     is com.google.ai.client.generativeai.type.BlobPart ->
       BlobPart(Blob(mimeType, Base64.encodeToString(blob, BASE_64_FLAGS)))
     is com.google.ai.client.generativeai.type.FunctionCallPart ->
-      FunctionCallPart(FunctionCall(name, args.orEmpty()))
+      FunctionCallPart(FunctionCall(name, args))
     is com.google.ai.client.generativeai.type.FunctionResponsePart ->
       FunctionResponsePart(FunctionResponse(name, response.toInternal()))
+    is com.google.ai.client.generativeai.type.FileDataPart ->
+      FileDataPart(FileData(fileUri = uri, mimeType = mimeType))
+    is com.google.ai.client.generativeai.type.ExecutableCodePart ->
+      ExecutableCodePart(ExecutableCode(language, code))
+    is com.google.ai.client.generativeai.type.CodeExecutionResultPart ->
+      CodeExecutionResultPart(CodeExecutionResult(outcome.toInternal(), output))
     else ->
       throw SerializationException(
         "The given subclass of Part (${javaClass.simpleName}) is not supported in the serialization yet."
@@ -92,6 +108,8 @@ internal fun com.google.ai.client.generativeai.type.GenerationConfig.toInternal(
     candidateCount = candidateCount,
     maxOutputTokens = maxOutputTokens,
     stopSequences = stopSequences,
+    responseMimeType = responseMimeType,
+    responseSchema = responseSchema?.toInternal(),
   )
 
 internal fun com.google.ai.client.generativeai.type.HarmCategory.toInternal() =
@@ -114,19 +132,46 @@ internal fun BlockThreshold.toInternal() =
     BlockThreshold.UNSPECIFIED -> HarmBlockThreshold.UNSPECIFIED
   }
 
-@GenerativeBeta
-internal fun Tool.toInternal() =
-  com.google.ai.client.generativeai.common.client.Tool(functionDeclarations.map { it.toInternal() })
+internal fun ExecutionOutcome.toInternal() =
+  when (this) {
+    ExecutionOutcome.UNSPECIFIED -> Outcome.UNSPECIFIED
+    ExecutionOutcome.OK -> Outcome.OUTCOME_OK
+    ExecutionOutcome.FAILED -> Outcome.OUTCOME_FAILED
+    ExecutionOutcome.DEADLINE_EXCEEDED -> Outcome.OUTCOME_DEADLINE_EXCEEDED
+  }
 
-@GenerativeBeta
+internal fun Tool.toInternal() =
+  com.google.ai.client.generativeai.common.client.Tool(
+    functionDeclarations?.map { it.toInternal() },
+    codeExecution = codeExecution?.toInternal(),
+  )
+
+internal fun ToolConfig.toInternal() =
+  com.google.ai.client.generativeai.common.client.ToolConfig(
+    com.google.ai.client.generativeai.common.client.FunctionCallingConfig(
+      when (functionCallingConfig.mode) {
+        FunctionCallingConfig.Mode.ANY ->
+          com.google.ai.client.generativeai.common.client.FunctionCallingConfig.Mode.ANY
+        FunctionCallingConfig.Mode.AUTO ->
+          com.google.ai.client.generativeai.common.client.FunctionCallingConfig.Mode.AUTO
+        FunctionCallingConfig.Mode.NONE ->
+          com.google.ai.client.generativeai.common.client.FunctionCallingConfig.Mode.NONE
+      }
+    )
+  )
+
+internal fun com.google.ai.client.generativeai.common.UsageMetadata.toPublic(): UsageMetadata =
+  UsageMetadata(promptTokenCount ?: 0, candidatesTokenCount ?: 0, totalTokenCount ?: 0)
+
 internal fun FunctionDeclaration.toInternal() =
   com.google.ai.client.generativeai.common.client.FunctionDeclaration(
     name,
     description,
     Schema(
-      properties = getParameters().associate { it.name to it.toInternal() },
-      required = getParameters().map { it.name },
+      properties = parameters.associate { it.name to it.toInternal() },
+      required = requiredParameters,
       type = "OBJECT",
+      nullable = false,
     ),
   )
 
@@ -135,6 +180,7 @@ internal fun <T> com.google.ai.client.generativeai.type.Schema<T>.toInternal(): 
     type.name,
     description,
     format,
+    nullable,
     enum,
     properties?.mapValues { it.value.toInternal() },
     required,
@@ -171,14 +217,23 @@ internal fun Part.toPublic(): com.google.ai.client.generativeai.type.Part {
       }
     }
     is FunctionCallPart ->
-      com.google.ai.client.generativeai.type.FunctionCallPart(
-        functionCall.name,
-        functionCall.args.orEmpty(),
-      )
+      com.google.ai.client.generativeai.type.FunctionCallPart(functionCall.name, functionCall.args)
     is FunctionResponsePart ->
       com.google.ai.client.generativeai.type.FunctionResponsePart(
         functionResponse.name,
         functionResponse.response.toPublic(),
+      )
+    is FileDataPart ->
+      com.google.ai.client.generativeai.type.FileDataPart(fileData.fileUri, fileData.mimeType)
+    is ExecutableCodePart ->
+      com.google.ai.client.generativeai.type.ExecutableCodePart(
+        executableCode.language,
+        executableCode.code,
+      )
+    is CodeExecutionResultPart ->
+      com.google.ai.client.generativeai.type.CodeExecutionResultPart(
+        codeExecutionResult.outcome.toPublic(),
+        codeExecutionResult.output,
       )
     else ->
       throw SerializationException(
@@ -243,10 +298,19 @@ internal fun BlockReason.toPublic() =
     BlockReason.UNKNOWN -> com.google.ai.client.generativeai.type.BlockReason.UNKNOWN
   }
 
+internal fun Outcome.toPublic() =
+  when (this) {
+    Outcome.UNSPECIFIED -> ExecutionOutcome.UNSPECIFIED
+    Outcome.OUTCOME_OK -> ExecutionOutcome.OK
+    Outcome.OUTCOME_FAILED -> ExecutionOutcome.FAILED
+    Outcome.OUTCOME_DEADLINE_EXCEEDED -> ExecutionOutcome.DEADLINE_EXCEEDED
+  }
+
 internal fun GenerateContentResponse.toPublic() =
   com.google.ai.client.generativeai.type.GenerateContentResponse(
     candidates?.map { it.toPublic() }.orEmpty(),
     promptFeedback?.toPublic(),
+    usageMetadata?.toPublic(),
   )
 
 internal fun CountTokensResponse.toPublic() =

@@ -19,9 +19,9 @@ package com.google.gradle.tasks
 import com.google.gradle.types.LinesChanged
 import com.google.gradle.types.VersionType.*
 import com.google.gradle.util.SkipTask
-import java.io.File
+import com.google.gradle.util.spoiler
 import org.gradle.api.DefaultTask
-import org.gradle.api.provider.Property
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
@@ -41,19 +41,19 @@ import org.gradle.api.tasks.TaskAction
  * If no public api changes are found, then no message will be generated and the task will skip
  * itself.
  *
- * @property changesFile a file contained a [LinesChanged]; representing the changes made in this
+ * @property changesFile a file containing a [LinesChanged]; representing the changes made in this
  *   repo
  * @property outputFile where to save the warning message to
  * @throws SkipTask if no public api changes are found
  */
 abstract class WarnAboutApiChangesTask : DefaultTask() {
-  @get:InputFile abstract val changesFile: Property<File>
+  @get:InputFile abstract val changesFile: RegularFileProperty
 
-  @get:OutputFile abstract val outputFile: Property<File>
+  @get:OutputFile abstract val outputFile: RegularFileProperty
 
   @TaskAction
   fun add() {
-    val diff = LinesChanged.fromFile(changesFile.get())
+    val diff = LinesChanged.fromFile(changesFile.asFile.get())
 
     val added = spoiler("APIs Added", diff.added.joinToString("\n\n") { it.trim() })
     val removed = spoiler("APIs Removed", diff.removed.joinToString("\n\n") { it.trim() })
@@ -82,19 +82,6 @@ abstract class WarnAboutApiChangesTask : DefaultTask() {
         else -> throw SkipTask("No public api changes found")
       }
 
-    outputFile.get().writeText(message)
+    outputFile.asFile.get().writeText(message)
   }
-
-  private fun spoiler(title: String, content: String) =
-    """
-        |<details>
-        |<summary> $title </summary>
-        |   
-        |```
-        |$content
-        |```
-        |   
-        |</details>
-    """
-      .trimMargin()
 }

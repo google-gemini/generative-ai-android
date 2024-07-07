@@ -20,34 +20,27 @@ import android.graphics.Bitmap
 import com.google.ai.client.generativeai.common.APIController
 import com.google.ai.client.generativeai.common.CountTokensRequest
 import com.google.ai.client.generativeai.common.GenerateContentRequest
+import com.google.ai.client.generativeai.common.util.fullModelName
 import com.google.ai.client.generativeai.internal.util.toInternal
 import com.google.ai.client.generativeai.internal.util.toPublic
 import com.google.ai.client.generativeai.type.Content
 import com.google.ai.client.generativeai.type.CountTokensResponse
 import com.google.ai.client.generativeai.type.FinishReason
-import com.google.ai.client.generativeai.type.FourParameterFunction
-import com.google.ai.client.generativeai.type.FunctionCallPart
 import com.google.ai.client.generativeai.type.GenerateContentResponse
 import com.google.ai.client.generativeai.type.GenerationConfig
-import com.google.ai.client.generativeai.type.GenerativeBeta
 import com.google.ai.client.generativeai.type.GoogleGenerativeAIException
-import com.google.ai.client.generativeai.type.InvalidStateException
-import com.google.ai.client.generativeai.type.NoParameterFunction
-import com.google.ai.client.generativeai.type.OneParameterFunction
 import com.google.ai.client.generativeai.type.PromptBlockedException
 import com.google.ai.client.generativeai.type.RequestOptions
 import com.google.ai.client.generativeai.type.ResponseStoppedException
 import com.google.ai.client.generativeai.type.SafetySetting
 import com.google.ai.client.generativeai.type.SerializationException
-import com.google.ai.client.generativeai.type.ThreeParameterFunction
 import com.google.ai.client.generativeai.type.Tool
-import com.google.ai.client.generativeai.type.TwoParameterFunction
+import com.google.ai.client.generativeai.type.ToolConfig
 import com.google.ai.client.generativeai.type.content
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.ExperimentalSerializationApi
-import org.json.JSONObject
 
 /**
  * A facilitator for a given multimodal model (eg; Gemini).
@@ -57,6 +50,7 @@ import org.json.JSONObject
  * @property generationConfig configuration parameters to use for content generation
  * @property safetySettings the safety bounds to use during alongside prompts during content
  *   generation
+ * @property systemInstruction contains a [Content] that directs the model to behave a certain way
  * @property requestOptions configuration options to utilize during backend communication
  */
 @OptIn(ExperimentalSerializationApi::class)
@@ -67,6 +61,8 @@ internal constructor(
   val generationConfig: GenerationConfig? = null,
   val safetySettings: List<SafetySetting>? = null,
   val tools: List<Tool>? = null,
+  val toolConfig: ToolConfig? = null,
+  val systemInstruction: Content? = null,
   val requestOptions: RequestOptions = RequestOptions(),
   private val controller: APIController,
 ) {
@@ -77,16 +73,25 @@ internal constructor(
     apiKey: String,
     generationConfig: GenerationConfig? = null,
     safetySettings: List<SafetySetting>? = null,
-    tools: List<Tool>? = null,
     requestOptions: RequestOptions = RequestOptions(),
+    tools: List<Tool>? = null,
+    toolConfig: ToolConfig? = null,
+    systemInstruction: Content? = null,
   ) : this(
-    modelName,
+    fullModelName(modelName),
     apiKey,
     generationConfig,
     safetySettings,
     tools,
+    toolConfig,
+    systemInstruction?.let { Content("system", it.parts) },
     requestOptions,
-    APIController(apiKey, modelName, requestOptions.toInternal()),
+    APIController(
+      apiKey,
+      modelName,
+      requestOptions.toInternal(),
+      "genai-android/${BuildConfig.VERSION_NAME}",
+    ),
   )
 
   /**
@@ -186,38 +191,6 @@ internal constructor(
     return countTokens(content { image(prompt) })
   }
 
-  /**
-   * Executes a function requested by the model.
-   *
-   * @param functionCallPart A [FunctionCallPart] from the model, containing a function call and
-   *   parameters
-   * @return The output of the requested function call
-   */
-  @OptIn(GenerativeBeta::class)
-  suspend fun executeFunction(functionCallPart: FunctionCallPart): JSONObject {
-    if (tools == null) {
-      throw InvalidStateException("No registered tools")
-    }
-    val callable =
-      tools.flatMap { it.functionDeclarations }.firstOrNull { it.name == functionCallPart.name }
-        ?: throw InvalidStateException("No registered function named ${functionCallPart.name}")
-    return when (callable) {
-      is NoParameterFunction -> callable.execute()
-      is OneParameterFunction<*> ->
-        (callable as OneParameterFunction<Any?>).execute(functionCallPart)
-      is TwoParameterFunction<*, *> ->
-        (callable as TwoParameterFunction<Any?, Any?>).execute(functionCallPart)
-      is ThreeParameterFunction<*, *, *> ->
-        (callable as ThreeParameterFunction<Any?, Any?, Any?>).execute(functionCallPart)
-      is FourParameterFunction<*, *, *, *> ->
-        (callable as FourParameterFunction<Any?, Any?, Any?, Any?>).execute(functionCallPart)
-      else -> {
-        throw RuntimeException("UNREACHABLE")
-      }
-    }
-  }
-
-  @OptIn(GenerativeBeta::class)
   private fun constructRequest(vararg prompt: Content) =
     GenerateContentRequest(
       modelName,
@@ -225,10 +198,12 @@ internal constructor(
       safetySettings?.map { it.toInternal() },
       generationConfig?.toInternal(),
       tools?.map { it.toInternal() },
+      toolConfig?.toInternal(),
+      systemInstruction?.toInternal(),
     )
 
   private fun constructCountTokensRequest(vararg prompt: Content) =
-    CountTokensRequest(modelName, prompt.map { it.toInternal() })
+    CountTokensRequest.forGenAI(constructRequest(*prompt))
 
   private fun GenerateContentResponse.validate() = apply {
     if (candidates.isEmpty() && promptFeedback == null) {

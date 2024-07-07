@@ -26,6 +26,8 @@ import com.google.ai.client.generativeai.common.RequestOptions
 import com.google.ai.client.generativeai.common.server.Candidate
 import com.google.ai.client.generativeai.common.shared.Content
 import com.google.ai.client.generativeai.common.shared.TextPart
+import io.kotest.matchers.collections.shouldNotBeEmpty
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.http.HttpHeaders
@@ -37,6 +39,8 @@ import io.ktor.utils.io.writeFully
 import java.io.File
 import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
+
+private val TEST_CLIENT_ID = "genai-android/test"
 
 internal fun prepareStreamingResponse(response: List<GenerateContentResponse>): List<ByteArray> =
   response.map { "data: ${JSON.encodeToString(it)}$SSE_SEPARATOR".toByteArray() }
@@ -98,13 +102,21 @@ internal typealias CommonTest = suspend CommonTestScope.() -> Unit
 internal fun commonTest(
   status: HttpStatusCode = HttpStatusCode.OK,
   requestOptions: RequestOptions = RequestOptions(),
-  block: CommonTest
+  block: CommonTest,
 ) = doBlocking {
   val channel = ByteChannel(autoFlush = true)
   val mockEngine = MockEngine {
     respond(channel, status, headersOf(HttpHeaders.ContentType, "application/json"))
   }
-  val apiController = APIController("super_cool_test_key", "gemini-pro", requestOptions, mockEngine)
+  val apiController =
+    APIController(
+      "super_cool_test_key",
+      "gemini-pro",
+      requestOptions,
+      mockEngine,
+      TEST_CLIENT_ID,
+      null,
+    )
   CommonTestScope(channel, apiController).block()
 }
 
@@ -122,7 +134,7 @@ internal fun commonTest(
 internal fun goldenStreamingFile(
   name: String,
   httpStatusCode: HttpStatusCode = HttpStatusCode.OK,
-  block: CommonTest
+  block: CommonTest,
 ) = doBlocking {
   val goldenFile = loadGoldenFile("streaming/$name")
   val messages = goldenFile.readLines().filter { it.isNotBlank() }
@@ -152,7 +164,7 @@ internal fun goldenStreamingFile(
 internal fun goldenUnaryFile(
   name: String,
   httpStatusCode: HttpStatusCode = HttpStatusCode.OK,
-  block: CommonTest
+  block: CommonTest,
 ) =
   commonTest(httpStatusCode) {
     val goldenFile = loadGoldenFile("unary/$name")
@@ -174,3 +186,14 @@ internal fun loadGoldenFile(path: String): File = loadResourceFile("golden-files
 
 /** Loads a file from the test resources directory. */
 internal fun loadResourceFile(path: String) = File("src/test/resources/$path")
+
+/**
+ * Ensures that a collection is neither null or empty.
+ *
+ * Syntax sugar for [shouldNotBeNull] and [shouldNotBeEmpty].
+ */
+inline fun <reified T : Any> Collection<T>?.shouldNotBeNullOrEmpty(): Collection<T> {
+  shouldNotBeNull()
+  shouldNotBeEmpty()
+  return this
+}
