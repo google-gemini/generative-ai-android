@@ -37,7 +37,13 @@ android {
         }
     }
 
-    sourceSets.getByName("main") {
+    buildTypes {
+        create("samples") {
+            initWith(getByName("debug"))
+        }
+    }
+
+    sourceSets.getByName("samples") {
         java.setSrcDirs(listOf("src/main/java", "src/main/kotlin", "../../samples/src/main/java"))
     }
 
