@@ -90,12 +90,12 @@ dependencies {
     implementation("com.google.guava:listenablefuture:1.0")
     implementation("androidx.concurrent:concurrent-futures:1.2.0-alpha02")
     implementation("androidx.concurrent:concurrent-futures-ktx:1.2.0-alpha02")
+    compileOnly("io.ktor:ktor-client-mock:$ktorVersion")
     testImplementation("junit:junit:4.13.2")
     testImplementation("io.kotest:kotest-assertions-core:4.0.7")
     testImplementation("io.kotest:kotest-assertions-jvm:4.0.7")
     testImplementation("io.kotest:kotest-assertions-json:4.0.7")
     testImplementation("io.ktor:ktor-client-mock:$ktorVersion")
-    compileOnly("io.ktor:ktor-client-mock:$ktorVersion")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }
