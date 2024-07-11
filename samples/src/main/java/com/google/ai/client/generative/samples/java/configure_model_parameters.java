@@ -28,7 +28,7 @@ import java.util.Arrays;
 
 class ConfigureModel {
   void configureModel() {
-    // [START configure_model]
+    // [START configure_model_parameters]
     GenerationConfig.Builder configBuilder = new GenerationConfig.Builder();
     configBuilder.temperature = 0.9f;
     configBuilder.topK = 16;
@@ -43,6 +43,6 @@ class ConfigureModel {
         new GenerativeModel("gemini-1.5-flash", BuildConfig.apiKey, generationConfig);
 
     GenerativeModelFutures model = GenerativeModelFutures.from(gm);
-    // [END configure_model]
+    // [END configure_model_parameters]
   }
 }

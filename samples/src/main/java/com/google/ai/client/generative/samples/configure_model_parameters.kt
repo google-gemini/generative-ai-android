@@ -28,7 +28,7 @@ import com.google.ai.client.generativeai.type.generationConfig
 
 
 suspend fun configureModel() {
-  // [START configure_model]
+  // [START configure_model_parameters]
   val config = generationConfig {
     temperature = 0.9f
     topK = 16
@@ -43,7 +43,7 @@ suspend fun configureModel() {
           modelName = "gemini-1.5-flash",
           apiKey = BuildConfig.apiKey,
           generationConfig = config)
-  // [END configure_model]
+  // [END configure_model_parameters]
 
   // Added to silence the compiler warning about unused variable.
   print(generativeModel)
