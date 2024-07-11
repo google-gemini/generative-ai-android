@@ -37,6 +37,16 @@ android {
         }
     }
 
+    buildTypes {
+        create("samples") {
+            initWith(getByName("debug"))
+        }
+    }
+
+    sourceSets.getByName("samples") {
+        java.setSrcDirs(listOf("src/main/java", "src/main/kotlin", "../../samples/src/main/java"))
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -58,6 +68,12 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     implementation("androidx.activity:activity-compose:1.8.1")
     implementation("androidx.navigation:navigation-compose:2.7.5")
+
+    // Required for one-shot operations (to use `ListenableFuture` from Guava Android)
+    implementation("com.google.guava:guava:31.0.1-android")
+
+    // Required for streaming operations (to use `Publisher` from Reactive Streams)
+    implementation("org.reactivestreams:reactive-streams:1.0.4")
 
     implementation(platform("androidx.compose:compose-bom:2023.10.01"))
     implementation("androidx.compose.ui:ui")
