@@ -16,6 +16,15 @@
 
 package com.google.ai.client.generative.samples
 
+import com.google.ai.client.generativeai.GenerativeModel
+import com.google.ai.client.generativeai.type.FunctionResponsePart
+import com.google.ai.client.generativeai.type.InvalidStateException
+import com.google.ai.client.generativeai.type.Schema
+import com.google.ai.client.generativeai.type.Tool
+import com.google.ai.client.generativeai.type.content
+import com.google.ai.client.generativeai.type.defineFunction
+import org.json.JSONObject
+
 
 // Set up your API Key
 // ====================
@@ -24,4 +33,54 @@ package com.google.ai.client.generative.samples
 // the "Set up your API Key section" in the [Gemini API
 // quickstart](https://ai.google.dev/gemini-api/docs/quickstart?lang=android#set-up-api-key).
 
-// TODO
+suspend fun functionCalling() {
+    // [START function_calling]
+    fun multiply(a: Double, b: Double) = a * b
+
+    val multiplyDefinition = defineFunction(
+        name = "multiply",
+        description = "returns a * b.",
+        parameters = listOf(
+        Schema.double("a", "First parameter"),
+        Schema.double("b", "Second parameter")
+        )
+    )
+
+    val generativeModel =
+        GenerativeModel(
+            // Specify a Gemini model appropriate for your use case
+            modelName = "gemini-1.5-flash",
+            // Access your API key as a Build Configuration variable (see "Set up your API key" above)
+            apiKey = BuildConfig.apiKey,
+            // List the functions definitions you want to make available to the model
+            tools = listOf(Tool(listOf(multiplyDefinition)))
+        )
+
+    val chat = generativeModel.startChat()
+    val prompt = "I have 57 cats, each owns 44 mittens, how many mittens is that in total?"
+
+    // Send the message to the generative model
+    var response = chat.sendMessage(prompt)
+
+    // Check if the model responded with a function call
+    if (response.functionCalls.isNotEmpty() &&
+        response.functionCalls.first().name == "multiply") {
+        val functionCall = response.functionCalls.first()
+
+        val a = functionCall.args["a"]?.toDouble() ?: throw InvalidStateException("Missing param 'a'")
+        val b = functionCall.args["b"]?.toDouble() ?: throw InvalidStateException("Missing param 'b'")
+        val result = JSONObject().put("result", multiply(a, b))
+
+        response = chat.sendMessage(
+            content(role = "function") {
+                part(FunctionResponsePart(functionCall.name, result))
+            }
+        )
+    }
+
+    // Whenever the model responds with text, show it in the UI
+    response.text?.let { modelResponse ->
+        println(modelResponse)
+    }
+    // [END function_calling]
+}
