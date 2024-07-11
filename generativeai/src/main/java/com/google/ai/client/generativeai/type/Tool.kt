@@ -30,6 +30,7 @@ class Tool(
   val codeExecution: JSONObject? = null,
 ) {
   companion object {
+    @JvmField
     val CODE_EXECUTION = Tool(codeExecution = JSONObject())
   }
 }
