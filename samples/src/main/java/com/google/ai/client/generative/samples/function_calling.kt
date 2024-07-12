@@ -39,10 +39,10 @@ suspend fun functionCalling() {
 
     val multiplyDefinition = defineFunction(
         name = "multiply",
-        description = "returns a * b.",
+        description = "returns the product of the provided numbers.",
         parameters = listOf(
-        Schema.double("a", "First parameter"),
-        Schema.double("b", "Second parameter")
+        Schema.double("a", "First number"),
+        Schema.double("b", "Second number")
         )
     )
 
