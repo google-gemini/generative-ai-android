@@ -46,6 +46,8 @@ suspend fun functionCalling() {
         )
     )
 
+    val usableFunctions = listOf(multiplyDefinition)
+
     val generativeModel =
         GenerativeModel(
             // Specify a Gemini model appropriate for your use case
@@ -53,7 +55,7 @@ suspend fun functionCalling() {
             // Access your API key as a Build Configuration variable (see "Set up your API key" above)
             apiKey = BuildConfig.apiKey,
             // List the functions definitions you want to make available to the model
-            tools = listOf(Tool(listOf(multiplyDefinition)))
+            tools = listOf(Tool(usableFunctions))
         )
 
     val chat = generativeModel.startChat()
