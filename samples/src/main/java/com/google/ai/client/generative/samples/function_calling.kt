@@ -63,17 +63,14 @@ suspend fun functionCalling() {
     var response = chat.sendMessage(prompt)
 
     // Check if the model responded with a function call
-    if (response.functionCalls.isNotEmpty() &&
-        response.functionCalls.first().name == "multiply") {
-        val functionCall = response.functionCalls.first()
+    response.functionCalls.first { it.name == "multiply" }.apply {
+        val a: String by args
+        val b: String by args
 
-        val a = functionCall.args["a"]?.toDouble() ?: throw InvalidStateException("Missing param 'a'")
-        val b = functionCall.args["b"]?.toDouble() ?: throw InvalidStateException("Missing param 'b'")
-        val result = JSONObject().put("result", multiply(a, b))
-
+        val result = JSONObject(mapOf("result" to multiply(a.toDouble(), b.toDouble())))
         response = chat.sendMessage(
             content(role = "function") {
-                part(FunctionResponsePart(functionCall.name, result))
+                part(FunctionResponsePart("multiply", result))
             }
         )
     }
