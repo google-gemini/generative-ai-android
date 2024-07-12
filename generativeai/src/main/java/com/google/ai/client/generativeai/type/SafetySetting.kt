@@ -22,4 +22,4 @@ package com.google.ai.client.generativeai.type
  * @param harmCategory The relevant [HarmCategory].
  * @param threshold The threshold form harm allowable.
  */
-class SafetySetting(val harmCategory: HarmCategory, val threshold: BlockThreshold) {}
+class SafetySetting(val harmCategory: HarmCategory, val threshold: BlockThreshold)

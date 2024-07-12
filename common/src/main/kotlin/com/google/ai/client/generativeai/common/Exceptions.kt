@@ -96,7 +96,7 @@ class InvalidStateException(message: String, cause: Throwable? = null) :
  */
 class ResponseStoppedException(val response: GenerateContentResponse, cause: Throwable? = null) :
   GoogleGenerativeAIException(
-    "Content generation stopped. Reason: ${response.candidates?.first()?.finishReason?.name}",
+    "Content generation stopped. Reason: ${response.candidates.first().finishReason?.name}",
     cause,
   )
 

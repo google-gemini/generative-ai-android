@@ -31,24 +31,24 @@ package com.google.ai.client.generativeai.type
  */
 class GenerationConfig
 private constructor(
-  val temperature: Float?,
-  val topK: Int?,
-  val topP: Float?,
-  val candidateCount: Int?,
-  val maxOutputTokens: Int?,
-  val stopSequences: List<String>?,
-  val responseMimeType: String?,
+  val temperature: Float,
+  val topK: Int,
+  val topP: Float,
+  val candidateCount: Int,
+  val maxOutputTokens: Int,
+  val stopSequences: List<String> = emptyList(),
+  val responseMimeType: String,
   val responseSchema: Schema<*>?,
 ) {
 
   class Builder {
-    @JvmField var temperature: Float? = null
-    @JvmField var topK: Int? = null
-    @JvmField var topP: Float? = null
-    @JvmField var candidateCount: Int? = null
-    @JvmField var maxOutputTokens: Int? = null
-    @JvmField var stopSequences: List<String>? = null
-    @JvmField var responseMimeType: String? = null
+    @JvmField var temperature: Float = 0f
+    @JvmField var topK: Int = 0
+    @JvmField var topP: Float = 0f
+    @JvmField var candidateCount: Int = 1
+    @JvmField var maxOutputTokens: Int = 0
+    @JvmField var stopSequences: List<String> = emptyList()
+    @JvmField var responseMimeType: String = ""
     @JvmField var responseSchema: Schema<*>? = null
 
     fun build() =

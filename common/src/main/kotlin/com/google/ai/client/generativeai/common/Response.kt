@@ -25,20 +25,20 @@ sealed interface Response
 
 @Serializable
 data class GenerateContentResponse(
-  val candidates: List<Candidate>? = null,
+  val candidates: List<Candidate> = emptyList(),
   val promptFeedback: PromptFeedback? = null,
   val usageMetadata: UsageMetadata? = null,
 ) : Response
 
 @Serializable
-data class CountTokensResponse(val totalTokens: Int, val totalBillableCharacters: Int? = null) :
+data class CountTokensResponse(val totalTokens: Int = 0, val totalBillableCharacters: Int = 0) :
   Response
 
 @Serializable data class GRpcErrorResponse(val error: GRpcError) : Response
 
 @Serializable
 data class UsageMetadata(
-  val promptTokenCount: Int? = null,
-  val candidatesTokenCount: Int? = null,
-  val totalTokenCount: Int? = null,
+  val promptTokenCount: Int = 0,
+  val candidatesTokenCount: Int = 0,
+  val totalTokenCount: Int = 0,
 )

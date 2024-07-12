@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalSerializationApi::class)
+
 package com.google.ai.client.generativeai.common
 
 import com.google.ai.client.generativeai.common.client.GenerationConfig
@@ -22,45 +24,41 @@ import com.google.ai.client.generativeai.common.client.ToolConfig
 import com.google.ai.client.generativeai.common.shared.Content
 import com.google.ai.client.generativeai.common.shared.SafetySetting
 import com.google.ai.client.generativeai.common.util.fullModelName
-import kotlinx.serialization.SerialName
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 
 sealed interface Request
 
 @Serializable
 data class GenerateContentRequest(
-  val model: String? = null,
+  val model: String,
   val contents: List<Content>,
-  @SerialName("safety_settings") val safetySettings: List<SafetySetting>? = null,
-  @SerialName("generation_config") val generationConfig: GenerationConfig? = null,
-  val tools: List<Tool>? = null,
-  @SerialName("tool_config") var toolConfig: ToolConfig? = null,
-  @SerialName("system_instruction") val systemInstruction: Content? = null,
+  val safetySettings: List<SafetySetting> = emptyList(),
+  val generationConfig: GenerationConfig? = null,
+  val tools: List<Tool> = emptyList(),
+  val toolConfig: ToolConfig? = null,
+  val systemInstruction: Content? = null,
 ) : Request
 
 @Serializable
 data class CountTokensRequest(
+  val model: String,
+  val contents: List<Content> = emptyList(),
+  val tools: List<Tool> = emptyList(),
   val generateContentRequest: GenerateContentRequest? = null,
-  val model: String? = null,
-  val contents: List<Content>? = null,
-  val tools: List<Tool>? = null,
-  @SerialName("system_instruction") val systemInstruction: Content? = null,
+  val systemInstruction: Content? = null,
 ) : Request {
   companion object {
-    fun forGenAI(generateContentRequest: GenerateContentRequest) =
-      CountTokensRequest(
-        generateContentRequest =
-          generateContentRequest.model?.let {
-            generateContentRequest.copy(model = fullModelName(it))
-          } ?: generateContentRequest
-      )
+    fun forGenAI(request: GenerateContentRequest) =
+      CountTokensRequest(fullModelName(request.model), request.contents, emptyList(), request)
 
-    fun forVertexAI(generateContentRequest: GenerateContentRequest) =
+    fun forVertexAI(request: GenerateContentRequest) =
       CountTokensRequest(
-        model = generateContentRequest.model?.let { fullModelName(it) },
-        contents = generateContentRequest.contents,
-        tools = generateContentRequest.tools,
-        systemInstruction = generateContentRequest.systemInstruction,
+        fullModelName(request.model),
+        request.contents,
+        request.tools,
+        null,
+        request.systemInstruction,
       )
   }
 }

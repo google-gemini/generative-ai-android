@@ -259,19 +259,19 @@ private suspend fun validateResponse(response: HttpResponse) {
   if (message.contains("quota")) {
     throw QuotaExceededException(message)
   }
-  if (error.details?.any { "SERVICE_DISABLED" == it.reason } == true) {
+  if (error.details.any { "SERVICE_DISABLED" == it.reason }) {
     throw ServiceDisabledException(message)
   }
   throw ServerException(message)
 }
 
 private fun GenerateContentResponse.validate() = apply {
-  if ((candidates?.isEmpty() != false) && promptFeedback == null) {
+  if (candidates.isEmpty() && promptFeedback == null) {
     throw SerializationException("Error deserializing response, found no valid fields")
   }
   promptFeedback?.blockReason?.let { throw PromptBlockedException(this) }
   candidates
-    ?.mapNotNull { it.finishReason }
-    ?.firstOrNull { it != FinishReason.STOP }
+    .map { it.finishReason }
+    .firstOrNull { it != FinishReason.STOP }
     ?.let { throw ResponseStoppedException(this) }
 }

@@ -21,6 +21,9 @@ enum class HarmCategory {
   /** A new and not yet supported value. */
   UNKNOWN,
 
+  /** A HarmCategory was not specified. */
+  UNSPECIFIED,
+
   /** Harassment content. */
   HARASSMENT,
 

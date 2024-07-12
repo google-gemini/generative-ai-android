@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:OptIn(ExperimentalSerializationApi::class)
+
 package com.google.ai.client.generativeai
 
 import com.google.ai.client.generativeai.common.APIController
@@ -54,6 +56,7 @@ import io.mockk.mockk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.ExperimentalSerializationApi
 import org.json.JSONObject
 import org.junit.Test
 
@@ -69,7 +72,10 @@ internal class GenerativeModelTests {
       mockApiController.generateContent(
         GenerateContentRequest_Common(
           "gemini-pro-1.0",
-          contents = listOf(Content_Common(parts = listOf(TextPart_Common("Why's the sky blue?")))),
+          contents =
+            listOf(
+              Content_Common(role = "user", parts = listOf(TextPart_Common("Why's the sky blue?")))
+            ),
         )
       )
     } returns
@@ -78,7 +84,8 @@ internal class GenerativeModelTests {
           Candidate_Common(
             content =
               Content_Common(
-                parts = listOf(TextPart_Common("I'm still learning how to answer this question"))
+                role = "user",
+                parts = listOf(TextPart_Common("I'm still learning how to answer this question")),
               ),
             finishReason = null,
             safetyRatings = listOf(),
@@ -103,7 +110,7 @@ internal class GenerativeModelTests {
                   startIndex = 0,
                   endIndex = 100,
                   uri = "http://www.example.com",
-                  license = null,
+                  license = "",
                 )
               ),
             finishReason = null,
@@ -139,8 +146,11 @@ internal class GenerativeModelTests {
     coEvery {
       mockApiController.generateContent(
         GenerateContentRequest_Common(
-          "gemini-pro-1.0",
-          contents = listOf(Content_Common(parts = listOf(TextPart_Common("Why's the sky blue?")))),
+          model = "gemini-pro-1.0",
+          contents =
+            listOf(
+              Content_Common(role = "user", parts = listOf(TextPart_Common("Why's the sky blue?")))
+            ),
         )
       )
     } throws InvalidAPIKeyException_Common("exception message")
@@ -155,7 +165,10 @@ internal class GenerativeModelTests {
       mockApiController.generateContentStream(
         GenerateContentRequest_Common(
           "gemini-pro-1.0",
-          contents = listOf(Content_Common(parts = listOf(TextPart_Common("Why's the sky blue?")))),
+          contents =
+            listOf(
+              Content_Common(role = "user", parts = listOf(TextPart_Common("Why's the sky blue?")))
+            ),
         )
       )
     } returns flow { throw UnsupportedUserLocationException_Common() }
