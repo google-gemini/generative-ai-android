@@ -25,7 +25,7 @@ import org.json.JSONObject
  * @param functionDeclarations The set of functions that this tool allows the model access to
  * @param codeExecution This is a flag value to enable Code Execution. Use [CODE_EXECUTION].
  */
-class Tool(
+class Tool @JvmOverloads constructor(
   val functionDeclarations: List<FunctionDeclaration>? = null,
   val codeExecution: JSONObject? = null,
 ) {
