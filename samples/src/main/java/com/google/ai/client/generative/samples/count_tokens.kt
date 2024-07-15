@@ -20,7 +20,10 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.google.ai.client.generativeai.GenerativeModel
+import com.google.ai.client.generativeai.type.Schema
+import com.google.ai.client.generativeai.type.Tool
 import com.google.ai.client.generativeai.type.content
+import com.google.ai.client.generativeai.type.defineFunction
 import com.google.ai.sample.R
 
 // Set up your API Key
@@ -91,4 +94,48 @@ suspend fun tokensMultimodalImageInline(context: Context) {
   val (totalTokens) = generativeModel.countTokens(multiModalContent)
   print(totalTokens)
   // [END tokens_multimodal_image_inline]
+}
+
+suspend fun tokensSystemInstruction() {
+    // [START tokens_system_instruction]
+    val generativeModel =
+        GenerativeModel(
+            // Specify a Gemini model appropriate for your use case
+            modelName = "gemini-1.5-flash",
+            // Access your API key as a Build Configuration variable (see "Set up your API key" above)
+            apiKey = BuildConfig.apiKey,
+            systemInstruction = content(role = "system") { text("You are a cat. Your name is Neko.")}
+        )
+
+    // For text-only input
+    val (totalTokens) = generativeModel.countTokens("What is your name?")
+    print(totalTokens)
+    // [END tokens_system_instruction]
+}
+
+suspend fun tokenTools() {
+    // [START tokens_tools]
+    val multiplyDefinition = defineFunction(
+        name = "multiply",
+        description = "returns the product of the provided numbers.",
+        parameters = listOf(
+            Schema.double("a", "First number"),
+            Schema.double("b", "Second number")
+        )
+    )
+    val usableFunctions = listOf(multiplyDefinition)
+
+    val generativeModel =
+        GenerativeModel(
+            // Specify a Gemini model appropriate for your use case
+            modelName = "gemini-1.5-flash",
+            // Access your API key as a Build Configuration variable (see "Set up your API key" above)
+            apiKey = BuildConfig.apiKey,
+            tools = listOf(Tool(usableFunctions))
+        )
+
+    // For text-only input
+    val (totalTokens) = generativeModel.countTokens("What's the product of 9 and 358?")
+    print(totalTokens)
+    // [END tokens_tools]
 }
