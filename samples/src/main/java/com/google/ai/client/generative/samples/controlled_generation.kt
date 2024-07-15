@@ -23,4 +23,12 @@ package com.google.ai.client.generative.samples
 // the "Set up your API Key section" in the [Gemini API
 // quickstart](https://ai.google.dev/gemini-api/docs/quickstart?lang=android#set-up-api-key).
 
-// TODO
+suspend fun json_controlled_generation() {
+    // [START json_controlled_generation]
+    // [END json_controlled_generation]
+}
+
+suspend fun json_no_schema() {
+    // [START json_no_schema]
+    // [END json_no_schema]
+}
