@@ -1,0 +1,1568 @@
+public final class com/google/ai/client/generativeai/common/APIController {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/APIController$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lcom/google/ai/client/generativeai/common/RequestOptions;Ljava/lang/String;Lcom/google/ai/client/generativeai/common/HeaderProvider;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lcom/google/ai/client/generativeai/common/RequestOptions;Ljava/lang/String;Lcom/google/ai/client/generativeai/common/HeaderProvider;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lcom/google/ai/client/generativeai/common/RequestOptions;Ljava/lang/String;Lcom/google/ai/client/generativeai/common/HeaderProvider;Lio/ktor/utils/io/ByteChannel;Lio/ktor/http/HttpStatusCode;)V
+	public final fun countTokens (Lcom/google/ai/client/generativeai/common/CountTokensRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun generateContent (Lcom/google/ai/client/generativeai/common/GenerateContentRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public final fun generateContentStream (Lcom/google/ai/client/generativeai/common/GenerateContentRequest;)Lkotlinx/coroutines/flow/Flow;
+}
+
+public final class com/google/ai/client/generativeai/common/APIController$Companion {
+}
+
+public final class com/google/ai/client/generativeai/common/BuildConfig {
+	public static final field BUILD_TYPE Ljava/lang/String;
+	public static final field DEBUG Z
+	public static final field LIBRARY_PACKAGE_NAME Ljava/lang/String;
+	public static final field VERSION_NAME Ljava/lang/String;
+	public fun <init> ()V
+}
+
+public final class com/google/ai/client/generativeai/common/CountTokensRequest : com/google/ai/client/generativeai/common/Request {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/CountTokensRequest$Companion;
+	public fun <init> ()V
+	public synthetic fun <init> (ILcom/google/ai/client/generativeai/common/GenerateContentRequest;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Lcom/google/ai/client/generativeai/common/shared/Content;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Lcom/google/ai/client/generativeai/common/GenerateContentRequest;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Lcom/google/ai/client/generativeai/common/shared/Content;)V
+	public synthetic fun <init> (Lcom/google/ai/client/generativeai/common/GenerateContentRequest;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Lcom/google/ai/client/generativeai/common/shared/Content;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/google/ai/client/generativeai/common/GenerateContentRequest;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/util/List;
+	public final fun component4 ()Ljava/util/List;
+	public final fun component5 ()Lcom/google/ai/client/generativeai/common/shared/Content;
+	public final fun copy (Lcom/google/ai/client/generativeai/common/GenerateContentRequest;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Lcom/google/ai/client/generativeai/common/shared/Content;)Lcom/google/ai/client/generativeai/common/CountTokensRequest;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/CountTokensRequest;Lcom/google/ai/client/generativeai/common/GenerateContentRequest;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Lcom/google/ai/client/generativeai/common/shared/Content;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/CountTokensRequest;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContents ()Ljava/util/List;
+	public final fun getGenerateContentRequest ()Lcom/google/ai/client/generativeai/common/GenerateContentRequest;
+	public final fun getModel ()Ljava/lang/String;
+	public final fun getSystemInstruction ()Lcom/google/ai/client/generativeai/common/shared/Content;
+	public final fun getTools ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/CountTokensRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/CountTokensRequest$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/CountTokensRequest$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/CountTokensRequest;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/CountTokensRequest;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/CountTokensRequest$Companion {
+	public final fun forGenAI (Lcom/google/ai/client/generativeai/common/GenerateContentRequest;)Lcom/google/ai/client/generativeai/common/CountTokensRequest;
+	public final fun forVertexAI (Lcom/google/ai/client/generativeai/common/GenerateContentRequest;)Lcom/google/ai/client/generativeai/common/CountTokensRequest;
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/CountTokensResponse : com/google/ai/client/generativeai/common/Response {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/CountTokensResponse$Companion;
+	public synthetic fun <init> (IILjava/lang/Integer;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (ILjava/lang/Integer;)V
+	public synthetic fun <init> (ILjava/lang/Integer;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()I
+	public final fun component2 ()Ljava/lang/Integer;
+	public final fun copy (ILjava/lang/Integer;)Lcom/google/ai/client/generativeai/common/CountTokensResponse;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/CountTokensResponse;ILjava/lang/Integer;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/CountTokensResponse;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getTotalBillableCharacters ()Ljava/lang/Integer;
+	public final fun getTotalTokens ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/CountTokensResponse;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/CountTokensResponse$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/CountTokensResponse$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/CountTokensResponse;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/CountTokensResponse;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/CountTokensResponse$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/GRpcErrorResponse : com/google/ai/client/generativeai/common/Response {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/GRpcErrorResponse$Companion;
+	public synthetic fun <init> (ILcom/google/ai/client/generativeai/common/server/GRpcError;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Lcom/google/ai/client/generativeai/common/server/GRpcError;)V
+	public final fun component1 ()Lcom/google/ai/client/generativeai/common/server/GRpcError;
+	public final fun copy (Lcom/google/ai/client/generativeai/common/server/GRpcError;)Lcom/google/ai/client/generativeai/common/GRpcErrorResponse;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/GRpcErrorResponse;Lcom/google/ai/client/generativeai/common/server/GRpcError;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/GRpcErrorResponse;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getError ()Lcom/google/ai/client/generativeai/common/server/GRpcError;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/GRpcErrorResponse;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/GRpcErrorResponse$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/GRpcErrorResponse$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/GRpcErrorResponse;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/GRpcErrorResponse;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/GRpcErrorResponse$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/GenerateContentRequest : com/google/ai/client/generativeai/common/Request {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/GenerateContentRequest$Companion;
+	public synthetic fun <init> (ILjava/lang/String;Ljava/util/List;Ljava/util/List;Lcom/google/ai/client/generativeai/common/client/GenerationConfig;Ljava/util/List;Lcom/google/ai/client/generativeai/common/client/ToolConfig;Lcom/google/ai/client/generativeai/common/shared/Content;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/util/List;Lcom/google/ai/client/generativeai/common/client/GenerationConfig;Ljava/util/List;Lcom/google/ai/client/generativeai/common/client/ToolConfig;Lcom/google/ai/client/generativeai/common/shared/Content;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Ljava/util/List;Lcom/google/ai/client/generativeai/common/client/GenerationConfig;Ljava/util/List;Lcom/google/ai/client/generativeai/common/client/ToolConfig;Lcom/google/ai/client/generativeai/common/shared/Content;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Ljava/util/List;
+	public final fun component4 ()Lcom/google/ai/client/generativeai/common/client/GenerationConfig;
+	public final fun component5 ()Ljava/util/List;
+	public final fun component6 ()Lcom/google/ai/client/generativeai/common/client/ToolConfig;
+	public final fun component7 ()Lcom/google/ai/client/generativeai/common/shared/Content;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Ljava/util/List;Lcom/google/ai/client/generativeai/common/client/GenerationConfig;Ljava/util/List;Lcom/google/ai/client/generativeai/common/client/ToolConfig;Lcom/google/ai/client/generativeai/common/shared/Content;)Lcom/google/ai/client/generativeai/common/GenerateContentRequest;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/GenerateContentRequest;Ljava/lang/String;Ljava/util/List;Ljava/util/List;Lcom/google/ai/client/generativeai/common/client/GenerationConfig;Ljava/util/List;Lcom/google/ai/client/generativeai/common/client/ToolConfig;Lcom/google/ai/client/generativeai/common/shared/Content;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/GenerateContentRequest;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getContents ()Ljava/util/List;
+	public final fun getGenerationConfig ()Lcom/google/ai/client/generativeai/common/client/GenerationConfig;
+	public final fun getModel ()Ljava/lang/String;
+	public final fun getSafetySettings ()Ljava/util/List;
+	public final fun getSystemInstruction ()Lcom/google/ai/client/generativeai/common/shared/Content;
+	public final fun getToolConfig ()Lcom/google/ai/client/generativeai/common/client/ToolConfig;
+	public final fun getTools ()Ljava/util/List;
+	public fun hashCode ()I
+	public final fun setToolConfig (Lcom/google/ai/client/generativeai/common/client/ToolConfig;)V
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/GenerateContentRequest;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/GenerateContentRequest$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/GenerateContentRequest$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/GenerateContentRequest;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/GenerateContentRequest;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/GenerateContentRequest$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/GenerateContentResponse : com/google/ai/client/generativeai/common/Response {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/GenerateContentResponse$Companion;
+	public fun <init> ()V
+	public synthetic fun <init> (ILjava/util/List;Lcom/google/ai/client/generativeai/common/server/PromptFeedback;Lcom/google/ai/client/generativeai/common/UsageMetadata;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/util/List;Lcom/google/ai/client/generativeai/common/server/PromptFeedback;Lcom/google/ai/client/generativeai/common/UsageMetadata;)V
+	public synthetic fun <init> (Ljava/util/List;Lcom/google/ai/client/generativeai/common/server/PromptFeedback;Lcom/google/ai/client/generativeai/common/UsageMetadata;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Lcom/google/ai/client/generativeai/common/server/PromptFeedback;
+	public final fun component3 ()Lcom/google/ai/client/generativeai/common/UsageMetadata;
+	public final fun copy (Ljava/util/List;Lcom/google/ai/client/generativeai/common/server/PromptFeedback;Lcom/google/ai/client/generativeai/common/UsageMetadata;)Lcom/google/ai/client/generativeai/common/GenerateContentResponse;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/GenerateContentResponse;Ljava/util/List;Lcom/google/ai/client/generativeai/common/server/PromptFeedback;Lcom/google/ai/client/generativeai/common/UsageMetadata;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/GenerateContentResponse;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCandidates ()Ljava/util/List;
+	public final fun getPromptFeedback ()Lcom/google/ai/client/generativeai/common/server/PromptFeedback;
+	public final fun getUsageMetadata ()Lcom/google/ai/client/generativeai/common/UsageMetadata;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/GenerateContentResponse;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/GenerateContentResponse$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/GenerateContentResponse$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/GenerateContentResponse;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/GenerateContentResponse;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/GenerateContentResponse$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract class com/google/ai/client/generativeai/common/GoogleGenerativeAIException : java/lang/RuntimeException {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/GoogleGenerativeAIException$Companion;
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/google/ai/client/generativeai/common/GoogleGenerativeAIException$Companion {
+	public final fun from (Ljava/lang/Throwable;)Lcom/google/ai/client/generativeai/common/GoogleGenerativeAIException;
+}
+
+public abstract interface class com/google/ai/client/generativeai/common/HeaderProvider {
+	public abstract fun generateHeaders (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun getTimeout-UwyO8pc ()J
+}
+
+public final class com/google/ai/client/generativeai/common/InvalidAPIKeyException : com/google/ai/client/generativeai/common/GoogleGenerativeAIException {
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/google/ai/client/generativeai/common/InvalidStateException : com/google/ai/client/generativeai/common/GoogleGenerativeAIException {
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/google/ai/client/generativeai/common/PromptBlockedException : com/google/ai/client/generativeai/common/GoogleGenerativeAIException {
+	public fun <init> (Lcom/google/ai/client/generativeai/common/GenerateContentResponse;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Lcom/google/ai/client/generativeai/common/GenerateContentResponse;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getResponse ()Lcom/google/ai/client/generativeai/common/GenerateContentResponse;
+}
+
+public final class com/google/ai/client/generativeai/common/QuotaExceededException : com/google/ai/client/generativeai/common/GoogleGenerativeAIException {
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public abstract interface class com/google/ai/client/generativeai/common/Request {
+}
+
+public final class com/google/ai/client/generativeai/common/RequestOptions {
+	public fun <init> ()V
+	public synthetic fun <init> (JLjava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (JLjava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun <init> (Ljava/lang/Long;)V
+	public fun <init> (Ljava/lang/Long;Ljava/lang/String;)V
+	public fun <init> (Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/Long;Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getApiVersion ()Ljava/lang/String;
+	public final fun getEndpoint ()Ljava/lang/String;
+	public final fun getTimeout-UwyO8pc ()J
+}
+
+public final class com/google/ai/client/generativeai/common/RequestTimeoutException : com/google/ai/client/generativeai/common/GoogleGenerativeAIException {
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public abstract interface class com/google/ai/client/generativeai/common/Response {
+}
+
+public final class com/google/ai/client/generativeai/common/ResponseStoppedException : com/google/ai/client/generativeai/common/GoogleGenerativeAIException {
+	public fun <init> (Lcom/google/ai/client/generativeai/common/GenerateContentResponse;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Lcom/google/ai/client/generativeai/common/GenerateContentResponse;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun getResponse ()Lcom/google/ai/client/generativeai/common/GenerateContentResponse;
+}
+
+public final class com/google/ai/client/generativeai/common/SerializationException : com/google/ai/client/generativeai/common/GoogleGenerativeAIException {
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/google/ai/client/generativeai/common/ServerException : com/google/ai/client/generativeai/common/GoogleGenerativeAIException {
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/google/ai/client/generativeai/common/ServiceDisabledException : com/google/ai/client/generativeai/common/GoogleGenerativeAIException {
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/google/ai/client/generativeai/common/UnknownException : com/google/ai/client/generativeai/common/GoogleGenerativeAIException {
+	public fun <init> (Ljava/lang/String;Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/google/ai/client/generativeai/common/UnsupportedUserLocationException : com/google/ai/client/generativeai/common/GoogleGenerativeAIException {
+	public fun <init> ()V
+	public fun <init> (Ljava/lang/Throwable;)V
+	public synthetic fun <init> (Ljava/lang/Throwable;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+}
+
+public final class com/google/ai/client/generativeai/common/UsageMetadata {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/UsageMetadata$Companion;
+	public fun <init> ()V
+	public synthetic fun <init> (ILjava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;)V
+	public synthetic fun <init> (Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/Integer;
+	public final fun component2 ()Ljava/lang/Integer;
+	public final fun component3 ()Ljava/lang/Integer;
+	public final fun copy (Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;)Lcom/google/ai/client/generativeai/common/UsageMetadata;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/UsageMetadata;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/UsageMetadata;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCandidatesTokenCount ()Ljava/lang/Integer;
+	public final fun getPromptTokenCount ()Ljava/lang/Integer;
+	public final fun getTotalTokenCount ()Ljava/lang/Integer;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/UsageMetadata;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/UsageMetadata$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/UsageMetadata$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/UsageMetadata;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/UsageMetadata;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/UsageMetadata$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/client/FunctionCallingConfig {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig$Companion;
+	public synthetic fun <init> (ILcom/google/ai/client/generativeai/common/client/FunctionCallingConfig$Mode;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig$Mode;)V
+	public final fun component1 ()Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig$Mode;
+	public final fun copy (Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig$Mode;)Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig;Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig$Mode;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getMode ()Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig$Mode;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/client/FunctionCallingConfig$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/client/FunctionCallingConfig$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/client/FunctionCallingConfig$Mode : java/lang/Enum {
+	public static final field ANY Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig$Mode;
+	public static final field AUTO Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig$Mode;
+	public static final field Companion Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig$Mode$Companion;
+	public static final field NONE Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig$Mode;
+	public static final field UNSPECIFIED Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig$Mode;
+	public static fun valueOf (Ljava/lang/String;)Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig$Mode;
+	public static fun values ()[Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig$Mode;
+}
+
+public final class com/google/ai/client/generativeai/common/client/FunctionCallingConfig$Mode$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/client/FunctionDeclaration {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/client/FunctionDeclaration$Companion;
+	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Lcom/google/ai/client/generativeai/common/client/Schema;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Lcom/google/ai/client/generativeai/common/client/Schema;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Lcom/google/ai/client/generativeai/common/client/Schema;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Lcom/google/ai/client/generativeai/common/client/Schema;)Lcom/google/ai/client/generativeai/common/client/FunctionDeclaration;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/client/FunctionDeclaration;Ljava/lang/String;Ljava/lang/String;Lcom/google/ai/client/generativeai/common/client/Schema;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/client/FunctionDeclaration;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDescription ()Ljava/lang/String;
+	public final fun getName ()Ljava/lang/String;
+	public final fun getParameters ()Lcom/google/ai/client/generativeai/common/client/Schema;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/client/FunctionDeclaration;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/client/FunctionDeclaration$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/client/FunctionDeclaration$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/client/FunctionDeclaration;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/client/FunctionDeclaration;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/client/FunctionDeclaration$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/client/GenerationConfig {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/client/GenerationConfig$Companion;
+	public synthetic fun <init> (ILjava/lang/Float;Ljava/lang/Float;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/util/List;Ljava/lang/String;Ljava/lang/Float;Ljava/lang/Float;Lcom/google/ai/client/generativeai/common/client/Schema;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/Float;Ljava/lang/Float;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/util/List;Ljava/lang/String;Ljava/lang/Float;Ljava/lang/Float;Lcom/google/ai/client/generativeai/common/client/Schema;)V
+	public synthetic fun <init> (Ljava/lang/Float;Ljava/lang/Float;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/util/List;Ljava/lang/String;Ljava/lang/Float;Ljava/lang/Float;Lcom/google/ai/client/generativeai/common/client/Schema;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/Float;
+	public final fun component10 ()Lcom/google/ai/client/generativeai/common/client/Schema;
+	public final fun component2 ()Ljava/lang/Float;
+	public final fun component3 ()Ljava/lang/Integer;
+	public final fun component4 ()Ljava/lang/Integer;
+	public final fun component5 ()Ljava/lang/Integer;
+	public final fun component6 ()Ljava/util/List;
+	public final fun component7 ()Ljava/lang/String;
+	public final fun component8 ()Ljava/lang/Float;
+	public final fun component9 ()Ljava/lang/Float;
+	public final fun copy (Ljava/lang/Float;Ljava/lang/Float;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/util/List;Ljava/lang/String;Ljava/lang/Float;Ljava/lang/Float;Lcom/google/ai/client/generativeai/common/client/Schema;)Lcom/google/ai/client/generativeai/common/client/GenerationConfig;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/client/GenerationConfig;Ljava/lang/Float;Ljava/lang/Float;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;Ljava/util/List;Ljava/lang/String;Ljava/lang/Float;Ljava/lang/Float;Lcom/google/ai/client/generativeai/common/client/Schema;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/client/GenerationConfig;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCandidateCount ()Ljava/lang/Integer;
+	public final fun getFrequencyPenalty ()Ljava/lang/Float;
+	public final fun getMaxOutputTokens ()Ljava/lang/Integer;
+	public final fun getPresencePenalty ()Ljava/lang/Float;
+	public final fun getResponseMimeType ()Ljava/lang/String;
+	public final fun getResponseSchema ()Lcom/google/ai/client/generativeai/common/client/Schema;
+	public final fun getStopSequences ()Ljava/util/List;
+	public final fun getTemperature ()Ljava/lang/Float;
+	public final fun getTopK ()Ljava/lang/Integer;
+	public final fun getTopP ()Ljava/lang/Float;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/client/GenerationConfig;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/client/GenerationConfig$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/client/GenerationConfig$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/client/GenerationConfig;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/client/GenerationConfig;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/client/GenerationConfig$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/client/Schema {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/client/Schema$Companion;
+	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/util/List;Ljava/util/Map;Ljava/util/List;Lcom/google/ai/client/generativeai/common/client/Schema;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/util/List;Ljava/util/Map;Ljava/util/List;Lcom/google/ai/client/generativeai/common/client/Schema;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/util/List;Ljava/util/Map;Ljava/util/List;Lcom/google/ai/client/generativeai/common/client/Schema;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/Boolean;
+	public final fun component5 ()Ljava/util/List;
+	public final fun component6 ()Ljava/util/Map;
+	public final fun component7 ()Ljava/util/List;
+	public final fun component8 ()Lcom/google/ai/client/generativeai/common/client/Schema;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/util/List;Ljava/util/Map;Ljava/util/List;Lcom/google/ai/client/generativeai/common/client/Schema;)Lcom/google/ai/client/generativeai/common/client/Schema;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/client/Schema;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/Boolean;Ljava/util/List;Ljava/util/Map;Ljava/util/List;Lcom/google/ai/client/generativeai/common/client/Schema;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/client/Schema;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getDescription ()Ljava/lang/String;
+	public final fun getEnum ()Ljava/util/List;
+	public final fun getFormat ()Ljava/lang/String;
+	public final fun getItems ()Lcom/google/ai/client/generativeai/common/client/Schema;
+	public final fun getNullable ()Ljava/lang/Boolean;
+	public final fun getProperties ()Ljava/util/Map;
+	public final fun getRequired ()Ljava/util/List;
+	public final fun getType ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/client/Schema;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/client/Schema$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/client/Schema$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/client/Schema;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/client/Schema;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/client/Schema$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/client/Tool {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/client/Tool$Companion;
+	public fun <init> ()V
+	public synthetic fun <init> (ILjava/util/List;Lkotlinx/serialization/json/JsonObject;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/util/List;Lkotlinx/serialization/json/JsonObject;)V
+	public synthetic fun <init> (Ljava/util/List;Lkotlinx/serialization/json/JsonObject;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Lkotlinx/serialization/json/JsonObject;
+	public final fun copy (Ljava/util/List;Lkotlinx/serialization/json/JsonObject;)Lcom/google/ai/client/generativeai/common/client/Tool;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/client/Tool;Ljava/util/List;Lkotlinx/serialization/json/JsonObject;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/client/Tool;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCodeExecution ()Lkotlinx/serialization/json/JsonObject;
+	public final fun getFunctionDeclarations ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/client/Tool;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/client/Tool$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/client/Tool$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/client/Tool;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/client/Tool;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/client/Tool$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/client/ToolConfig {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/client/ToolConfig$Companion;
+	public synthetic fun <init> (ILcom/google/ai/client/generativeai/common/client/FunctionCallingConfig;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig;)V
+	public final fun component1 ()Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig;
+	public final fun copy (Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig;)Lcom/google/ai/client/generativeai/common/client/ToolConfig;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/client/ToolConfig;Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/client/ToolConfig;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFunctionCallingConfig ()Lcom/google/ai/client/generativeai/common/client/FunctionCallingConfig;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/client/ToolConfig;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/client/ToolConfig$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/client/ToolConfig$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/client/ToolConfig;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/client/ToolConfig;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/client/ToolConfig$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/BlockReason : java/lang/Enum {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/server/BlockReason$Companion;
+	public static final field OTHER Lcom/google/ai/client/generativeai/common/server/BlockReason;
+	public static final field SAFETY Lcom/google/ai/client/generativeai/common/server/BlockReason;
+	public static final field UNKNOWN Lcom/google/ai/client/generativeai/common/server/BlockReason;
+	public static final field UNSPECIFIED Lcom/google/ai/client/generativeai/common/server/BlockReason;
+	public static fun valueOf (Ljava/lang/String;)Lcom/google/ai/client/generativeai/common/server/BlockReason;
+	public static fun values ()[Lcom/google/ai/client/generativeai/common/server/BlockReason;
+}
+
+public final class com/google/ai/client/generativeai/common/server/BlockReason$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/BlockReasonSerializer : kotlinx/serialization/KSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/server/BlockReasonSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/server/BlockReason;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/server/BlockReason;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+}
+
+public final class com/google/ai/client/generativeai/common/server/Candidate {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/server/Candidate$Companion;
+	public fun <init> ()V
+	public synthetic fun <init> (ILcom/google/ai/client/generativeai/common/shared/Content;Lcom/google/ai/client/generativeai/common/server/FinishReason;Ljava/util/List;Lcom/google/ai/client/generativeai/common/server/CitationMetadata;Lcom/google/ai/client/generativeai/common/server/GroundingMetadata;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Lcom/google/ai/client/generativeai/common/shared/Content;Lcom/google/ai/client/generativeai/common/server/FinishReason;Ljava/util/List;Lcom/google/ai/client/generativeai/common/server/CitationMetadata;Lcom/google/ai/client/generativeai/common/server/GroundingMetadata;)V
+	public synthetic fun <init> (Lcom/google/ai/client/generativeai/common/shared/Content;Lcom/google/ai/client/generativeai/common/server/FinishReason;Ljava/util/List;Lcom/google/ai/client/generativeai/common/server/CitationMetadata;Lcom/google/ai/client/generativeai/common/server/GroundingMetadata;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/google/ai/client/generativeai/common/shared/Content;
+	public final fun component2 ()Lcom/google/ai/client/generativeai/common/server/FinishReason;
+	public final fun component3 ()Ljava/util/List;
+	public final fun component4 ()Lcom/google/ai/client/generativeai/common/server/CitationMetadata;
+	public final fun component5 ()Lcom/google/ai/client/generativeai/common/server/GroundingMetadata;
+	public final fun copy (Lcom/google/ai/client/generativeai/common/shared/Content;Lcom/google/ai/client/generativeai/common/server/FinishReason;Ljava/util/List;Lcom/google/ai/client/generativeai/common/server/CitationMetadata;Lcom/google/ai/client/generativeai/common/server/GroundingMetadata;)Lcom/google/ai/client/generativeai/common/server/Candidate;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/server/Candidate;Lcom/google/ai/client/generativeai/common/shared/Content;Lcom/google/ai/client/generativeai/common/server/FinishReason;Ljava/util/List;Lcom/google/ai/client/generativeai/common/server/CitationMetadata;Lcom/google/ai/client/generativeai/common/server/GroundingMetadata;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/server/Candidate;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCitationMetadata ()Lcom/google/ai/client/generativeai/common/server/CitationMetadata;
+	public final fun getContent ()Lcom/google/ai/client/generativeai/common/shared/Content;
+	public final fun getFinishReason ()Lcom/google/ai/client/generativeai/common/server/FinishReason;
+	public final fun getGroundingMetadata ()Lcom/google/ai/client/generativeai/common/server/GroundingMetadata;
+	public final fun getSafetyRatings ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/server/Candidate;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/server/Candidate$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/server/Candidate$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/server/Candidate;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/server/Candidate;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/Candidate$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/CitationMetadata {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/server/CitationMetadata$Companion;
+	public synthetic fun <init> (ILjava/util/List;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Lcom/google/ai/client/generativeai/common/server/CitationMetadata;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/server/CitationMetadata;Ljava/util/List;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/server/CitationMetadata;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCitationSources ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/server/CitationMetadata;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/server/CitationMetadata$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/server/CitationMetadata$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/server/CitationMetadata;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/server/CitationMetadata;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/CitationMetadata$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/CitationSources {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/server/CitationSources$Companion;
+	public synthetic fun <init> (IIILjava/lang/String;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (IILjava/lang/String;Ljava/lang/String;)V
+	public synthetic fun <init> (IILjava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun component3 ()Ljava/lang/String;
+	public final fun component4 ()Ljava/lang/String;
+	public final fun copy (IILjava/lang/String;Ljava/lang/String;)Lcom/google/ai/client/generativeai/common/server/CitationSources;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/server/CitationSources;IILjava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/server/CitationSources;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEndIndex ()I
+	public final fun getLicense ()Ljava/lang/String;
+	public final fun getStartIndex ()I
+	public final fun getUri ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/server/CitationSources;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/server/CitationSources$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/server/CitationSources$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/server/CitationSources;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/server/CitationSources;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/CitationSources$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/FinishReason : java/lang/Enum {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/server/FinishReason$Companion;
+	public static final field MAX_TOKENS Lcom/google/ai/client/generativeai/common/server/FinishReason;
+	public static final field OTHER Lcom/google/ai/client/generativeai/common/server/FinishReason;
+	public static final field RECITATION Lcom/google/ai/client/generativeai/common/server/FinishReason;
+	public static final field SAFETY Lcom/google/ai/client/generativeai/common/server/FinishReason;
+	public static final field STOP Lcom/google/ai/client/generativeai/common/server/FinishReason;
+	public static final field UNKNOWN Lcom/google/ai/client/generativeai/common/server/FinishReason;
+	public static final field UNSPECIFIED Lcom/google/ai/client/generativeai/common/server/FinishReason;
+	public static fun valueOf (Ljava/lang/String;)Lcom/google/ai/client/generativeai/common/server/FinishReason;
+	public static fun values ()[Lcom/google/ai/client/generativeai/common/server/FinishReason;
+}
+
+public final class com/google/ai/client/generativeai/common/server/FinishReason$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/FinishReasonSerializer : kotlinx/serialization/KSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/server/FinishReasonSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/server/FinishReason;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/server/FinishReason;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+}
+
+public final class com/google/ai/client/generativeai/common/server/GRpcError {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/server/GRpcError$Companion;
+	public synthetic fun <init> (IILjava/lang/String;Ljava/util/List;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (ILjava/lang/String;Ljava/util/List;)V
+	public final fun component1 ()I
+	public final fun component2 ()Ljava/lang/String;
+	public final fun component3 ()Ljava/util/List;
+	public final fun copy (ILjava/lang/String;Ljava/util/List;)Lcom/google/ai/client/generativeai/common/server/GRpcError;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/server/GRpcError;ILjava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/server/GRpcError;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCode ()I
+	public final fun getDetails ()Ljava/util/List;
+	public final fun getMessage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/server/GRpcError;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/server/GRpcError$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/server/GRpcError$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/server/GRpcError;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/server/GRpcError;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/GRpcError$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/GRpcErrorDetails {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/server/GRpcErrorDetails$Companion;
+	public fun <init> ()V
+	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;)V
+	public synthetic fun <init> (Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/google/ai/client/generativeai/common/server/GRpcErrorDetails;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/server/GRpcErrorDetails;Ljava/lang/String;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/server/GRpcErrorDetails;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getReason ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/server/GRpcErrorDetails;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/server/GRpcErrorDetails$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/server/GRpcErrorDetails$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/server/GRpcErrorDetails;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/server/GRpcErrorDetails;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/GRpcErrorDetails$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/GroundingAttribution {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/server/GroundingAttribution$Companion;
+	public synthetic fun <init> (ILcom/google/ai/client/generativeai/common/server/Segment;Ljava/lang/Float;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Lcom/google/ai/client/generativeai/common/server/Segment;Ljava/lang/Float;)V
+	public final fun component1 ()Lcom/google/ai/client/generativeai/common/server/Segment;
+	public final fun component2 ()Ljava/lang/Float;
+	public final fun copy (Lcom/google/ai/client/generativeai/common/server/Segment;Ljava/lang/Float;)Lcom/google/ai/client/generativeai/common/server/GroundingAttribution;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/server/GroundingAttribution;Lcom/google/ai/client/generativeai/common/server/Segment;Ljava/lang/Float;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/server/GroundingAttribution;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getConfidenceScore ()Ljava/lang/Float;
+	public final fun getSegment ()Lcom/google/ai/client/generativeai/common/server/Segment;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/server/GroundingAttribution;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/server/GroundingAttribution$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/server/GroundingAttribution$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/server/GroundingAttribution;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/server/GroundingAttribution;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/GroundingAttribution$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/GroundingMetadata {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/server/GroundingMetadata$Companion;
+	public synthetic fun <init> (ILjava/util/List;Lcom/google/ai/client/generativeai/common/server/SearchEntryPoint;Ljava/util/List;Ljava/util/List;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/util/List;Lcom/google/ai/client/generativeai/common/server/SearchEntryPoint;Ljava/util/List;Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun component2 ()Lcom/google/ai/client/generativeai/common/server/SearchEntryPoint;
+	public final fun component3 ()Ljava/util/List;
+	public final fun component4 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;Lcom/google/ai/client/generativeai/common/server/SearchEntryPoint;Ljava/util/List;Ljava/util/List;)Lcom/google/ai/client/generativeai/common/server/GroundingMetadata;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/server/GroundingMetadata;Ljava/util/List;Lcom/google/ai/client/generativeai/common/server/SearchEntryPoint;Ljava/util/List;Ljava/util/List;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/server/GroundingMetadata;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getGroundingAttribution ()Ljava/util/List;
+	public final fun getRetrievalQueries ()Ljava/util/List;
+	public final fun getSearchEntryPoint ()Lcom/google/ai/client/generativeai/common/server/SearchEntryPoint;
+	public final fun getWebSearchQueries ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/server/GroundingMetadata;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/server/GroundingMetadata$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/server/GroundingMetadata$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/server/GroundingMetadata;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/server/GroundingMetadata;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/GroundingMetadata$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/HarmProbability : java/lang/Enum {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/server/HarmProbability$Companion;
+	public static final field HIGH Lcom/google/ai/client/generativeai/common/server/HarmProbability;
+	public static final field LOW Lcom/google/ai/client/generativeai/common/server/HarmProbability;
+	public static final field MEDIUM Lcom/google/ai/client/generativeai/common/server/HarmProbability;
+	public static final field NEGLIGIBLE Lcom/google/ai/client/generativeai/common/server/HarmProbability;
+	public static final field UNKNOWN Lcom/google/ai/client/generativeai/common/server/HarmProbability;
+	public static final field UNSPECIFIED Lcom/google/ai/client/generativeai/common/server/HarmProbability;
+	public static fun valueOf (Ljava/lang/String;)Lcom/google/ai/client/generativeai/common/server/HarmProbability;
+	public static fun values ()[Lcom/google/ai/client/generativeai/common/server/HarmProbability;
+}
+
+public final class com/google/ai/client/generativeai/common/server/HarmProbability$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/HarmProbabilitySerializer : kotlinx/serialization/KSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/server/HarmProbabilitySerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/server/HarmProbability;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/server/HarmProbability;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+}
+
+public final class com/google/ai/client/generativeai/common/server/HarmSeverity : java/lang/Enum {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/server/HarmSeverity$Companion;
+	public static final field HIGH Lcom/google/ai/client/generativeai/common/server/HarmSeverity;
+	public static final field LOW Lcom/google/ai/client/generativeai/common/server/HarmSeverity;
+	public static final field MEDIUM Lcom/google/ai/client/generativeai/common/server/HarmSeverity;
+	public static final field NEGLIGIBLE Lcom/google/ai/client/generativeai/common/server/HarmSeverity;
+	public static final field UNKNOWN Lcom/google/ai/client/generativeai/common/server/HarmSeverity;
+	public static final field UNSPECIFIED Lcom/google/ai/client/generativeai/common/server/HarmSeverity;
+	public static fun valueOf (Ljava/lang/String;)Lcom/google/ai/client/generativeai/common/server/HarmSeverity;
+	public static fun values ()[Lcom/google/ai/client/generativeai/common/server/HarmSeverity;
+}
+
+public final class com/google/ai/client/generativeai/common/server/HarmSeverity$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/PromptFeedback {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/server/PromptFeedback$Companion;
+	public fun <init> ()V
+	public synthetic fun <init> (ILcom/google/ai/client/generativeai/common/server/BlockReason;Ljava/util/List;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Lcom/google/ai/client/generativeai/common/server/BlockReason;Ljava/util/List;)V
+	public synthetic fun <init> (Lcom/google/ai/client/generativeai/common/server/BlockReason;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/google/ai/client/generativeai/common/server/BlockReason;
+	public final fun component2 ()Ljava/util/List;
+	public final fun copy (Lcom/google/ai/client/generativeai/common/server/BlockReason;Ljava/util/List;)Lcom/google/ai/client/generativeai/common/server/PromptFeedback;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/server/PromptFeedback;Lcom/google/ai/client/generativeai/common/server/BlockReason;Ljava/util/List;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/server/PromptFeedback;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBlockReason ()Lcom/google/ai/client/generativeai/common/server/BlockReason;
+	public final fun getSafetyRatings ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/server/PromptFeedback;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/server/PromptFeedback$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/server/PromptFeedback$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/server/PromptFeedback;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/server/PromptFeedback;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/PromptFeedback$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/SafetyRating {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/server/SafetyRating$Companion;
+	public synthetic fun <init> (ILcom/google/ai/client/generativeai/common/shared/HarmCategory;Lcom/google/ai/client/generativeai/common/server/HarmProbability;Ljava/lang/Boolean;Ljava/lang/Float;Lcom/google/ai/client/generativeai/common/server/HarmSeverity;Ljava/lang/Float;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Lcom/google/ai/client/generativeai/common/shared/HarmCategory;Lcom/google/ai/client/generativeai/common/server/HarmProbability;Ljava/lang/Boolean;Ljava/lang/Float;Lcom/google/ai/client/generativeai/common/server/HarmSeverity;Ljava/lang/Float;)V
+	public synthetic fun <init> (Lcom/google/ai/client/generativeai/common/shared/HarmCategory;Lcom/google/ai/client/generativeai/common/server/HarmProbability;Ljava/lang/Boolean;Ljava/lang/Float;Lcom/google/ai/client/generativeai/common/server/HarmSeverity;Ljava/lang/Float;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/google/ai/client/generativeai/common/shared/HarmCategory;
+	public final fun component2 ()Lcom/google/ai/client/generativeai/common/server/HarmProbability;
+	public final fun component3 ()Ljava/lang/Boolean;
+	public final fun component4 ()Ljava/lang/Float;
+	public final fun component5 ()Lcom/google/ai/client/generativeai/common/server/HarmSeverity;
+	public final fun component6 ()Ljava/lang/Float;
+	public final fun copy (Lcom/google/ai/client/generativeai/common/shared/HarmCategory;Lcom/google/ai/client/generativeai/common/server/HarmProbability;Ljava/lang/Boolean;Ljava/lang/Float;Lcom/google/ai/client/generativeai/common/server/HarmSeverity;Ljava/lang/Float;)Lcom/google/ai/client/generativeai/common/server/SafetyRating;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/server/SafetyRating;Lcom/google/ai/client/generativeai/common/shared/HarmCategory;Lcom/google/ai/client/generativeai/common/server/HarmProbability;Ljava/lang/Boolean;Ljava/lang/Float;Lcom/google/ai/client/generativeai/common/server/HarmSeverity;Ljava/lang/Float;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/server/SafetyRating;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getBlocked ()Ljava/lang/Boolean;
+	public final fun getCategory ()Lcom/google/ai/client/generativeai/common/shared/HarmCategory;
+	public final fun getProbability ()Lcom/google/ai/client/generativeai/common/server/HarmProbability;
+	public final fun getProbabilityScore ()Ljava/lang/Float;
+	public final fun getSeverity ()Lcom/google/ai/client/generativeai/common/server/HarmSeverity;
+	public final fun getSeverityScore ()Ljava/lang/Float;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/server/SafetyRating;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/server/SafetyRating$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/server/SafetyRating$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/server/SafetyRating;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/server/SafetyRating;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/SafetyRating$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/SearchEntryPoint {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/server/SearchEntryPoint$Companion;
+	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lcom/google/ai/client/generativeai/common/server/SearchEntryPoint;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/server/SearchEntryPoint;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/server/SearchEntryPoint;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getRenderedContent ()Ljava/lang/String;
+	public final fun getSdkBlob ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/server/SearchEntryPoint;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/server/SearchEntryPoint$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/server/SearchEntryPoint$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/server/SearchEntryPoint;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/server/SearchEntryPoint;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/SearchEntryPoint$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/Segment {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/server/Segment$Companion;
+	public fun <init> (II)V
+	public synthetic fun <init> (IIILkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public final fun component1 ()I
+	public final fun component2 ()I
+	public final fun copy (II)Lcom/google/ai/client/generativeai/common/server/Segment;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/server/Segment;IIILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/server/Segment;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getEndIndex ()I
+	public final fun getStartIndex ()I
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/server/Segment;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/server/Segment$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/server/Segment$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/server/Segment;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/server/Segment;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/server/Segment$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/Blob {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/shared/Blob$Companion;
+	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lcom/google/ai/client/generativeai/common/shared/Blob;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/shared/Blob;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/shared/Blob;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getData ()Ljava/lang/String;
+	public final fun getMimeType ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/shared/Blob;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/shared/Blob$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/shared/Blob$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/shared/Blob;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/shared/Blob;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/Blob$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/BlobPart : com/google/ai/client/generativeai/common/shared/Part {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/shared/BlobPart$Companion;
+	public synthetic fun <init> (ILcom/google/ai/client/generativeai/common/shared/Blob;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Lcom/google/ai/client/generativeai/common/shared/Blob;)V
+	public final fun component1 ()Lcom/google/ai/client/generativeai/common/shared/Blob;
+	public final fun copy (Lcom/google/ai/client/generativeai/common/shared/Blob;)Lcom/google/ai/client/generativeai/common/shared/BlobPart;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/shared/BlobPart;Lcom/google/ai/client/generativeai/common/shared/Blob;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/shared/BlobPart;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getInlineData ()Lcom/google/ai/client/generativeai/common/shared/Blob;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/shared/BlobPart;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/shared/BlobPart$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/shared/BlobPart$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/shared/BlobPart;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/shared/BlobPart;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/BlobPart$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/CodeExecutionResult {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/shared/CodeExecutionResult$Companion;
+	public synthetic fun <init> (ILcom/google/ai/client/generativeai/common/shared/Outcome;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Lcom/google/ai/client/generativeai/common/shared/Outcome;Ljava/lang/String;)V
+	public final fun component1 ()Lcom/google/ai/client/generativeai/common/shared/Outcome;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Lcom/google/ai/client/generativeai/common/shared/Outcome;Ljava/lang/String;)Lcom/google/ai/client/generativeai/common/shared/CodeExecutionResult;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/shared/CodeExecutionResult;Lcom/google/ai/client/generativeai/common/shared/Outcome;Ljava/lang/String;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/shared/CodeExecutionResult;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getOutcome ()Lcom/google/ai/client/generativeai/common/shared/Outcome;
+	public final fun getOutput ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/shared/CodeExecutionResult;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/shared/CodeExecutionResult$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/shared/CodeExecutionResult$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/shared/CodeExecutionResult;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/shared/CodeExecutionResult;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/CodeExecutionResult$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/CodeExecutionResultPart : com/google/ai/client/generativeai/common/shared/Part {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/shared/CodeExecutionResultPart$Companion;
+	public synthetic fun <init> (ILcom/google/ai/client/generativeai/common/shared/CodeExecutionResult;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Lcom/google/ai/client/generativeai/common/shared/CodeExecutionResult;)V
+	public final fun component1 ()Lcom/google/ai/client/generativeai/common/shared/CodeExecutionResult;
+	public final fun copy (Lcom/google/ai/client/generativeai/common/shared/CodeExecutionResult;)Lcom/google/ai/client/generativeai/common/shared/CodeExecutionResultPart;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/shared/CodeExecutionResultPart;Lcom/google/ai/client/generativeai/common/shared/CodeExecutionResult;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/shared/CodeExecutionResultPart;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCodeExecutionResult ()Lcom/google/ai/client/generativeai/common/shared/CodeExecutionResult;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/shared/CodeExecutionResultPart;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/shared/CodeExecutionResultPart$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/shared/CodeExecutionResultPart$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/shared/CodeExecutionResultPart;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/shared/CodeExecutionResultPart;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/CodeExecutionResultPart$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/Content {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/shared/Content$Companion;
+	public synthetic fun <init> (ILjava/lang/String;Ljava/util/List;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/util/List;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;)Lcom/google/ai/client/generativeai/common/shared/Content;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/shared/Content;Ljava/lang/String;Ljava/util/List;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/shared/Content;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getParts ()Ljava/util/List;
+	public final fun getRole ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/shared/Content;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/shared/Content$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/shared/Content$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/shared/Content;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/shared/Content;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/Content$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/ExecutableCode {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/shared/ExecutableCode$Companion;
+	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lcom/google/ai/client/generativeai/common/shared/ExecutableCode;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/shared/ExecutableCode;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/shared/ExecutableCode;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCode ()Ljava/lang/String;
+	public final fun getLanguage ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/shared/ExecutableCode;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/shared/ExecutableCode$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/shared/ExecutableCode$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/shared/ExecutableCode;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/shared/ExecutableCode;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/ExecutableCode$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/ExecutableCodePart : com/google/ai/client/generativeai/common/shared/Part {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/shared/ExecutableCodePart$Companion;
+	public synthetic fun <init> (ILcom/google/ai/client/generativeai/common/shared/ExecutableCode;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Lcom/google/ai/client/generativeai/common/shared/ExecutableCode;)V
+	public final fun component1 ()Lcom/google/ai/client/generativeai/common/shared/ExecutableCode;
+	public final fun copy (Lcom/google/ai/client/generativeai/common/shared/ExecutableCode;)Lcom/google/ai/client/generativeai/common/shared/ExecutableCodePart;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/shared/ExecutableCodePart;Lcom/google/ai/client/generativeai/common/shared/ExecutableCode;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/shared/ExecutableCodePart;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getExecutableCode ()Lcom/google/ai/client/generativeai/common/shared/ExecutableCode;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/shared/ExecutableCodePart;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/shared/ExecutableCodePart$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/shared/ExecutableCodePart$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/shared/ExecutableCodePart;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/shared/ExecutableCodePart;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/ExecutableCodePart$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/FileData {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/shared/FileData$Companion;
+	public synthetic fun <init> (ILjava/lang/String;Ljava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;Ljava/lang/String;)Lcom/google/ai/client/generativeai/common/shared/FileData;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/shared/FileData;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/shared/FileData;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFileUri ()Ljava/lang/String;
+	public final fun getMimeType ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/shared/FileData;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/shared/FileData$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/shared/FileData$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/shared/FileData;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/shared/FileData;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/FileData$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/FileDataPart : com/google/ai/client/generativeai/common/shared/Part {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/shared/FileDataPart$Companion;
+	public synthetic fun <init> (ILcom/google/ai/client/generativeai/common/shared/FileData;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Lcom/google/ai/client/generativeai/common/shared/FileData;)V
+	public final fun component1 ()Lcom/google/ai/client/generativeai/common/shared/FileData;
+	public final fun copy (Lcom/google/ai/client/generativeai/common/shared/FileData;)Lcom/google/ai/client/generativeai/common/shared/FileDataPart;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/shared/FileDataPart;Lcom/google/ai/client/generativeai/common/shared/FileData;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/shared/FileDataPart;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFileData ()Lcom/google/ai/client/generativeai/common/shared/FileData;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/shared/FileDataPart;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/shared/FileDataPart$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/shared/FileDataPart$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/shared/FileDataPart;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/shared/FileDataPart;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/FileDataPart$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/FunctionCall {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/shared/FunctionCall$Companion;
+	public synthetic fun <init> (ILjava/lang/String;Ljava/util/Map;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Ljava/util/Map;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/Map;
+	public final fun copy (Ljava/lang/String;Ljava/util/Map;)Lcom/google/ai/client/generativeai/common/shared/FunctionCall;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/shared/FunctionCall;Ljava/lang/String;Ljava/util/Map;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/shared/FunctionCall;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getArgs ()Ljava/util/Map;
+	public final fun getName ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/shared/FunctionCall;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/shared/FunctionCall$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/shared/FunctionCall$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/shared/FunctionCall;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/shared/FunctionCall;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/FunctionCall$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/FunctionCallPart : com/google/ai/client/generativeai/common/shared/Part {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/shared/FunctionCallPart$Companion;
+	public synthetic fun <init> (ILcom/google/ai/client/generativeai/common/shared/FunctionCall;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Lcom/google/ai/client/generativeai/common/shared/FunctionCall;)V
+	public final fun component1 ()Lcom/google/ai/client/generativeai/common/shared/FunctionCall;
+	public final fun copy (Lcom/google/ai/client/generativeai/common/shared/FunctionCall;)Lcom/google/ai/client/generativeai/common/shared/FunctionCallPart;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/shared/FunctionCallPart;Lcom/google/ai/client/generativeai/common/shared/FunctionCall;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/shared/FunctionCallPart;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFunctionCall ()Lcom/google/ai/client/generativeai/common/shared/FunctionCall;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/shared/FunctionCallPart;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/shared/FunctionCallPart$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/shared/FunctionCallPart$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/shared/FunctionCallPart;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/shared/FunctionCallPart;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/FunctionCallPart$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/FunctionResponse {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/shared/FunctionResponse$Companion;
+	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/json/JsonObject;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Lkotlinx/serialization/json/JsonObject;
+	public final fun copy (Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;)Lcom/google/ai/client/generativeai/common/shared/FunctionResponse;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/shared/FunctionResponse;Ljava/lang/String;Lkotlinx/serialization/json/JsonObject;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/shared/FunctionResponse;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getName ()Ljava/lang/String;
+	public final fun getResponse ()Lkotlinx/serialization/json/JsonObject;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/shared/FunctionResponse;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/shared/FunctionResponse$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/shared/FunctionResponse$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/shared/FunctionResponse;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/shared/FunctionResponse;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/FunctionResponse$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/FunctionResponsePart : com/google/ai/client/generativeai/common/shared/Part {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/shared/FunctionResponsePart$Companion;
+	public synthetic fun <init> (ILcom/google/ai/client/generativeai/common/shared/FunctionResponse;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Lcom/google/ai/client/generativeai/common/shared/FunctionResponse;)V
+	public final fun component1 ()Lcom/google/ai/client/generativeai/common/shared/FunctionResponse;
+	public final fun copy (Lcom/google/ai/client/generativeai/common/shared/FunctionResponse;)Lcom/google/ai/client/generativeai/common/shared/FunctionResponsePart;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/shared/FunctionResponsePart;Lcom/google/ai/client/generativeai/common/shared/FunctionResponse;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/shared/FunctionResponsePart;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getFunctionResponse ()Lcom/google/ai/client/generativeai/common/shared/FunctionResponse;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/shared/FunctionResponsePart;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/shared/FunctionResponsePart$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/shared/FunctionResponsePart$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/shared/FunctionResponsePart;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/shared/FunctionResponsePart;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/FunctionResponsePart$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/HarmBlockMethod : java/lang/Enum {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/shared/HarmBlockMethod$Companion;
+	public static final field PROBABILITY Lcom/google/ai/client/generativeai/common/shared/HarmBlockMethod;
+	public static final field SEVERITY Lcom/google/ai/client/generativeai/common/shared/HarmBlockMethod;
+	public static final field UNSPECIFIED Lcom/google/ai/client/generativeai/common/shared/HarmBlockMethod;
+	public static fun valueOf (Ljava/lang/String;)Lcom/google/ai/client/generativeai/common/shared/HarmBlockMethod;
+	public static fun values ()[Lcom/google/ai/client/generativeai/common/shared/HarmBlockMethod;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/HarmBlockMethod$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/HarmBlockThreshold : java/lang/Enum {
+	public static final field BLOCK_LOW_AND_ABOVE Lcom/google/ai/client/generativeai/common/shared/HarmBlockThreshold;
+	public static final field BLOCK_MEDIUM_AND_ABOVE Lcom/google/ai/client/generativeai/common/shared/HarmBlockThreshold;
+	public static final field BLOCK_NONE Lcom/google/ai/client/generativeai/common/shared/HarmBlockThreshold;
+	public static final field BLOCK_ONLY_HIGH Lcom/google/ai/client/generativeai/common/shared/HarmBlockThreshold;
+	public static final field Companion Lcom/google/ai/client/generativeai/common/shared/HarmBlockThreshold$Companion;
+	public static final field UNSPECIFIED Lcom/google/ai/client/generativeai/common/shared/HarmBlockThreshold;
+	public static fun valueOf (Ljava/lang/String;)Lcom/google/ai/client/generativeai/common/shared/HarmBlockThreshold;
+	public static fun values ()[Lcom/google/ai/client/generativeai/common/shared/HarmBlockThreshold;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/HarmBlockThreshold$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/HarmCategory : java/lang/Enum {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/shared/HarmCategory$Companion;
+	public static final field DANGEROUS_CONTENT Lcom/google/ai/client/generativeai/common/shared/HarmCategory;
+	public static final field HARASSMENT Lcom/google/ai/client/generativeai/common/shared/HarmCategory;
+	public static final field HATE_SPEECH Lcom/google/ai/client/generativeai/common/shared/HarmCategory;
+	public static final field SEXUALLY_EXPLICIT Lcom/google/ai/client/generativeai/common/shared/HarmCategory;
+	public static final field UNKNOWN Lcom/google/ai/client/generativeai/common/shared/HarmCategory;
+	public static fun valueOf (Ljava/lang/String;)Lcom/google/ai/client/generativeai/common/shared/HarmCategory;
+	public static fun values ()[Lcom/google/ai/client/generativeai/common/shared/HarmCategory;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/HarmCategory$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/HarmCategorySerializer : kotlinx/serialization/KSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/shared/HarmCategorySerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/shared/HarmCategory;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/shared/HarmCategory;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+}
+
+public final class com/google/ai/client/generativeai/common/shared/Outcome : java/lang/Enum {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/shared/Outcome$Companion;
+	public static final field OUTCOME_DEADLINE_EXCEEDED Lcom/google/ai/client/generativeai/common/shared/Outcome;
+	public static final field OUTCOME_FAILED Lcom/google/ai/client/generativeai/common/shared/Outcome;
+	public static final field OUTCOME_OK Lcom/google/ai/client/generativeai/common/shared/Outcome;
+	public static final field UNSPECIFIED Lcom/google/ai/client/generativeai/common/shared/Outcome;
+	public static fun valueOf (Ljava/lang/String;)Lcom/google/ai/client/generativeai/common/shared/Outcome;
+	public static fun values ()[Lcom/google/ai/client/generativeai/common/shared/Outcome;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/Outcome$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public abstract interface class com/google/ai/client/generativeai/common/shared/Part {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/shared/Part$Companion;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/Part$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/PartSerializer : kotlinx/serialization/json/JsonContentPolymorphicSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/shared/PartSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/SafetySetting {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/shared/SafetySetting$Companion;
+	public synthetic fun <init> (ILcom/google/ai/client/generativeai/common/shared/HarmCategory;Lcom/google/ai/client/generativeai/common/shared/HarmBlockThreshold;Lcom/google/ai/client/generativeai/common/shared/HarmBlockMethod;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Lcom/google/ai/client/generativeai/common/shared/HarmCategory;Lcom/google/ai/client/generativeai/common/shared/HarmBlockThreshold;Lcom/google/ai/client/generativeai/common/shared/HarmBlockMethod;)V
+	public synthetic fun <init> (Lcom/google/ai/client/generativeai/common/shared/HarmCategory;Lcom/google/ai/client/generativeai/common/shared/HarmBlockThreshold;Lcom/google/ai/client/generativeai/common/shared/HarmBlockMethod;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lcom/google/ai/client/generativeai/common/shared/HarmCategory;
+	public final fun component2 ()Lcom/google/ai/client/generativeai/common/shared/HarmBlockThreshold;
+	public final fun component3 ()Lcom/google/ai/client/generativeai/common/shared/HarmBlockMethod;
+	public final fun copy (Lcom/google/ai/client/generativeai/common/shared/HarmCategory;Lcom/google/ai/client/generativeai/common/shared/HarmBlockThreshold;Lcom/google/ai/client/generativeai/common/shared/HarmBlockMethod;)Lcom/google/ai/client/generativeai/common/shared/SafetySetting;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/shared/SafetySetting;Lcom/google/ai/client/generativeai/common/shared/HarmCategory;Lcom/google/ai/client/generativeai/common/shared/HarmBlockThreshold;Lcom/google/ai/client/generativeai/common/shared/HarmBlockMethod;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/shared/SafetySetting;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCategory ()Lcom/google/ai/client/generativeai/common/shared/HarmCategory;
+	public final fun getMethod ()Lcom/google/ai/client/generativeai/common/shared/HarmBlockMethod;
+	public final fun getThreshold ()Lcom/google/ai/client/generativeai/common/shared/HarmBlockThreshold;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/shared/SafetySetting;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/shared/SafetySetting$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/shared/SafetySetting$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/shared/SafetySetting;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/shared/SafetySetting;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/SafetySetting$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/TextPart : com/google/ai/client/generativeai/common/shared/Part {
+	public static final field Companion Lcom/google/ai/client/generativeai/common/shared/TextPart$Companion;
+	public synthetic fun <init> (ILjava/lang/String;Lkotlinx/serialization/internal/SerializationConstructorMarker;)V
+	public fun <init> (Ljava/lang/String;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun copy (Ljava/lang/String;)Lcom/google/ai/client/generativeai/common/shared/TextPart;
+	public static synthetic fun copy$default (Lcom/google/ai/client/generativeai/common/shared/TextPart;Ljava/lang/String;ILjava/lang/Object;)Lcom/google/ai/client/generativeai/common/shared/TextPart;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getText ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+	public static final synthetic fun write$Self (Lcom/google/ai/client/generativeai/common/shared/TextPart;Lkotlinx/serialization/encoding/CompositeEncoder;Lkotlinx/serialization/descriptors/SerialDescriptor;)V
+}
+
+public final class com/google/ai/client/generativeai/common/shared/TextPart$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/google/ai/client/generativeai/common/shared/TextPart$$serializer;
+	public fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/google/ai/client/generativeai/common/shared/TextPart;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/google/ai/client/generativeai/common/shared/TextPart;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/shared/TextPart$Companion {
+	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/google/ai/client/generativeai/common/util/FirstOrdinalSerializer : kotlinx/serialization/KSerializer {
+	public fun <init> (Lkotlin/reflect/KClass;)V
+	public fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Enum;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Enum;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+}
+
+public final class com/google/ai/client/generativeai/common/util/SerializationKt {
+	public static final fun enumValues (Lkotlin/reflect/KClass;)[Ljava/lang/Enum;
+	public static final fun getSerialName (Ljava/lang/Enum;)Ljava/lang/String;
+}
+
+public final class com/google/ai/client/generativeai/common/util/UtilKt {
+	public static final fun fullModelName (Ljava/lang/String;)Ljava/lang/String;
+}
+
