@@ -28,11 +28,7 @@ import com.google.ai.client.generativeai.common.shared.Content
 import com.google.ai.client.generativeai.common.shared.TextPart
 import io.kotest.matchers.collections.shouldNotBeEmpty
 import io.kotest.matchers.nulls.shouldNotBeNull
-import io.ktor.client.engine.mock.MockEngine
-import io.ktor.client.engine.mock.respond
-import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.headersOf
 import io.ktor.utils.io.ByteChannel
 import io.ktor.utils.io.close
 import io.ktor.utils.io.writeFully
@@ -105,17 +101,15 @@ internal fun commonTest(
   block: CommonTest,
 ) = doBlocking {
   val channel = ByteChannel(autoFlush = true)
-  val mockEngine = MockEngine {
-    respond(channel, status, headersOf(HttpHeaders.ContentType, "application/json"))
-  }
   val apiController =
     APIController(
       "super_cool_test_key",
       "gemini-pro",
       requestOptions,
-      mockEngine,
       TEST_CLIENT_ID,
       null,
+      channel,
+      status,
     )
   CommonTestScope(channel, apiController).block()
 }

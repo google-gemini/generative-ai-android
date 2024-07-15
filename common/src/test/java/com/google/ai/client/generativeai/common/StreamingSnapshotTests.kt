@@ -72,11 +72,13 @@ internal class StreamingSnapshotTests {
       val responses = apiController.generateContentStream(textGenerateContentRequest("prompt"))
 
       withTimeout(testTimeout) {
-        responses.first {
+        val responseList = responses.toList()
+        responseList.isEmpty() shouldBe false
+        responseList.any {
           it.candidates?.any {
             it.safetyRatings?.any { it.category == HarmCategory.UNKNOWN } ?: false
           } ?: false
-        }
+        } shouldBe true
       }
     }
 

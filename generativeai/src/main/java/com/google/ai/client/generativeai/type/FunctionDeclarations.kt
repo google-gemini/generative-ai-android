@@ -79,6 +79,8 @@ class Schema<T>(
 
   companion object {
     /** Registers a schema for a 32 bit integer number */
+    @JvmStatic
+    @JvmName("numInt")
     fun int(name: String, description: String) =
       Schema<Int>(
         name = name,
@@ -89,6 +91,8 @@ class Schema<T>(
       )
 
     /** Registers a schema for a 64 bit integer number */
+    @JvmStatic
+    @JvmName("numLong")
     fun long(name: String, description: String) =
       Schema<Long>(
         name = name,
@@ -98,6 +102,7 @@ class Schema<T>(
       )
 
     /** Registers a schema for a string */
+    @JvmStatic
     fun str(name: String, description: String) =
       Schema<String>(
         name = name,
@@ -107,6 +112,7 @@ class Schema<T>(
       )
 
     /** Registers a schema for a boolean */
+    @JvmStatic
     fun bool(name: String, description: String) =
       Schema<Boolean>(
         name = name,
@@ -116,6 +122,8 @@ class Schema<T>(
       )
 
     /** Registers a schema for a floating point number */
+    @JvmStatic
+    @JvmName("numDouble")
     fun double(name: String, description: String) =
       Schema<Double>(
         name = name,
@@ -127,6 +135,7 @@ class Schema<T>(
     /**
      * Registers a schema for a complex object. In a function it will be returned as a [JSONObject]
      */
+    @JvmStatic
     fun obj(name: String, description: String, vararg contents: Schema<out Any>) =
       Schema<JSONObject>(
         name = name,
@@ -142,6 +151,7 @@ class Schema<T>(
      *
      * @param items can be used to specify the type of the array
      */
+    @JvmStatic
     fun arr(name: String, description: String, items: Schema<out Any>? = null) =
       Schema<List<String>>(
         name = name,
@@ -152,6 +162,8 @@ class Schema<T>(
       )
 
     /** Registers a schema for an enum */
+    @JvmStatic
+    @JvmName("enumeration")
     fun enum(name: String, description: String, values: List<String>) =
       Schema<String>(
         name = name,
