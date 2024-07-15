@@ -14,6 +14,8 @@
 
 package com.google.ai.client.generative.samples.java;
 
+import static com.google.ai.client.generativeai.type.FunctionDeclarationsKt.defineFunction;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,6 +24,10 @@ import com.google.ai.client.generativeai.java.ChatFutures;
 import com.google.ai.client.generativeai.java.GenerativeModelFutures;
 import com.google.ai.client.generativeai.type.Content;
 import com.google.ai.client.generativeai.type.CountTokensResponse;
+import com.google.ai.client.generativeai.type.FunctionDeclaration;
+import com.google.ai.client.generativeai.type.RequestOptions;
+import com.google.ai.client.generativeai.type.Schema;
+import com.google.ai.client.generativeai.type.Tool;
 import com.google.ai.sample.R;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
@@ -134,7 +140,7 @@ class CountTokens {
   }
 
   void tokensMultimodalImageInline(Context context) {
-      // [START tokens_multimodal_image_inline]
+    // [START tokens_multimodal_image_inline]
     // Specify a Gemini model appropriate for your use case
     GenerativeModel gm =
         new GenerativeModel(
@@ -179,5 +185,105 @@ class CountTokens {
         executor);
     // [END tokens_multimodal_image_inline]
 
+  }
+
+  void tokensSystemInstruction() {
+    // [START tokens_system_instruction]
+    // Create your system instructions
+    Content systemInstruction =
+        new Content.Builder().addText("You are a cat. Your name is Neko.").build();
+
+    // Specify a Gemini model appropriate for your use case
+    GenerativeModel gm =
+        new GenerativeModel(
+            /* modelName */ "gemini-1.5-flash",
+            // Access your API key as a Build Configuration variable (see "Set up your API key"
+            // above)
+            /* apiKey */ BuildConfig.apiKey,
+            /* generationConfig (optional) */ null,
+            /* safetySettings (optional) */ null,
+            /* requestOptions (optional) */ new RequestOptions(),
+            /* tools (optional) */ null,
+            /* toolsConfig (optional) */ null,
+            /* systemInstruction (optional) */ systemInstruction);
+    GenerativeModelFutures model = GenerativeModelFutures.from(gm);
+
+    Content inputContent = new Content.Builder().addText("What's your name?.").build();
+
+    // For illustrative purposes only. You should use an executor that fits your needs.
+    Executor executor = Executors.newSingleThreadExecutor();
+
+    // For text-only input
+    ListenableFuture<CountTokensResponse> countTokensResponse = model.countTokens(inputContent);
+
+    Futures.addCallback(
+        countTokensResponse,
+        new FutureCallback<CountTokensResponse>() {
+          @Override
+          public void onSuccess(CountTokensResponse result) {
+            int totalTokens = result.getTotalTokens();
+            System.out.println("TotalTokens = " + totalTokens);
+          }
+
+          @Override
+          public void onFailure(Throwable t) {
+            t.printStackTrace();
+          }
+        },
+        executor);
+    // [END tokens_system_instruction]
+  }
+
+  void tokenTools() {
+    // [START tokens_tools]
+    FunctionDeclaration multiplyDefinition =
+        defineFunction(
+            /* name  */ "multiply",
+            /* description */ "returns a * b.",
+            /* parameters */ Arrays.asList(
+                Schema.numDouble("a", "First parameter"),
+                Schema.numDouble("b", "Second parameter")),
+            /* required */ Arrays.asList("a", "b"));
+
+    Tool tool = new Tool(Arrays.asList(multiplyDefinition), null);
+    ;
+
+    // Specify a Gemini model appropriate for your use case
+    GenerativeModel gm =
+        new GenerativeModel(
+            /* modelName */ "gemini-1.5-flash",
+            // Access your API key as a Build Configuration variable (see "Set up your API key"
+            // above)
+            /* apiKey */ BuildConfig.apiKey,
+            /* generationConfig (optional) */ null,
+            /* safetySettings (optional) */ null,
+            /* requestOptions (optional) */ new RequestOptions(),
+            /* tools (optional) */ Arrays.asList(tool));
+    GenerativeModelFutures model = GenerativeModelFutures.from(gm);
+
+    Content inputContent = new Content.Builder().addText("What's your name?.").build();
+
+    // For illustrative purposes only. You should use an executor that fits your needs.
+    Executor executor = Executors.newSingleThreadExecutor();
+
+    // For text-only input
+    ListenableFuture<CountTokensResponse> countTokensResponse = model.countTokens(inputContent);
+
+    Futures.addCallback(
+        countTokensResponse,
+        new FutureCallback<CountTokensResponse>() {
+          @Override
+          public void onSuccess(CountTokensResponse result) {
+            int totalTokens = result.getTotalTokens();
+            System.out.println("TotalTokens = " + totalTokens);
+          }
+
+          @Override
+          public void onFailure(Throwable t) {
+            t.printStackTrace();
+          }
+        },
+        executor);
+    // [END tokens_tools]
   }
 }
