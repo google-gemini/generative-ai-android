@@ -39,7 +39,6 @@ import java.util.concurrent.Executors;
 class ControlledGeneration {
   void jsonControlledGeneration() {
     // [START json_controlled_generation]
-
     Schema<List<String>> schema =
         new Schema(
             /* name */ "recipes",

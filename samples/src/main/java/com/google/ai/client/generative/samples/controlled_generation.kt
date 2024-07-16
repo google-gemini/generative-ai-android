@@ -30,26 +30,6 @@ import com.google.ai.client.generativeai.type.generationConfig
 
 suspend fun json_controlled_generation() {
     // [START json_controlled_generation]
-    val jsonSchema = Schema(
-        name = "recipes",
-        description = "List of recipes",
-        type = FunctionType.ARRAY,
-        items = Schema(
-            name = "recipe",
-            description = "A recipe",
-            type = FunctionType.OBJECT,
-            properties = mapOf(
-                "recipeName" to Schema(
-                    name = "recipeName",
-                    description = "Name of the recipe",
-                    type = FunctionType.STRING,
-                    nullable = false
-                ),
-            ),
-            required = listOf("recipeName")
-        ),
-    )
-
     val generativeModel =
         GenerativeModel(
             // Specify a Gemini model appropriate for your use case
@@ -58,13 +38,30 @@ suspend fun json_controlled_generation() {
             apiKey = BuildConfig.apiKey,
             generationConfig = generationConfig {
                 responseMimeType = "application/json"
-                responseSchema = jsonSchema
+                responseSchema = Schema(
+                    name = "recipes",
+                    description = "List of recipes",
+                    type = FunctionType.ARRAY,
+                    items = Schema(
+                        name = "recipe",
+                        description = "A recipe",
+                        type = FunctionType.OBJECT,
+                        properties = mapOf(
+                            "recipeName" to Schema(
+                                name = "recipeName",
+                                description = "Name of the recipe",
+                                type = FunctionType.STRING,
+                                nullable = false
+                            ),
+                        ),
+                        required = listOf("recipeName")
+                    ),
+                )
             })
 
     val prompt = "List a few popular cookie recipes."
     val response = generativeModel.generateContent(prompt)
     print(response.text)
-
     // [END json_controlled_generation]
 }
 
@@ -87,6 +84,5 @@ suspend fun json_no_schema() {
     """.trimIndent()
     val response = generativeModel.generateContent(prompt)
     print(response.text)
-
     // [END json_no_schema]
 }
