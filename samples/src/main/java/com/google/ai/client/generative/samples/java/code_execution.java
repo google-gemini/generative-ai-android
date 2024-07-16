@@ -51,7 +51,7 @@ class CodeExecution {
                         /* generationConfig */ null,
                         /* safetySettings */ null,
                         /* requestOptions */ new RequestOptions(),
-                        /* tools */ Collections.singletonList(Tool.Companion.getCODE_EXECUTION()));
+                        /* tools */ Collections.singletonList(Tool.CODE_EXECUTION));
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
 
         Content inputContent =
@@ -91,7 +91,7 @@ class CodeExecution {
                         /* generationConfig */ null,
                         /* safetySettings */ null,
                         /* requestOptions */ new RequestOptions(),
-                        /* tools */ Collections.singletonList(Tool.Companion.getCODE_EXECUTION()));
+                        /* tools */ Collections.singletonList(Tool.CODE_EXECUTION));
         GenerativeModelFutures model = GenerativeModelFutures.from(gm);
 
         Content inputContent =
