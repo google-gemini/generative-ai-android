@@ -70,7 +70,6 @@ suspend fun json_controlled_generation() {
 
 suspend fun json_no_schema() {
     // [START json_no_schema]
-
     val generativeModel =
         GenerativeModel(
             // Specify a Gemini model appropriate for your use case

@@ -29,15 +29,22 @@ import org.json.JSONObject
  */
 class FunctionType<T>(val name: String, val parse: (String?) -> T?) {
   companion object {
+    @JvmField
     val STRING = FunctionType<String>("STRING") { it }
+    @JvmField
     val INTEGER = FunctionType<Int>("INTEGER") { it?.toIntOrNull() }
+    @JvmField
     val LONG = FunctionType<Long>("INTEGER") { it?.toLongOrNull() }
+    @JvmField
     val NUMBER = FunctionType<Double>("NUMBER") { it?.toDoubleOrNull() }
+    @JvmField
     val BOOLEAN = FunctionType<Boolean>("BOOLEAN") { it?.toBoolean() }
+    @JvmField
     val ARRAY =
       FunctionType<List<String>>("ARRAY") { it ->
         it?.let { Json.parseToJsonElement(it).jsonArray.map { element -> element.toString() } }
       }
+    @JvmField
     val OBJECT = FunctionType<JSONObject>("OBJECT") { it?.let { JSONObject(it) } }
   }
 }
