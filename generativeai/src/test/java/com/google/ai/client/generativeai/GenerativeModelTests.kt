@@ -64,11 +64,11 @@ internal class GenerativeModelTests {
 
   @Test
   fun `generateContent request succeeds`() = doBlocking {
-    val model = GenerativeModel("gemini-pro-1.0", apiKey, controller = mockApiController)
+    val model = GenerativeModel("gemini-pro-1.5", apiKey, controller = mockApiController)
     coEvery {
       mockApiController.generateContent(
         GenerateContentRequest_Common(
-          "gemini-pro-1.0",
+          "gemini-pro-1.5",
           contents = listOf(Content_Common(parts = listOf(TextPart_Common("Why's the sky blue?")))),
         )
       )
@@ -135,11 +135,11 @@ internal class GenerativeModelTests {
 
   @Test
   fun `generateContent throws exception`() = doBlocking {
-    val model = GenerativeModel("gemini-pro-1.0", apiKey, controller = mockApiController)
+    val model = GenerativeModel("gemini-pro-1.5", apiKey, controller = mockApiController)
     coEvery {
       mockApiController.generateContent(
         GenerateContentRequest_Common(
-          "gemini-pro-1.0",
+          "gemini-pro-1.5",
           contents = listOf(Content_Common(parts = listOf(TextPart_Common("Why's the sky blue?")))),
         )
       )
@@ -150,11 +150,11 @@ internal class GenerativeModelTests {
 
   @Test
   fun `generateContentStream throws exception`() = doBlocking {
-    val model = GenerativeModel("gemini-pro-1.0", apiKey, controller = mockApiController)
+    val model = GenerativeModel("gemini-pro-1.5", apiKey, controller = mockApiController)
     coEvery {
       mockApiController.generateContentStream(
         GenerateContentRequest_Common(
-          "gemini-pro-1.0",
+          "gemini-pro-1.5",
           contents = listOf(Content_Common(parts = listOf(TextPart_Common("Why's the sky blue?")))),
         )
       )
@@ -180,7 +180,7 @@ internal class GenerativeModelTests {
       )
     val tools = listOf(Tool(listOf(getExchangeRate)))
     val model =
-      GenerativeModel("gemini-pro-1.0", apiKey, tools = tools, controller = mockApiController)
+      GenerativeModel("gemini-pro-1.5", apiKey, tools = tools, controller = mockApiController)
     val chat = Chat(model)
 
     coEvery { mockApiController.generateContent(any()) } returns
