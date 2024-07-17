@@ -209,8 +209,9 @@ internal class GenerativeModelTests {
     response.functionCalls.firstOrNull()?.let {
       it.shouldNotBeNull()
       it.name shouldBe "getExchangeRate"
-      it.args!! shouldContain ("currencyFrom" to "USD")
-      it.args!! shouldContain ("currencyTo" to "EUR")
+      it.args.shouldNotBeNull()
+      it.args?.shouldContain("currencyFrom" to "USD")
+      it.args?.shouldContain("currencyTo" to "EUR")
     }
 
     coEvery { mockApiController.generateContent(any()) } returns
