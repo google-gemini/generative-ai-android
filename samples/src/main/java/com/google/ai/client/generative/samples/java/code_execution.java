@@ -18,8 +18,10 @@ package com.google.ai.client.generative.samples.java;
 import com.google.ai.client.generativeai.GenerativeModel;
 import com.google.ai.client.generativeai.java.ChatFutures;
 import com.google.ai.client.generativeai.java.GenerativeModelFutures;
+import com.google.ai.client.generativeai.type.Candidate;
 import com.google.ai.client.generativeai.type.Content;
 import com.google.ai.client.generativeai.type.GenerateContentResponse;
+import com.google.ai.client.generativeai.type.Part;
 import com.google.ai.client.generativeai.type.RequestOptions;
 import com.google.ai.client.generativeai.type.Tool;
 import com.google.common.util.concurrent.FutureCallback;
@@ -66,6 +68,15 @@ class CodeExecution {
                 new FutureCallback<GenerateContentResponse>() {
                     @Override
                     public void onSuccess(GenerateContentResponse result) {
+                        // Each `part` either contains `text`, `executable_code` or an
+                        // `execution_result`
+                        Candidate candidate = result.getCandidates().get(0);
+                        for (Part part : candidate.getContent().getParts()) {
+                            System.out.println(part);
+                        }
+
+                        // Alternatively, you can use the `text` accessor which joins the parts into a
+                        // markdown compatible text representation
                         String resultText = result.getText();
                         System.out.println(resultText);
                     }
@@ -108,6 +119,15 @@ class CodeExecution {
                 new FutureCallback<GenerateContentResponse>() {
                     @Override
                     public void onSuccess(GenerateContentResponse result) {
+                        // Each `part` either contains `text`, `executable_code` or an
+                        // `execution_result`
+                        Candidate candidate = result.getCandidates().get(0);
+                        for (Part part : candidate.getContent().getParts()) {
+                            System.out.println(part);
+                        }
+
+                        // Alternatively, you can use the `text` accessor which joins the parts into a
+                        // markdown compatible text representation
                         String resultText = result.getText();
                         System.out.println(resultText);
                     }
