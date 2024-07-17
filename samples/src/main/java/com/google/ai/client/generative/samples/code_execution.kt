@@ -42,7 +42,7 @@ suspend fun codeExecutionBasic() {
     // Each `part` either contains `text`, `executable_code` or an `execution_result`
     println(response.candidates[0].content.parts.joinToString("\n"))
 
-    // Alternatively, you can use the `text` accessor joins the parts into a markdown compatible
+    // Alternatively, you can use the `text` accessor which joins the parts into a markdown compatible
     // text representation
     println(response.text)
     // [END code_execution_basic]
