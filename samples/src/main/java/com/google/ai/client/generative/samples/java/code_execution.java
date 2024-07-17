@@ -75,7 +75,7 @@ class CodeExecution {
                             System.out.println(part);
                         }
 
-                        // Alternatively, you can use the `text` accessor joins the parts into a
+                        // Alternatively, you can use the `text` accessor which joins the parts into a
                         // markdown compatible text representation
                         String resultText = result.getText();
                         System.out.println(resultText);
