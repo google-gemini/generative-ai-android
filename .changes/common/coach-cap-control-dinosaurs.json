@@ -1,0 +1,1 @@
+{"type":"MINOR","changes":["make FunctionCall.args nullable"]}
