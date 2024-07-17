@@ -39,6 +39,11 @@ suspend fun codeExecutionBasic() {
 
     val response = model.generateContent("What is the sum of the first 50 prime numbers?")
 
+    // Each `part` either contains `text`, `executable_code` or an `execution_result`
+    println(response.candidates[0].content.parts.joinToString("\n"))
+
+    // Alternatively, you can use the `text` accessor joins the parts into a markdown compatible
+    // text representation
     println(response.text)
     // [END code_execution_basic]
 }
@@ -58,6 +63,11 @@ suspend fun codeExecutionChat() {
 
     val response = chat.sendMessage("What is the sum of the first 50 prime numbers?")
 
+    // Each `part` either contains `text`, `executable_code` or an `execution_result`
+    println(response.candidates[0].content.parts.joinToString("\n"))
+
+    // Alternatively, you can use the `text` accessor joins the parts into a markdown compatible
+    // text representation
     println(response.text)
     // [END code_execution_chat]
 }
