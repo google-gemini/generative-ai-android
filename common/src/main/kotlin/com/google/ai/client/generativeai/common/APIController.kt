@@ -94,14 +94,7 @@ internal constructor(
     apiClient: String,
     headerProvider: HeaderProvider?,
     engine: HttpClientEngine,
-  ) : this(
-    key,
-    model,
-    requestOptions,
-    engine,
-    apiClient,
-    headerProvider,
-  )
+  ) : this(key, model, requestOptions, engine, apiClient, headerProvider)
 
   private val model = fullModelName(model)
 

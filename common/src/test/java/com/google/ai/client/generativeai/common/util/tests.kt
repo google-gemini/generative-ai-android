@@ -112,7 +112,9 @@ internal fun commonTest(
       requestOptions,
       TEST_CLIENT_ID,
       null,
-      MockEngine { respond(channel, status, headersOf(HttpHeaders.ContentType, "application/json")) },
+      MockEngine {
+        respond(channel, status, headersOf(HttpHeaders.ContentType, "application/json"))
+      },
     )
   CommonTestScope(channel, apiController).block()
 }
