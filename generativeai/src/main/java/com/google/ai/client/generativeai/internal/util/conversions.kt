@@ -243,7 +243,7 @@ internal fun Part.toPublic(): com.google.ai.client.generativeai.type.Part {
 }
 
 internal fun CitationSources.toPublic() =
-  CitationMetadata(startIndex = startIndex, endIndex = endIndex, uri = uri, license = license)
+    CitationMetadata(startIndex = startIndex, endIndex = endIndex, uri = uri ?: "", license = license)
 
 internal fun SafetyRating.toPublic() =
   com.google.ai.client.generativeai.type.SafetyRating(category.toPublic(), probability.toPublic())
